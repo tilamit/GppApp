@@ -1,0 +1,42 @@
+﻿.mdi .mdi-tooltip-edit {
+    color: white !important;
+}
+
+.modal-header .close {
+    color: white !important;
+}
+
+.e-input-group.e-error, .e-input-group.e-control-wrapper.e-error, .e-input-group.e-error:not(.e-float-icon-left), .e-input-group.e-control-wrapper.e-error:not(.e-float-icon-left) {
+    border-bottom-color: #f44336 !important;
+}
+
+    .e-input-group:not(.e-float-icon-left), .e-input-group.e-success:not(.e-float-icon-left), .e-input-group.e-warning:not(.e-float-icon-left), .e-input-group.e-error:not(.e-float-icon-left), .e-input-group.e-control-wrapper:not(.e-float-icon-left), .e-input-group.e-control-wrapper.e-success:not(.e-float-icon-left), .e-input-group.e-control-wrapper.e-warning:not(.e-float-icon-left), .e-input-group.e-control-wrapper.e-error:not(.e-float-icon-left) {
+        color: white !important;
+    }
+
+.e-input-group .e-input-group-icon:last-child, .e-input-group.e-bigger .e-input-group-icon:last-child, .e-input-group .e-input-group-icon.e-bigger:last-child, .e-bigger .e-input-group .e-input-group-icon:last-child, .e-input-group.e-small .e-input-group-icon:last-child, .e-input-group.e-small.e-bigger .e-input-group-icon:last-child, .e-input-group.e-small .e-input-group-icon.e-bigger:last-child, .e-input-group.e-control-wrapper .e-input-group-icon:last-child, .e-input-group.e-control-wrapper.e-bigger .e-input-group-icon:last-child, .e-input-group.e-control-wrapper .e-input-group-icon.e-bigger:last-child, .e-input-group.e-control-wrapper.e-small .e-input-group-icon:last-child, .e-input-group.e-control-wrapper.e-small.e-bigger .e-input-group-icon:last-child, .e-input-group.e-control-wrapper.e-small .e-input-group-icon.e-bigger:last-child, .e-bigger .e-input-group.e-control-wrapper.e-small .e-input-group-icon:last-child, .e-bigger .e-input-group.e-small .e-input-group-icon:last-child {
+    color: red !important;
+}
+
+span.spanId {
+    display: none !important;
+}
+
+.table th img, .jsgrid .jsgrid-table th img, .table td img, .jsgrid .jsgrid-table td img {
+    width: 400px !important;
+    height: 200px !important;
+    border-radius: 0% !important;
+}
+
+#floatRight {
+    margin-left: 66%;
+}
+
+.sign-up {
+    text-align: center;
+}
+
+.form-control:disabled, .asColorPicker-input:disabled, .dataTables_wrapper select:disabled, .jsgrid .jsgrid-table .jsgrid-filter-row input:disabled[type=text], .jsgrid .jsgrid-table .jsgrid-filter-row select:disabled, .jsgrid .jsgrid-table .jsgrid-filter-row input:disabled[type=number], .select2-container--default .select2-selection--single:disabled, .select2-container--default .select2-selection--single .select2-search__field:disabled, .typeahead:disabled, .tt-query:disabled, .tt-hint:disabled, .form-control[readonly], .asColorPicker-input[readonly], .dataTables_wrapper select[readonly], .jsgrid .jsgrid-table .jsgrid-filter-row input[readonly][type=text], .jsgrid .jsgrid-table .jsgrid-filter-row select[readonly], .jsgrid .jsgrid-table .jsgrid-filter-row input[readonly][type=number], .select2-container--default .select2-selection--single[readonly], .select2-container--default .select2-selection--single .select2-search__field[readonly], .typeahead[readonly], .tt-query[readonly], .tt-hint[readonly] {
+    background-color: black !important;
+    opacity: 1;
+}

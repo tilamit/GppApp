@@ -1,0 +1,18 @@
+﻿<script src="~/js/jquery-1.11.3.min.js"></script>
+
+<script>
+    $(document).ready(function () {
+        $('.nav-link').click(function () {
+            var id = $(this).attr("id");
+            //$("#result").html("Loading ......");
+            $("#result").load('@Url.Action("LoadPartialView", "Dashboard")', { passVal: id });
+            $(".nav-link").removeAttr('href');
+        });
+    });
+</script>
+
+@*Content loads here - Starts*@
+  <div id="result"></div>
+@*Content loads here - Ends*@
+
+

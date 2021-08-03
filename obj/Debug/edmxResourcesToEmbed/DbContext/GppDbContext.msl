@@ -1,0 +1,92 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Mapping Space="C-S" xmlns="http://schemas.microsoft.com/ado/2009/11/mapping/cs">
+  <EntityContainerMapping StorageEntityContainer="GppAppModelStoreContainer" CdmEntityContainer="GppAppEntities">
+    <EntitySetMapping Name="ProjectItems">
+      <EntityTypeMapping TypeName="GppAppModel.ProjectItems">
+        <MappingFragment StoreEntitySet="ProjectItems">
+          <ScalarProperty Name="Id" ColumnName="Id" />
+          <ScalarProperty Name="ProjectId" ColumnName="ProjectId" />
+          <ScalarProperty Name="ItemDescription" ColumnName="ItemDescription" />
+          <ScalarProperty Name="ProjectNotes" ColumnName="ProjectNotes" />
+          <ScalarProperty Name="Image" ColumnName="Image" />
+          <ScalarProperty Name="Checked" ColumnName="Checked" />
+          <ScalarProperty Name="Status" ColumnName="Status" />
+          <ScalarProperty Name="CreatedOn" ColumnName="CreatedOn" />
+          <ScalarProperty Name="CreatedBy" ColumnName="CreatedBy" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="Projects">
+      <EntityTypeMapping TypeName="GppAppModel.Projects">
+        <MappingFragment StoreEntitySet="Projects">
+          <ScalarProperty Name="ProjectRef" ColumnName="ProjectRef" />
+          <ScalarProperty Name="Id" ColumnName="Id" />
+          <ScalarProperty Name="ProjectId" ColumnName="ProjectId" />
+          <ScalarProperty Name="ProjectName" ColumnName="ProjectName" />
+          <ScalarProperty Name="ProjectDetails" ColumnName="ProjectDetails" />
+          <ScalarProperty Name="Status" ColumnName="Status" />
+          <ScalarProperty Name="CreatedBy" ColumnName="CreatedBy" />
+          <ScalarProperty Name="CreatedOn" ColumnName="CreatedOn" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="UserDetails">
+      <EntityTypeMapping TypeName="GppAppModel.UserDetails">
+        <MappingFragment StoreEntitySet="UserDetails">
+          <ScalarProperty Name="CreatedOn" ColumnName="CreatedOn" />
+          <ScalarProperty Name="Status" ColumnName="Status" />
+          <ScalarProperty Name="DateOfBirth" ColumnName="DateOfBirth" />
+          <ScalarProperty Name="ImgPath" ColumnName="ImgPath" />
+          <ScalarProperty Name="Gender" ColumnName="Gender" />
+          <ScalarProperty Name="UserType" ColumnName="UserType" />
+          <ScalarProperty Name="Email" ColumnName="Email" />
+          <ScalarProperty Name="Password" ColumnName="Password" />
+          <ScalarProperty Name="UserName" ColumnName="UserName" />
+          <ScalarProperty Name="UserId" ColumnName="UserId" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="ItemImages">
+      <EntityTypeMapping TypeName="GppAppModel.ItemImages">
+        <MappingFragment StoreEntitySet="ItemImages">
+          <ScalarProperty Name="Status" ColumnName="Status" />
+          <ScalarProperty Name="CreatedBy" ColumnName="CreatedBy" />
+          <ScalarProperty Name="CreatedOn" ColumnName="CreatedOn" />
+          <ScalarProperty Name="Image" ColumnName="Image" />
+          <ScalarProperty Name="ProjectItemId" ColumnName="ProjectItemId" />
+          <ScalarProperty Name="Id" ColumnName="Id" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="ProjectsHistory">
+      <EntityTypeMapping TypeName="GppAppModel.ProjectsHistory">
+        <MappingFragment StoreEntitySet="ProjectsHistory">
+          <ScalarProperty Name="UpdatedOn" ColumnName="UpdatedOn" />
+          <ScalarProperty Name="PreCreatedOn" ColumnName="PreCreatedOn" />
+          <ScalarProperty Name="PreCreatedBy" ColumnName="PreCreatedBy" />
+          <ScalarProperty Name="PreProjectDetails" ColumnName="PreProjectDetails" />
+          <ScalarProperty Name="PreviousRef" ColumnName="PreviousRef" />
+          <ScalarProperty Name="PreviousName" ColumnName="PreviousName" />
+          <ScalarProperty Name="ProjectId" ColumnName="ProjectId" />
+          <ScalarProperty Name="Id" ColumnName="Id" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="ProjectItemsHistory">
+      <EntityTypeMapping TypeName="GppAppModel.ProjectItemsHistory">
+        <MappingFragment StoreEntitySet="ProjectItemsHistory">
+          <ScalarProperty Name="PreId" ColumnName="PreId" />
+          <ScalarProperty Name="UpdatedOn" ColumnName="UpdatedOn" />
+          <ScalarProperty Name="PreCreatedBy" ColumnName="PreCreatedBy" />
+          <ScalarProperty Name="PreCreatedOn" ColumnName="PreCreatedOn" />
+          <ScalarProperty Name="PreChecked" ColumnName="PreChecked" />
+          <ScalarProperty Name="PreImage" ColumnName="PreImage" />
+          <ScalarProperty Name="PreProjectNotes" ColumnName="PreProjectNotes" />
+          <ScalarProperty Name="PreItemDescription" ColumnName="PreItemDescription" />
+          <ScalarProperty Name="ProjectId" ColumnName="ProjectId" />
+          <ScalarProperty Name="Id" ColumnName="Id" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+  </EntityContainerMapping>
+</Mapping>
