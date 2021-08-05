@@ -145,6 +145,7 @@
     <Compile Include="Controllers\DashboardController.cs" />
     <Compile Include="Controllers\ErrorPageController.cs" />
     <Compile Include="Controllers\HomeController.cs" />
+    <Compile Include="Controllers\UserController.cs" />
     <Compile Include="DbContext\GppDbContext.Context.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
@@ -183,6 +184,7 @@
     </Compile>
     <Compile Include="Interface\AuthorizeInterface.cs" />
     <Compile Include="Interface\ProjectsInterface.cs" />
+    <Compile Include="Interface\UsersInterface.cs" />
     <Compile Include="Models\ProjectHistory.cs" />
     <Compile Include="Models\ProjectImages.cs" />
     <Compile Include="Models\ProjectItemHistory.cs" />
@@ -190,7 +192,7 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Repository\AuthorizeRepository.cs" />
     <Compile Include="Repository\ProjectsRepository.cs" />
-    <Compile Include="SimpleAuthorizationServerProvider.cs" />
+    <Compile Include="Repository\UsersRepository.cs" />
     <Compile Include="Startup.cs" />
     <Compile Include="Utility\GppAuthorizeAttribute.cs" />
   </ItemGroup>
@@ -2528,6 +2530,7 @@
     <Folder Include="imageuploader\" />
     <Folder Include="Views\Editor\" />
     <Folder Include="Views\Form\" />
+    <Folder Include="Views\User\" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="fonts\glyphicons-halflings-regular.woff" />

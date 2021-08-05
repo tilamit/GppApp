@@ -47,15 +47,26 @@
                         </div>
                         <div class="form-group">
                             <label for="Email">Email</label>
-                            <input type="text" class="form-control" id="userEmail" placeholder="Email" />
+                            <input type="text" class="form-control" id="userEmail" placeholder="Email" disabled />
 
                             <span class="hideSection" id="preUserEmail"></span>
                         </div>
                         <div class="form-group">
                             <label for="Gender">Gender</label>
-                            <input type="text" class="form-control" id="userGender" placeholder="Gender" />
+
+                            <div class="userGender">
+                                <select class="form-control" id="userGenders">
+                                    <option value="2">Female</option>
+                                    <option value="1">Male</option>
+                                </select>
+                            </div>
+                            @*<input type="text" class="form-control" id="userGender" placeholder="Gender" />*@
 
                             <span class="hideSection" id="preUserGender"></span>
+                        </div>
+                        <div class="form-group">
+                            <label for="DateofBirth">Date of Birth</label>
+                            <input type="text" class="form-control" id="userDateofBirth" />
                         </div>
                         <div class="form-group">
                             <label for="CreatedOn">Created On</label>
@@ -230,19 +241,81 @@
         <link href="https://cdn.syncfusion.com/ej2/material.css" rel="stylesheet">*@
 
     <script type="text/javascript">
+        //SyncFusion date picker
+        var datepicker = new ej.calendars.DatePicker({ width: "255px", color: "red", format: "MM/dd/yyyy" });
+        datepicker.appendTo('#userDateofBirth');
+
         $('#logout').click(function () {
             window.location.href = "/Auth/Logout";
         });
 
         //Update project items here
         $('#updateUser').click(function () {
+            var aUserDetails = {};
+
             var res = validate();
             if (res == true) {
+
+                aUserDetails.UserName = $("#userName").val();
+                aUserDetails.Gender = parseInt($("#userGenders").val());
+                aUserDetails.DateOfBirth = $("#userDateofBirth").val();
+
+                $.ajax({
+                    type: "POST",
+                    url: "/User/UpdateUsers",
+                    data: JSON.stringify({ aUserDetails }),
+                    contentType: "application/json; charset=utf-8",
+                    dataType: "json",
+                    success: function (value) {
+                        alert(value);
+                    },
+                    error: function (ex) {
+                        alert('Failed to retrieve states.' + ex);
+                    }
+                });
                
             } else {
                 alert("Please! Fill up all fields.");
             }
         });
+
+        //Open modal on click
+        $('#openAccountModal').click(function () {
+            $.ajax({
+                url: "/User/GetUsers",
+                type: "POST",
+                contentType: "application/json; charset=utf-8",
+                dataType: "json",
+                success: function (users) {
+                    if (users != null || users != "") {
+
+                        $.each(users, function (i, user) {
+                            $("#userName").val(user.UserName);
+                            $("#userEmail").val(user.Email);
+                            //$("#userGender select").val(user.UserType);
+                            $('.userGender select').val(user.Gender);
+                            $("#userDateofBirth").val(getFormattedDate(user.DateOfBirth));
+                            $("#userCreatedOn").val(getFormattedDate(user.CreatedOn));
+                        })
+                    }
+                },
+                error: function (er) {
+                    //alert(er);
+                }
+            });
+        });
+
+        //Hide modal on click
+        $("#closbtn").click(function () {
+            $('#openAccountModal').modal('hide');
+        });
+
+        function getFormattedDate(date) {
+            var dt = new Date(parseInt(date.replace("/Date(", "").replace(")/", ""), 10))
+            var date = new Date(Date.parse(dt));
+
+            return ('0' + (date.getMonth() + 1)).slice(-2) + "/" + ('0' + date.getDate()).slice(-2) + "/" + date.getFullYear();
+        }
 
         //Validation
         function validate() {
@@ -262,14 +335,7 @@
             else {
                 $('#userEmail').css('border-color', 'lightgrey');
             }
-            if ($('#userGender').val().trim() == "") {
-                $('#userGender').css('border-color', 'Red');
-                isValid = false;
-            }
-            else {
-                $('#userGender').css('border-color', 'lightgrey');
-            }
-
+           
             return isValid;
         }
     </script>
