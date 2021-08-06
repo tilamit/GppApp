@@ -31,5 +31,7 @@ namespace GppApp.DbContext
         public virtual DbSet<ItemImages> ItemImages { get; set; }
         public virtual DbSet<ProjectsHistory> ProjectsHistory { get; set; }
         public virtual DbSet<ProjectItemsHistory> ProjectItemsHistory { get; set; }
+        public virtual DbSet<Gender> Gender { get; set; }
+        public virtual DbSet<UserTypes> UserTypes { get; set; }
     }
 }

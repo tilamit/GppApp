@@ -1,5 +1,12 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <Schema Namespace="GppAppModel.Store" Provider="System.Data.SqlClient" ProviderManifestToken="2012" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
+  <EntityType Name="Gender">
+    <Key>
+      <PropertyRef Name="Id" />
+    </Key>
+    <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="GenderType" Type="nvarchar" MaxLength="6" />
+  </EntityType>
   <EntityType Name="ItemImages">
     <Key>
       <PropertyRef Name="Id" />
@@ -81,12 +88,21 @@
     <Property Name="Status" Type="int" />
     <Property Name="CreatedOn" Type="datetime" />
   </EntityType>
+  <EntityType Name="UserTypes">
+    <Key>
+      <PropertyRef Name="Id" />
+    </Key>
+    <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="Types" Type="nvarchar" MaxLength="20" />
+  </EntityType>
   <EntityContainer Name="GppAppModelStoreContainer">
+    <EntitySet Name="Gender" EntityType="Self.Gender" Schema="dbo" store:Type="Tables" />
     <EntitySet Name="ItemImages" EntityType="Self.ItemImages" Schema="dbo" store:Type="Tables" />
     <EntitySet Name="ProjectItems" EntityType="Self.ProjectItems" Schema="dbo" store:Type="Tables" />
     <EntitySet Name="ProjectItemsHistory" EntityType="Self.ProjectItemsHistory" Schema="dbo" store:Type="Tables" />
     <EntitySet Name="Projects" EntityType="Self.Projects" Schema="dbo" store:Type="Tables" />
     <EntitySet Name="ProjectsHistory" EntityType="Self.ProjectsHistory" Schema="dbo" store:Type="Tables" />
     <EntitySet Name="UserDetails" EntityType="Self.UserDetails" Schema="dbo" store:Type="Tables" />
+    <EntitySet Name="UserTypes" EntityType="Self.UserTypes" Schema="dbo" store:Type="Tables" />
   </EntityContainer>
 </Schema>

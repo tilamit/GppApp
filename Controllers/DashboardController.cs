@@ -47,6 +47,8 @@ namespace GppApp.Controllers
                     var result = _projectsRepository.GetProjects();
 
                     return PartialView("projectsPartialView", result);
+                case "userDetails":
+                    return PartialView("usersPartialView");
 
                 default:
                     return PartialView("frontPartialView");

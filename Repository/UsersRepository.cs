@@ -1,5 +1,6 @@
 ﻿using GppApp.DbContext;
 using GppApp.Interface;
+using GppApp.Models;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -21,6 +22,47 @@ namespace GppApp.Repository
         {
             userId = Convert.ToInt32(HttpContext.Current.Session["userId"]);
             return _context.UserDetails.Where(c => c.UserId == userId).ToList();
+        }
+
+        public List<UserViewModel> GetAllUsers()
+        {
+            var result = (from c in _context.UserDetails
+                          join d in _context.Gender on c.Gender equals d.Id
+                          join f in _context.UserTypes on c.UserType equals f.Id
+                          select new UserViewModel
+                          {
+                              UserId = c.UserId,
+                              UserName = c.UserName,
+                              Email = c.Email,
+                              UserTypes = f.Types,
+                              CreatedOn = c.CreatedOn
+                          }).ToList();
+
+            return result;
+        }
+
+        public void AddUsers(UserDetails aUserDetails)
+        {
+            try
+            {
+                UserDetails aUserDetail = new UserDetails();
+                aUserDetail.UserName = aUserDetails.UserName;
+                aUserDetail.Email = aUserDetails.Email;
+                aUserDetail.Password = aUserDetails.Password;
+                aUserDetail.UserType = aUserDetails.UserType;
+                aUserDetail.Gender = aUserDetails.Gender;
+                aUserDetail.DateOfBirth = Convert.ToDateTime("1990-09-10");
+                aUserDetail.CreatedOn = DateTime.Now;
+                aUserDetail.Status = 1;
+
+                _context.UserDetails.Add(aUserDetail);
+                _context.SaveChanges();
+            }
+
+            catch (Exception ex)
+            {
+                ex.ToString();
+            }
         }
 
         public void UpdateUsers(UserDetails aUserDetails)

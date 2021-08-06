@@ -11,6 +11,8 @@
         <EntityTypeShape EntityType="GppAppModel.ItemImages" Width="1.5" PointX="6.75" PointY="0.5" />
         <EntityTypeShape EntityType="GppAppModel.ProjectsHistory" Width="1.5" PointX="0.75" PointY="3.375" />
         <EntityTypeShape EntityType="GppAppModel.ProjectItemsHistory" Width="1.5" PointX="2.75" PointY="3.375" />
+        <EntityTypeShape EntityType="GppAppModel.Gender" Width="1.5" PointX="6.75" PointY="2.875" />
+        <EntityTypeShape EntityType="GppAppModel.UserTypes" Width="1.5" PointX="4.75" PointY="3.625" />
       </Diagram>
     </edmx:Diagrams>
   </edmx:Designer>

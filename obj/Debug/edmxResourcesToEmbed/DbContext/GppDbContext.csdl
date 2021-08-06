@@ -34,6 +34,8 @@
     <EntitySet Name="ItemImages" EntityType="GppAppModel.ItemImages" />
     <EntitySet Name="ProjectsHistory" EntityType="GppAppModel.ProjectsHistory" />
     <EntitySet Name="ProjectItemsHistory" EntityType="GppAppModel.ProjectItemsHistory" />
+    <EntitySet Name="Gender" EntityType="GppAppModel.Gender" />
+    <EntitySet Name="UserTypes" EntityType="GppAppModel.UserTypes" />
   </EntityContainer>
   <EntityType Name="UserDetails">
     <Key>
@@ -88,5 +90,19 @@
     <Property Name="PreCreatedBy" Type="Int32" />
     <Property Name="UpdatedOn" Type="DateTime" Precision="3" />
     <Property Name="PreId" Type="Int32" />
+  </EntityType>
+  <EntityType Name="Gender">
+    <Key>
+      <PropertyRef Name="Id" />
+    </Key>
+    <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="GenderType" Type="String" MaxLength="6" FixedLength="false" Unicode="true" />
+  </EntityType>
+  <EntityType Name="UserTypes">
+    <Key>
+      <PropertyRef Name="Id" />
+    </Key>
+    <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="Types" Type="String" MaxLength="20" FixedLength="false" Unicode="true" />
   </EntityType>
 </Schema>

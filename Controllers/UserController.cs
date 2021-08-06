@@ -1,5 +1,6 @@
 ﻿using GppApp.DbContext;
 using GppApp.Interface;
+using GppApp.Models;
 using GppApp.Repository;
 using System;
 using System.Collections.Generic;
@@ -44,6 +45,37 @@ namespace GppApp.Controllers
             }
 
             return Json(aLst, JsonRequestBehavior.AllowGet);
+        }
+
+        [HttpPost]
+        public JsonResult GetAllUsers()
+        {
+            List<UserViewModel> aLst = null;
+            try
+            {
+                aLst = _usersRepository.GetAllUsers();
+            }
+            catch (Exception ex)
+            {
+                ex.ToString();
+            }
+
+            return Json(aLst, JsonRequestBehavior.AllowGet);
+        }
+
+        public async Task<JsonResult> AddUsers(UserDetails aUserDetails)
+        {
+            try
+            {
+                _usersRepository.AddUsers(aUserDetails);
+            }
+
+            catch (Exception ex)
+            {
+                ex.ToString();
+            }
+
+            return await Task.Run(() => Json("User details added successfully!", JsonRequestBehavior.AllowGet));
         }
 
         public async Task<JsonResult> UpdateUsers(UserDetails aUserDetails)

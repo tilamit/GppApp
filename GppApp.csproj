@@ -146,6 +146,9 @@
     <Compile Include="Controllers\ErrorPageController.cs" />
     <Compile Include="Controllers\HomeController.cs" />
     <Compile Include="Controllers\UserController.cs" />
+    <Compile Include="DbContext\Gender.cs">
+      <DependentUpon>GppDbContext.tt</DependentUpon>
+    </Compile>
     <Compile Include="DbContext\GppDbContext.Context.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
@@ -179,6 +182,9 @@
     <Compile Include="DbContext\UserDetails.cs">
       <DependentUpon>GppDbContext.tt</DependentUpon>
     </Compile>
+    <Compile Include="DbContext\UserTypes.cs">
+      <DependentUpon>GppDbContext.tt</DependentUpon>
+    </Compile>
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
@@ -189,6 +195,7 @@
     <Compile Include="Models\ProjectImages.cs" />
     <Compile Include="Models\ProjectItemHistory.cs" />
     <Compile Include="Models\ProjectsViewModel.cs" />
+    <Compile Include="Models\UserViewModel.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Repository\AuthorizeRepository.cs" />
     <Compile Include="Repository\ProjectsRepository.cs" />
@@ -2523,6 +2530,7 @@
     <Content Include="Views\Shared\Entry.cshtml" />
     <Content Include="Views\Shared\projectsPartialView.cshtml" />
     <Content Include="Views\Shared\editProjectsPartialView.cshtml" />
+    <Content Include="Views\Shared\usersPartialView.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
