@@ -13,6 +13,7 @@ namespace GppApp.Interface
         List<UserDetails> GetUsers();
         List<UserViewModel> GetAllUsers();
         void UpdateUsers(UserDetails aUserDetails);
+        void UpdateAllUsers(UserDetails aUserDetails);
         void AddUsers(UserDetails aUserDetails);
     }
 }

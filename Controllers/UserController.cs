@@ -48,12 +48,19 @@ namespace GppApp.Controllers
         }
 
         [HttpPost]
-        public JsonResult GetAllUsers()
+        public JsonResult GetAllUsers(int id)
         {
             List<UserViewModel> aLst = null;
             try
             {
-                aLst = _usersRepository.GetAllUsers();
+                if(id != 0)
+                {
+                    aLst = _usersRepository.GetAllUsers().Where(c => c.UserId == id && c.Status == 1).ToList();
+                }
+                else
+                {
+                    aLst = _usersRepository.GetAllUsers().Where(c => c.Status == 1).ToList(); ;
+                }
             }
             catch (Exception ex)
             {
@@ -83,6 +90,21 @@ namespace GppApp.Controllers
             try
             {
                 _usersRepository.UpdateUsers(aUserDetails);
+            }
+
+            catch (Exception ex)
+            {
+                ex.ToString();
+            }
+
+            return await Task.Run(() => Json("User details updated successfully!", JsonRequestBehavior.AllowGet));
+        }
+
+        public async Task<JsonResult> UpdateAllUsers(UserDetails aUserDetails)
+        {
+            try
+            {
+                _usersRepository.UpdateAllUsers(aUserDetails);
             }
 
             catch (Exception ex)

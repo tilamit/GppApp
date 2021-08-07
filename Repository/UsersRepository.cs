@@ -34,8 +34,11 @@ namespace GppApp.Repository
                               UserId = c.UserId,
                               UserName = c.UserName,
                               Email = c.Email,
+                              UserType = c.UserType,
+                              Gender = c.Gender,
                               UserTypes = f.Types,
-                              CreatedOn = c.CreatedOn
+                              CreatedOn = c.CreatedOn,
+                              Status = c.Status
                           }).ToList();
 
             return result;
@@ -76,6 +79,21 @@ namespace GppApp.Repository
                 result.Gender = aUserDetails.Gender;
                 result.DateOfBirth = aUserDetails.DateOfBirth;
             
+                _context.SaveChanges();
+            }
+        }
+
+        public void UpdateAllUsers(UserDetails aUserDetails)
+        {
+            var result = _context.UserDetails.SingleOrDefault(c => c.UserId == aUserDetails.UserId);
+
+            if (result != null)
+            {
+                result.UserName = aUserDetails.UserName;
+                result.Gender = aUserDetails.Gender;
+                result.UserType = aUserDetails.UserType;
+                result.Status = aUserDetails.Status;
+
                 _context.SaveChanges();
             }
         }
