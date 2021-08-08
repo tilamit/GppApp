@@ -9,6 +9,7 @@ namespace GppApp.Interface
     public interface ProjectsInterface : IDisposable
     {
         List<Projects> GetProjects();
+        List<ProjectItems> GetAllProjectItems();
         List<ProjectsViewModel> GetProjectItems(string projectId);
         List<ProjectItems> GetItems(int id);
         List<ItemImages> GetImages(int projectId);

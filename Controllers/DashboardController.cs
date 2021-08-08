@@ -95,19 +95,36 @@ namespace GppApp.Controllers
         }
 
         [HttpPost]
-        public JsonResult GetProjectItems(string id)
+        public JsonResult GetAllProjects()
         {
-            List<ProjectsViewModel> aLst = null;
+            int projectsTotal = 0;
+            List<Projects> aLst = null;
             try
             {
-                aLst = _projectsRepository.GetProjectItems(id);
+                aLst = _projectsRepository.GetProjects().Where(c => c.Status == 1).ToList();
             }
             catch (Exception ex)
             {
                 ex.ToString();
             }
 
-            return Json(aLst, JsonRequestBehavior.AllowGet);
+            return Json(projectsTotal = aLst.Count(), JsonRequestBehavior.AllowGet);
+        }
+
+        [HttpPost]
+        public JsonResult GetAllProjectItems()
+        {
+            List<ProjectItems> aLst = null;
+            try
+            {
+                aLst = _projectsRepository.GetAllProjectItems().Where(c => c.Status == 1).ToList();
+            }
+            catch (Exception ex)
+            {
+                ex.ToString();
+            }
+
+            return Json(aLst.Count(), JsonRequestBehavior.AllowGet);
         }
 
         [HttpPost]

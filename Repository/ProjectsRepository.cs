@@ -68,6 +68,11 @@ namespace GppApp.Repository
             return _context.ProjectItems.Where(c => c.Id == id).ToList();
         }
 
+        public List<ProjectItems> GetAllProjectItems()
+        {
+            return _context.ProjectItems.ToList();
+        }
+
 
         public List<ProjectsViewModel> GetProjectItems(string projectId)
         {

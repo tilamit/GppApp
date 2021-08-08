@@ -64,3 +64,11 @@ span.spanId {
 #projectHisDetails td {
     color:white;
 }
+
+.body-color {
+    background:#002b73 !important;
+}
+
+.dashboard {
+    color:black;
+}
