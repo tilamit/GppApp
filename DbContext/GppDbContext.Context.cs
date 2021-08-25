@@ -33,5 +33,9 @@ namespace GppApp.DbContext
         public virtual DbSet<ProjectItemsHistory> ProjectItemsHistory { get; set; }
         public virtual DbSet<Gender> Gender { get; set; }
         public virtual DbSet<UserTypes> UserTypes { get; set; }
+        public virtual DbSet<AssignedMenus> AssignedMenus { get; set; }
+        public virtual DbSet<Menus> Menus { get; set; }
+        public virtual DbSet<TrackUsers> TrackUsers { get; set; }
+        public virtual DbSet<ItemsConfirmed> ItemsConfirmed { get; set; }
     }
 }

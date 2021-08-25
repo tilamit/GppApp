@@ -12,7 +12,11 @@
         <EntityTypeShape EntityType="GppAppModel.ProjectsHistory" Width="1.5" PointX="0.75" PointY="3.375" />
         <EntityTypeShape EntityType="GppAppModel.ProjectItemsHistory" Width="1.5" PointX="2.75" PointY="3.375" />
         <EntityTypeShape EntityType="GppAppModel.Gender" Width="1.5" PointX="6.75" PointY="2.875" />
-        <EntityTypeShape EntityType="GppAppModel.UserTypes" Width="1.5" PointX="4.75" PointY="3.625" />
+        <EntityTypeShape EntityType="GppAppModel.UserTypes" Width="1.5" PointX="4.75" PointY="3.875" />
+        <EntityTypeShape EntityType="GppAppModel.AssignedMenus" Width="1.5" PointX="8.625" PointY="0.5" />
+        <EntityTypeShape EntityType="GppAppModel.Menus" Width="1.5" PointX="8.625" PointY="2.625" />
+        <EntityTypeShape EntityType="GppAppModel.TrackUsers" Width="1.5" PointX="6.75" PointY="4.5" />
+        <EntityTypeShape EntityType="GppAppModel.ItemsConfirmed" Width="1.5" PointX="8.625" PointY="5" />
       </Diagram>
     </edmx:Diagrams>
   </edmx:Designer>

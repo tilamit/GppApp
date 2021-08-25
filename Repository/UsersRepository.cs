@@ -53,6 +53,16 @@ namespace GppApp.Repository
                 aUserDetail.Email = aUserDetails.Email;
                 aUserDetail.Password = aUserDetails.Password;
                 aUserDetail.UserType = aUserDetails.UserType;
+
+                if(aUserDetails.UserType == 1)
+                {
+                    aUserDetail.AssignedMenu = "#admin";
+                }
+                else
+                {
+                    aUserDetail.AssignedMenu = "#user";
+                }
+
                 aUserDetail.Gender = aUserDetails.Gender;
                 aUserDetail.DateOfBirth = Convert.ToDateTime("1990-09-10");
                 aUserDetail.CreatedOn = DateTime.Now;

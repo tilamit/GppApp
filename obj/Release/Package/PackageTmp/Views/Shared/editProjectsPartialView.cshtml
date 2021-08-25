@@ -1,0 +1,678 @@
+﻿@model IEnumerable<GppApp.Models.ProjectsViewModel>
+@{
+    ViewBag.Title = "Project Items";
+}
+
+<style type="text/css">
+    .elem, .elem * {
+        box-sizing: border-box;
+        margin: 0 !important;
+    }
+
+    .elem {
+        display: inline-block;
+        font-size: 0;
+        width: 33%;
+        border: 20px solid transparent;
+        border-bottom: none;
+        background: #fff;
+        padding: 10px;
+        height: auto;
+        background-clip: padding-box;
+    }
+
+    .elem > span {
+        display: block;
+        cursor: pointer;
+        height: 0;
+        padding-bottom: 70%;
+        background-size: cover;
+        background-position: center center;
+    }
+
+    .hide, .hideArea, .hideDate, .hideChecked, .showBlueBar, .hideSection {
+        display: none;
+    }
+
+    .mdi-history::before, .alignText {
+        font-size: 20px;
+        text-align: center;
+    }
+
+    .bs-example{
+    	margin: 20px;
+    }
+</style>
+
+<div>
+    <div class="d-flex justify-content-between">
+        <div><input type="button" class="btn btn-success" id="floatLeft" value="Generate PDF" /></div>
+        <div class="col-lg-12"><a id="openModal" class="btn btn-primary" data-toggle="modal" data-target="#myProjectItems">Add Items</a></div>
+        <div class="col-lg-12" id="floatRight"><a id="delete" class="btn btn-danger">Delete</a></div>
+    </div>
+</div>
+
+<br />
+
+@*Add Project Items*@
+<div id="myProjectItems" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h4>Add Project Items <span class="spanId"></span></h4>
+                <button type="button" class="close" data-dismiss="modal">&times;</button>
+            </div>
+            <div class="modal-body">
+                <form>
+                    <div class="form-group hide">
+                        <label for="Id">Id</label>
+                        <input type="text" class="form-control" id="id" />
+
+                        <span class="hideSection" id="preId"></span>
+                    </div>
+                    <div class="form-group">
+                        <label for="ItemDescription">Item Description</label>
+                        <input type="text" class="form-control" id="editor1" placeholder="Description" />
+
+                        <span class="hideSection" id="preEditor1"></span>
+                    </div>
+                    <div class="form-group">
+                        <label for="projectNotes">Notes</label>
+                        <input type="text" class="form-control" id="projectNotes" placeholder="Notes" />
+
+                        <span class="hideSection" id="preProjectNotes"></span>
+                    </div>
+                    <div class="form-group">
+                        <label for="CreatedOn">Created On</label>
+                        <input type="text" class="form-control" id="projectCreatedOn" />
+
+                        <span class="hideSection" id="preProjectCreatedOn"></span>
+                    </div>
+                    <div class="form-group hideThisStatus">
+                        <label for="Status">Status</label>
+                        <input type="checkbox" class="form-control" id="addItemStatus" />
+                    </div>
+                    <div class="form-group">
+                        <label for="itemImage">Image</label>
+                        <input type="file" name="Image" value="" onchange="return ShowImagePreview(this)" class="form-control" id="uploadImg" /><div></div>
+                        <img src="~/img/default.jpg" alt="preview" id="imagePreview" style="border: 1px solid red; height: 200px; width: 200px; margin: auto; display: block;" />
+                    
+                        <span class="hideSection" id="preProjectId"></span>
+                        <span class="hideSection" id="preUploadImg"></span>
+                        <span id="createdBy" class="hideSection"></span>
+                        <span id="preChecked" class="hideSection"></span>
+                    </div>
+                </form>
+            </div>
+            <div class="modal-footer">
+                <input type="button" class="btn btn-default" id="addData" value="Add" />
+                <input type="button" class="btn btn-default" id="updateData" value="Update" />
+            </div>
+        </div>
+    </div>
+</div>
+
+@*Show Project Items History*@
+<div id="myProjectItemsHistory" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h4>Project Items Update History</h4>
+                <button type="button" class="close" data-dismiss="modal">&times;</button>
+            </div>
+            <div class="modal-body">
+                <div id="projectItemsHistory"></div>
+            </div>
+            <div class="modal-footer">
+
+            </div>
+        </div>
+    </div>
+</div>
+
+@*Show images here*@
+<div id="myProjectImages" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabe2" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h4>Image Details<span class="spanId"></span></h4>
+                <button type="button" class="close" data-dismiss="modal">&times;</button>
+            </div>
+            <div class="modal-body">
+                <div class="images"></div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="row">
+    <div class="col-lg-12 grid-margin stretch-card">
+        <div class="card overrideCard">
+            <div class="card-body" id="card">
+
+            </div>
+        </div>
+    </div>
+    <div class="hide">
+
+    </div>
+</div>
+
+<script src="~/ckeditor/ckeditor.js"></script>
+
+<script>
+    //Hide modal initially
+    $('#myProjectItems').modal('hide');
+    $('#updateData').hide();
+    $('.hideThisStatus').hide();
+
+    //Open modal on click
+    $('#openModal').click(function () {
+
+        //Initialize CKEditor by giving id of text area
+        CKEDITOR.replace('editor1');
+
+        //Get each instance of CKEditor
+        for (instance in CKEDITOR.instances) {
+            //update element
+            CKEDITOR.instances[instance].updateElement();
+        }
+
+        CKEDITOR.instances['editor1'].setData('');
+        $('#projectNotes').val('');
+        $('#projectCreatedOn').val('');
+
+        $('#updateData').hide();
+        $('#addData').show();
+        $('#myProjectItems').modal('show');
+        $(".spanId").html($(".card-title").html());
+        $('.hideThisStatus').hide();
+    });
+
+    //Hide modal on click
+    $("#closbtn").click(function () {
+        $('#myProjectItems').modal('hide');
+    });
+
+    //SyncFusion date picker
+    var datepicker = new ej.calendars.DatePicker({ width: "255px", color: "red", format: "MM/dd/yyyy" });
+    datepicker.appendTo('#projectCreatedOn');
+
+    //CKEditor
+    //Initialize CKEditor by giving id of text area
+    //CKEDITOR.config.width = 800;
+    CKEDITOR.replace('editor1');
+
+    //Get each instance of CKEditor
+    for (instance in CKEDITOR.instances) {
+        CKEDITOR.instances[instance].updateElement();
+    }
+
+    //Add project items here
+    $('#addData').click(function () {
+        var id = '@ViewBag.projectId';
+
+        $('.card-body').empty();
+        var aProjectItems = {};
+
+        var res = validate();
+        if (res == true) {
+            $('#projects').empty();
+
+            aProjectItems.ProjectId = id;
+            aProjectItems.ItemDescription = CKEDITOR.instances['editor1'].getData();  //Set CKEditor value using jQuery
+            aProjectItems.ProjectNotes = $("#projectNotes").val();
+            aProjectItems.CreatedOn = $("#projectCreatedOn").val();
+          
+            $.ajax({
+                type: "POST",
+                url: "/Dashboard/AddProjectItems",
+                data: JSON.stringify({ aProjectItems }),
+                contentType: "application/json; charset=utf-8",
+                dataType: "json",
+                success: function (id) {
+                    alert("Project item added successfully!");
+
+                    //Image upload
+                    var data = new FormData();
+                    var files = $("#uploadImg").get(0).files;
+                    if (files.length > 0) {
+                        data.append("MyImages", files[0]);
+                    }
+
+                    data.append("id", "");
+                    data.append("uniqueId", parseInt(id));
+                    data.append("imgName", "");
+
+                    $.ajax({
+                        url: "/Dashboard/UploadImg",
+                        type: "POST",
+                        processData: false,
+                        contentType: false,
+                        data: data,
+                        success: function (response) {
+                            //$(".img-circle").attr('src', '/img/' + response);
+
+                            GetProjectItems();
+                        },
+                        error: function (er) {
+                            //alert(er);
+                        }
+                    });
+                },
+                error: function (ex) {
+                    alert('Failed to retrieve states.' + ex);
+                }
+            });
+        } else {
+            alert("Please! Fill up all fields.");
+        }
+    });
+
+    //Update project items here
+    $('#updateData').click(function () {
+        var aProjectItemHistory = {};
+
+        var res = validate();
+        if (res == true) {
+            $('#projects').empty();
+
+            //Image upload
+            var data = new FormData();
+            var files = $("#uploadImg").get(0).files;
+            if (files.length > 0) {
+                data.append("MyImages", files[0]);
+            }
+
+            var txt = $(".spanId").html();
+            data.append("id", "");
+            data.append("uniqueId", $("#id").val());
+            data.append("imgName", $('#imagePreview').attr('src').filename());
+
+            //Update project item details
+            aProjectItemHistory.Id = $("#id").val();
+            aProjectItemHistory.ItemDescription = CKEDITOR.instances['editor1'].getData();  //Set CKEditor value using jQuery
+            aProjectItemHistory.ProjectNotes = $("#projectNotes").val();
+
+            //Update project item history
+            aProjectItemHistory.ProjectId = $("#preProjectId").text();
+            aProjectItemHistory.PreItemDescription = $("#preEditor1").text();  //Set CKEditor value using jQuery
+            aProjectItemHistory.PreProjectNotes = $("#preProjectNotes").text();
+            aProjectItemHistory.PreImage = $("#preUploadImg").text();
+            aProjectItemHistory.PreChecked = $("#preChecked").text();
+            aProjectItemHistory.PreCreatedOn = $("#preProjectCreatedOn").text();
+            aProjectItemHistory.PreCreatedBy = $("#createdBy").text();
+
+            if ($("#addItemStatus").prop('checked') == true) {
+                aProjectItemHistory.PreStatus = 1;
+            } else {
+                aProjectItemHistory.PreStatus = 0;
+            }
+
+            $.ajax({
+                type: "POST",
+                url: "/Dashboard/UpdateItems",
+                data: JSON.stringify({ aProjectItemHistory }),
+                contentType: "application/json; charset=utf-8",
+                dataType: "json",
+                success: function (value) {
+                    alert(value);
+
+                    $.ajax({
+                        url: "/Dashboard/UploadImg",
+                        type: "POST",
+                        processData: false,
+                        contentType: false,
+                        data: data,
+                        success: function (response) {
+                            //$(".img-circle").attr('src', '/img/' + response);
+                        },
+                        error: function (er) {
+                            alert(er);
+                        }
+                    });
+
+                    GetProjectItems();
+                },
+                error: function (ex) {
+                    alert('Failed to retrieve states.' + ex);
+                }
+            });
+        } else {
+            alert("Please! Fill up all fields.");
+        }
+    });
+
+    function ShowImagePreview(input) {
+        debugger;
+        if (input.files && input.files[0]) {
+            var fname = input.files[0].name;
+            var re = /(\.jpg|\.jpeg|\.bmp|\.gif|\.png)$/i;
+            if (!re.exec(fname)) {
+                alert("Image not supported!");
+                $("#fileupload").val("");
+
+                return false;
+            }
+            else {
+                var reader = new FileReader();
+                reader.onload = function (e) {
+                    $('#imagePreview').prop('src', e.target.result);
+                };
+                reader.readAsDataURL(input.files[0]);
+            }
+        }
+    }
+
+    GetProjectItems();
+
+    //Get project items
+    function GetProjectItems() {
+        var html = "";
+        var html2 = "";
+        var id = '@ViewBag.projectId';
+
+        var backColor = "";
+
+        $("#card").empty();
+
+        $.ajax({
+            url: "/Dashboard/GetProjectItems",
+            type: "POST",
+            contentType: "application/json; charset=utf-8",
+            dataType: "json",
+            data: JSON.stringify({ id: id }),
+            success: function (projects) {
+                if (projects != null || projects != "") {
+
+                    html += "<h4 class='card-title card-title-override hideId'>" + projects[0].ProjectId + "</h4><div class='table-responsive'>" +
+                            "<table id='projects' class='table table-bordered table-contextual projectItems'><thead>" +
+                            "<tr><th class='hideArea'>Date</th><th>Select</th><th class='action'>Action</th><th class='headingItemNo'> Item # </th><th class='hide'>Id</th><th>Item Description</th><th>Notes</th><th class='hideDate'>Created On</th><th>History</th><th>Image</th><th class='hideChecked'>Checked?</th></tr></thead><tbody>";
+
+                    $.each(projects, function (i, project) {
+                        if (project.Checked == true) {
+                            backColor = "<td class='checked hideChecked' style='background-color:#98FB98;-webkit-print-color-adjust: exact;'>CHECKED</td>";
+                        } else {
+                            backColor = "<td class='checked hideChecked' style='background-color:lightpink;-webkit-print-color-adjust: exact;'></td>;"
+                        }
+
+                        var num = parseInt(i) + 1;
+                        html += "<tr><td><input type='checkbox' class='cbCheck' value='" + project.Id + "' id='" + project.Id + "' /></td><td class='action'><a class='editItems' data-projectId='" + project.ProjectId + "'>Edit</a></td><td>" + num + "</td>" +
+                                "<td class='hide hideId projectWithId'>" + project.Id + "</td>" +
+                                "<td class='hideDate proCreatedOn'>" + getDateFormatted(project.ProCreatedOn).toString().slice(0, 15) + "</td>" +
+                                "<td class='detailsWidth'>" + project.ItemDescription + "</td>" +
+                                "<td>" + project.ProjectNotes + "</td>" +
+                                "<td class='hideDate'>" + (project.CreatedOn) + "</td><td class='alignText'><i class='mdi mdi-history projectItemHistory'></i></td>" +
+                                "<td><img id='showImages' height='270' width='240' src='/img/" + project.Image + "' /></td>" + backColor + "</tr><tr><td class='showBlueBar' height='20' colspan='10' style='background-color: lightblue; -webkit-print-color-adjust: exact;'></td></tr>";
+                    })
+
+                    //html += "<a class='elem hideImages' data-lcl-txt='lorem ipsum dolor sit amet' data-lcl-author='someone' data-lcl-thumb='https://images.unsplash.com/photo-1476514525535-07fb3b4ae5f1?dpr=1&auto=format&fit=crop&w=150&q=80&cs=tinysrgb'></a>";
+
+                    html += "</tbody></table></div>";
+                }
+
+                $("#card").append(html);
+
+                //Update project items
+                var id = "";
+                $('.editItems').click(function () {
+                    id = $(this).closest("tr").find(".hideId").text();
+
+                    $.ajax({
+                        url: "/Dashboard/GetItems",
+                        type: "POST",
+                        contentType: "application/json; charset=utf-8",
+                        dataType: "json",
+                        data: JSON.stringify({ id: id }),
+                        success: function (projects) {
+                            if (projects != null || projects != "") {
+
+                                //Initialize CKEditor by giving id of text area
+                                CKEDITOR.replace('editor1');
+
+                                //Get each instance of CKEditor
+                                for (instance in CKEDITOR.instances) {
+                                    //update element
+                                    CKEDITOR.instances[instance].updateElement();
+                                }
+
+                                //Set CKEditor value using jQuery
+                                $.each(projects, function (i, project) {
+                                    CKEDITOR.instances['editor1'].setData(project.ItemDescription);
+                                    $('#id').val(project.Id);
+                                    $('#projectNotes').val(project.ProjectNotes);
+                                    $('#projectCreatedOn').val(getFormattedDate(project.CreatedOn));
+                                    $('#createdBy').val(project.CreatedBy);
+                                    $('#imagePreview').attr('src', "/img/" + project.Image + "");
+
+                                    $("#preProjectId").text(project.ProjectId);
+                                    $("#preEditor1").text(project.ItemDescription);  //Set CKEditor value using jQuery
+                                    $("#preProjectNotes").text(project.ProjectNotes);
+                                    $("#preUploadImg").text(project.Image);
+                                    $("#preChecked").text(project.Checked);
+                                    $("#preProjectCreatedOn").text(getFormattedDate(project.CreatedOn));
+                                    $("#createdBy").text(project.CreatedBy);
+
+                                    if (project.Status == 1) {
+                                        $('#addItemStatus').prop('checked', true);
+                                    } else {
+                                        $('#addItemStatus').prop('checked', false);
+                                    }
+                                })
+
+                                $('.hideThisStatus').show();
+                                $('#updateData').show();
+                                $('#addData').hide();
+                                $('#myProjectItems').modal('show');
+                            }
+                        },
+                        error: function (er) {
+                            //alert(er);
+                        }
+                    });
+                });
+
+                //Delete students
+                $("#delete").click(function () {
+                    var $container = $('.projectItems');
+                    var $checked = $container.find('.cbCheck:checked');
+                    var values = $checked.map(function () {
+                        return this.value
+                    }).get();
+
+                    alert(values);
+
+                    var cnfrm = confirm('Are you sure to delete?');
+                    if (cnfrm == true) {
+                        alert(values.join(','));
+                    } else {
+                        return false;
+                    }
+                });
+
+                //Show update history
+                $('.projectItemHistory').click(function () {
+                    $('#myProjectItemsHistory').modal('show');
+
+                    $('#projectItemsHistory').empty();
+
+                    var html = "";
+                    id = $(this).closest("tr").find(".projectWithId").text();
+
+                    $.ajax({
+                        url: "/Dashboard/ShowProjectItemsHistory",
+                        type: "POST",
+                        contentType: "application/json; charset=utf-8",
+                        dataType: "json",
+                        data: JSON.stringify({ id: id }),
+                        success: function (projects) {
+                            if (projects != null || projects != "") {
+
+                                html += "<div class='table-responsive'>" +
+                                        "<table id='projectItemsHisDetails' class='table table-bordered'><thead>" +
+                                        "<tr><th> # </th><th>Id</th><th>Details</th><th>Created On</th><th>Updated On</th><th>Updated By</th></tr></thead><tbody>";
+
+                                $.each(projects, function (i, project) {
+                                    var num = parseInt(i) + 1;
+
+                                    html += "<tr><td>" + num + "</td>" +
+                                            "<td>" + project.ProjectId + "</td>" +
+                                            "<td>" + project.PreItemDescription + "</td>" +
+                                            "<td>" + getFormattedDate(project.PreCreatedOn) + "</td>" +
+                                            "<td>" + getFormattedDate(project.UpdatedOn) + "</td>" +
+                                            "<td>" + project.PersonCreated + "</td>" +
+                                            "</tr>";
+                                })
+
+                                html += "</tbody></table></div>";
+                            }
+
+                            $("#projectItemsHistory").append(html);
+                        },
+                        error: function (er) {
+                            alert(er);
+                        }
+                    });
+                });
+
+                //Get image name
+                String.prototype.filename = function (extension) {
+                    var s = this.replace(/\\/g, '/');
+                    s = s.substring(s.lastIndexOf('/') + 1);
+                    return extension ? s.replace(/[?#].+$/, '') : s.split('.')[0];
+                }
+
+                //Add image src here
+                $("body").on("click", "#showImages", function () {
+                    $('.images').empty();
+
+                    var id = $(this).closest("tr").find(".hideId").text();
+
+                    var html2 = "";
+                    debugger;
+                    $.ajax({
+                        url: "/Dashboard/GetImages",
+                        type: "POST",
+                        contentType: "application/json; charset=utf-8",
+                        dataType: "json",
+                        data: JSON.stringify({ id: id }),
+                        success: function (data) {
+                            if (data != null || data != "") {
+
+                                $.each(data, function (i, project) {
+                                    html2 += "<div id='userDetails'><b>Changed by</b>: Tim <b>Date Changed</b>: 07/22/2021</div>";
+                                    html2 += "<img width='470' height='240' src='/img/" + project.Image + "' /><br/>";
+                                })
+                            }
+
+                            $('.images').html(html2);
+                            $('#myProjectImages').modal('show');
+                        },
+                        error: function (er) {
+                            //alert(er);
+                        }
+                    });
+                });
+
+                //Create pdf here
+                //Generate pdf
+                $("body").on("click", "#floatLeft", function () {
+                    //var divContents = $("#projects").html();
+                    var sTable = document.getElementById('card').innerHTML;
+                    var style = "<style>";
+                    style = style + "@@page { size: A4 landscape; } body { border: 2px solid #1f497d; padding: 4%; margin: 0; }";
+                    style = style + "table { width: 100%; font: 17px Calibri; } #showImages { height: 140px; width: 180px; } #BoxLeft { font-size:14px; width: 100%; margin: 0 auto; margin-top: 6%; height: 40px; } .Box1, .Box2 { float: left; width: 15%; } .box { height: 25px; border: 1px solid #bdbdbd; -webkit-border-radius: 5px; border-radius: 5px; -moz-box-shadow: 0 0 10px #bdbdbd; -webkit-box-shadow: 0 0 10px #bdbdbd; box-shadow: 0 0 10px #bdbdbd; } .Box1 { background-color: #002b73; color:white; -webkit-print-color-adjust: exact; } .Box2 { background-color: white; -webkit-print-color-adjust: exact; }  #BoxRight { font-size:14px; width: 100%; margin: 0 auto; margin-top: -12%; height: 40px; } .Box3, .Box4 { float: right; width: 15%; } .Box3 { -webkit-print-color-adjust: exact; } .Box4 { background-color: #002b73; color:white; -webkit-print-color-adjust: exact; }";
+                    style = style + "table, td { border: solid 2px #002b73; border-collapse: collapse; font-size:14px;";
+                    style = style + "padding: 2px 3px;text-align: center; } #projects th { height:10px; font-size:14px; text-transform: uppercase; background-color: #002b73; -webkit-print-color-adjust: exact; color: white; }";
+                    style = style + ".headingItemNo { width: 6%; } .detailsWidth { width:40%; } #projects { margin-top: 0%; -webkit-print-color-adjust: exact; } .action, .hideId, .hide, .hideDate, .hideArea { display:none; } .top { margin-top: -5%; margin-left: 4%; } .topAside { margin-top: -5%; margin-left: 4%; } .heading { margin-top:3%; text-align:center; } .logoGpp { height: 140px; width: 250px; display: block; margin-left: auto; margin-right: auto; -webkit-print-color-adjust: exact; }";
+                    style = style + "</style>";
+
+                    var win = window.open('', '', 'height=2000,width=2000');
+
+                    win.document.write("<html><head>");
+                    win.document.write(style);
+                    win.document.write("</head>");
+                    win.document.write("<body><img class='logoGpp' src='/img/logo.jpg' /><div class='top topAside'><div id='BoxLeft'><div class='Box1'><div class='box'><h4 class='heading'>Job Reference: </h4></div></div><div class='Box2'><div class='box'><h4 class='heading'>" + $(".card-title").html() + "</h4></div></div></div></div>");
+                    win.document.write("<div class='top'><div id='BoxRight'><div class='Box3'><div class='box'><h4 class='heading'>" + $(".proCreatedOn").html() + "</h4></div></div><div class='Box4'><div class='box'><h4 class='heading'>Initiation Date: </h4></div></div></div></div><br /><br /><br /><br />");
+                    win.document.write(sTable);
+                    win.document.write("</body></html>");
+
+                    win.document.close();
+
+                    win.print();
+                });
+
+                //Live handler for images
+                lc_lightbox('.elem', {
+                    wrap_class: 'lcl_fade_oc',
+                    gallery: true,
+                    thumb_attr: 'data-lcl-thumb',
+
+                    skin: 'minimal',
+                    radius: 0,
+                    padding: 0,
+                    border_w: 0,
+                });
+            },
+            error: function (er) {
+                //alert(er);
+            }
+        });
+    }
+
+    function getFormattedDate(date) {
+        var dt = new Date(parseInt(date.replace("/Date(", "").replace(")/", ""), 10))
+        var date = new Date(Date.parse(dt));
+
+        return ('0' + (date.getMonth() + 1)).slice(-2) + "/" + ('0' + date.getDate()).slice(-2) + "/" + date.getFullYear();
+    }
+
+    function getDateFormatted(date) {
+        var dt = new Date(parseInt(date.replace("/Date(", "").replace(")/", ""), 10))
+        var date = new Date(Date.parse(dt));
+
+        return date;
+    }
+
+    Date.prototype.getDateWithoutTime = function () {
+        return new Date(this.toDateString());
+    }
+
+    //Validation
+    function validate() {
+        //Initialize CKEditor by giving id of text area
+        CKEDITOR.replace('editor1');
+
+        //Get each instance of CKEditor
+        for (instance in CKEDITOR.instances) {
+            //update element
+            CKEDITOR.instances[instance].updateElement();
+        }
+
+        var isValid = true;
+
+        if ($('#projectNotes').val().trim() == "") {
+            $('#projectNotes').css('border-color', 'Red');
+            isValid = false;
+        }
+        else {
+            $('#projectNotes').css('border-color', 'lightgrey');
+        }
+        if (CKEDITOR.instances['editor1'].getData().trim() == "") {
+            $('#editor1').css('border-color', 'Red');
+            isValid = false;
+        }
+        else {
+            $('#editor1').css('border-color', 'lightgrey');
+        }
+        if ($('#projectCreatedOn').val().trim() == "") {
+            $('#projectCreatedOn').css('border-color', 'Red');
+            isValid = false;
+        }
+        else {
+            $('#projectCreatedOn').css('border-color', 'lightgrey');
+        }
+
+        return isValid;
+    }
+</script>

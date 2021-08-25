@@ -79,12 +79,28 @@ namespace GppApp.Controllers
             {
                 if (id == "" || id == null)
                 {
-                    aLst = _projectsRepository.GetProjects();
+                    aLst = _projectsRepository.GetProjects().OrderByDescending(c => c.Id).ToList();
                 }
                 else
                 {
-                    aLst = _projectsRepository.GetProjects().Where(c => c.ProjectId == id).ToList();
+                    aLst = _projectsRepository.GetProjects().Where(c => c.ProjectId == id).OrderByDescending(c => c.Id).ToList();
                 }
+            }
+            catch (Exception ex)
+            {
+                ex.ToString();
+            }
+
+            return Json(aLst, JsonRequestBehavior.AllowGet);
+        }
+
+        [HttpPost]
+        public JsonResult GetProjectItems(string id)
+        {
+            List<ProjectsViewModel> aLst = null;
+            try
+            {
+                aLst = _projectsRepository.GetProjectItems(id).OrderByDescending(c => c.Id).ToList();
             }
             catch (Exception ex)
             {
@@ -242,6 +258,22 @@ namespace GppApp.Controllers
             return await Task.Run(() => Json("Project items updated successfully!", JsonRequestBehavior.AllowGet));
         }
 
+        //Update project items here
+        public async Task<JsonResult> DeleteProjectItems(string itemId)
+        {
+            try
+            {
+                _projectsRepository.DeleteProjectItems(itemId);
+            }
+
+            catch (Exception ex)
+            {
+                ex.ToString();
+            }
+
+            return await Task.Run(() => Json("Project items deleted successfully!", JsonRequestBehavior.AllowGet));
+        }
+
         //Add project items here
         public async Task<JsonResult> AddProjectItems(ProjectItems aProjectItems)
         {
@@ -256,6 +288,22 @@ namespace GppApp.Controllers
             }
 
             return await Task.Run(() => Json(aProjectItems.Id, JsonRequestBehavior.AllowGet));
+        }
+
+        //Add project items here
+        public async Task<JsonResult> AddConfirmedItems(string projectId, string itemId)
+        {
+            try
+            {
+                _projectsRepository.AddConfirmedItems(projectId, itemId);
+            }
+
+            catch (Exception ex)
+            {
+                ex.ToString();
+            }
+
+            return await Task.Run(() => Json("Project items confirmed successfully!", JsonRequestBehavior.AllowGet));
         }
 
         //Image upload

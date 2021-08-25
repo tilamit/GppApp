@@ -53,6 +53,10 @@
 
                         <span class="hideSection" id="preEditor1"></span>
                     </div>
+                    <div class="form-group hideThisStatus">
+                        <label for="Status">Status</label>
+                        <input type="checkbox" class="form-control" id="addStatus" />
+                    </div>
                     <div class="form-group">
                         <label for="CreatedOn">Created On</label>
                         <input type="text" class="form-control" id="projectCreatedOn" />
@@ -108,6 +112,7 @@
     $('#myProjects').modal('hide');
     $('#updateData').hide();
     $('.frmProjectId').hide();
+    $('.hideThisStatus').hide();
 
     //Open modal on click
     $('#openModal').click(function () {
@@ -133,6 +138,7 @@
         $('#updateData').hide();
         $('#addData').show();
         $('#myProjects').modal('show');
+        $('.hideThisStatus').hide();
     });
 
     //Hide modal on click
@@ -211,6 +217,14 @@
             aProjectsHistory.PreCreatedOn = $("#preProjectCreatedOn").text();
             aProjectsHistory.PreCreatedBy = $('#createdBy').text();
 
+            if ($("#addStatus").prop('checked') == true) {
+                aProjectsHistory.Status = 1;
+                //aProjectItemHistory.PreStatus = 1;
+            } else {
+                aProjectsHistory.Status = 0;
+                //aProjectItemHistory.PreStatus = 0;
+            }
+
             $.ajax({
                 type: "POST",
                 url: "/Dashboard/UpdateProjects",
@@ -234,8 +248,8 @@
     //Get project details
     function GetProjectDetails() {
         var html = "";
-
-        //mdi mdi-tooltip-edit
+        var status = "";
+        var locked = "";
 
         $.ajax({
             url: "/Dashboard/GetProjects",
@@ -253,11 +267,19 @@
                     $.each(projects, function (i, project) {
                         var num = parseInt(i) + 1;
 
+                        if (project.Status == 0) {
+                            status = "<a class='editProjects' data-projectId='" + project.ProjectId + "'>Project Items</a>";
+                            locked = "<a href='javascript:void(0);'>Edit</a>";
+                        } else {
+                            status = "<a class='editProjects' data-projectId='" + project.ProjectId + "'>Project Items</a>";
+                            locked = "<a class='editProject' data-projectId='" + project.ProjectId + "'>Edit</a>";
+                        }
+
                         html += "<tr><td>" + num + "</td>" +
                                 "<td class='projectWithId'>" + project.ProjectId + "</td>" +
                                 "<td>" + project.ProjectName + "</td>" +
                                 "<td>" + project.ProjectDetails + "</td>" +
-                                "<td>" + getFormattedDate(project.CreatedOn) + "</td><td class='alignText'><i class='mdi mdi-history projectHistory'></i></td><td><a class='editProject' data-projectId='" + project.ProjectId + "'>Edit</a></td><td><a class='editProjects' data-projectId='" + project.ProjectId + "'>Project Items</a></td></tr>";
+                                "<td>" + getFormattedDate(project.CreatedOn) + "</td><td class='alignText'><i class='mdi mdi-history projectHistory'></i></td><td>" + locked + "</td><td>" + status + "</td></tr>";
                     })
 
                     html += "</tbody></table></div>";
@@ -318,17 +340,24 @@
                                     CKEDITOR.instances['editor1'].setData(project.ProjectDetails);
                                     $('#projectCreatedOn').val(getFormattedDate(project.CreatedOn));
                                     $('#createdBy').text(project.CreatedBy);
-                                    $('#status').val(project.Status);
+                                    //$('#status').val(project.Status);
 
                                     $("#preProjectName").text(project.ProjectName);
                                     $("#preProjectRef").text(project.ProjectRef);
                                     $("#preEditor1").text(CKEDITOR.instances['editor1'].getData());  //Set CKEditor value using jQuery
                                     $("#preProjectCreatedOn").text(getFormattedDate(project.CreatedOn));
+
+                                    if (project.Status == 1) {
+                                        $('#addStatus').prop('checked', true);
+                                    } else {
+                                        $('#addStatus').prop('checked', false);
+                                    }
                                 })
 
                                 $('#updateData').show();
                                 $('#addData').hide();
                                 $('#myProjects').modal('show');
+                                $('.hideThisStatus').show();
                             }
                         },
                         error: function (er) {

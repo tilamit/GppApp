@@ -21,5 +21,7 @@ namespace GppApp.Interface
         void AddImages(int id, string imgName);
         bool CheckImages(int id, string imgName);
         void AddProjectItems(ProjectItems aProjectItems);
+        void DeleteProjectItems(string itemId);
+        void AddConfirmedItems(string projectId, string itemId);
     }
 }

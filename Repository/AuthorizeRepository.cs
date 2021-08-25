@@ -35,6 +35,11 @@ namespace OnlineRevision.Repository
             return str;
         }
 
+        public void TrackAllUsers(TrackUsers aTrackUsers)
+        {
+            _context.TrackUsers.Add(aTrackUsers);
+        }
+
         private bool disposed = false;
 
         protected virtual void Dispose(bool disposing)

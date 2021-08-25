@@ -33,6 +33,7 @@
     <EntitySetMapping Name="UserDetails">
       <EntityTypeMapping TypeName="GppAppModel.UserDetails">
         <MappingFragment StoreEntitySet="UserDetails">
+          <ScalarProperty Name="AssignedMenu" ColumnName="AssignedMenu" />
           <ScalarProperty Name="CreatedOn" ColumnName="CreatedOn" />
           <ScalarProperty Name="Status" ColumnName="Status" />
           <ScalarProperty Name="DateOfBirth" ColumnName="DateOfBirth" />
@@ -54,6 +55,84 @@
           <ScalarProperty Name="CreatedOn" ColumnName="CreatedOn" />
           <ScalarProperty Name="Image" ColumnName="Image" />
           <ScalarProperty Name="ProjectItemId" ColumnName="ProjectItemId" />
+          <ScalarProperty Name="Id" ColumnName="Id" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="ProjectsHistory">
+      <EntityTypeMapping TypeName="GppAppModel.ProjectsHistory">
+        <MappingFragment StoreEntitySet="ProjectsHistory">
+          <ScalarProperty Name="UpdatedOn" ColumnName="UpdatedOn" />
+          <ScalarProperty Name="PreCreatedOn" ColumnName="PreCreatedOn" />
+          <ScalarProperty Name="PreCreatedBy" ColumnName="PreCreatedBy" />
+          <ScalarProperty Name="PreProjectDetails" ColumnName="PreProjectDetails" />
+          <ScalarProperty Name="PreviousRef" ColumnName="PreviousRef" />
+          <ScalarProperty Name="PreviousName" ColumnName="PreviousName" />
+          <ScalarProperty Name="ProjectId" ColumnName="ProjectId" />
+          <ScalarProperty Name="Id" ColumnName="Id" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="ProjectItemsHistory">
+      <EntityTypeMapping TypeName="GppAppModel.ProjectItemsHistory">
+        <MappingFragment StoreEntitySet="ProjectItemsHistory">
+          <ScalarProperty Name="PreId" ColumnName="PreId" />
+          <ScalarProperty Name="UpdatedOn" ColumnName="UpdatedOn" />
+          <ScalarProperty Name="PreCreatedBy" ColumnName="PreCreatedBy" />
+          <ScalarProperty Name="PreCreatedOn" ColumnName="PreCreatedOn" />
+          <ScalarProperty Name="PreChecked" ColumnName="PreChecked" />
+          <ScalarProperty Name="PreImage" ColumnName="PreImage" />
+          <ScalarProperty Name="PreProjectNotes" ColumnName="PreProjectNotes" />
+          <ScalarProperty Name="PreItemDescription" ColumnName="PreItemDescription" />
+          <ScalarProperty Name="ProjectId" ColumnName="ProjectId" />
+          <ScalarProperty Name="Id" ColumnName="Id" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="Gender">
+      <EntityTypeMapping TypeName="GppAppModel.Gender">
+        <MappingFragment StoreEntitySet="Gender">
+          <ScalarProperty Name="GenderType" ColumnName="GenderType" />
+          <ScalarProperty Name="Id" ColumnName="Id" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="UserTypes">
+      <EntityTypeMapping TypeName="GppAppModel.UserTypes">
+        <MappingFragment StoreEntitySet="UserTypes">
+          <ScalarProperty Name="Types" ColumnName="Types" />
+          <ScalarProperty Name="Id" ColumnName="Id" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="AssignedMenus">
+      <EntityTypeMapping TypeName="GppAppModel.AssignedMenus">
+        <MappingFragment StoreEntitySet="AssignedMenus">
+          <ScalarProperty Name="Status" ColumnName="Status" />
+          <ScalarProperty Name="UserType" ColumnName="UserType" />
+          <ScalarProperty Name="MenuId" ColumnName="MenuId" />
+          <ScalarProperty Name="AssignedMenu" ColumnName="AssignedMenu" />
+          <ScalarProperty Name="Id" ColumnName="Id" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="Menus">
+      <EntityTypeMapping TypeName="GppAppModel.Menus">
+        <MappingFragment StoreEntitySet="Menus">
+          <ScalarProperty Name="MenuIcon" ColumnName="MenuIcon" />
+          <ScalarProperty Name="Status" ColumnName="Status" />
+          <ScalarProperty Name="MenuDetails" ColumnName="MenuDetails" />
+          <ScalarProperty Name="MenuName" ColumnName="MenuName" />
+          <ScalarProperty Name="MenuId" ColumnName="MenuId" />
+          <ScalarProperty Name="Id" ColumnName="Id" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="TrackUsers">
+      <EntityTypeMapping TypeName="GppAppModel.TrackUsers">
+        <MappingFragment StoreEntitySet="TrackUsers">
+          <ScalarProperty Name="LoginTime" ColumnName="LoginTime" />
+          <ScalarProperty Name="UserId" ColumnName="UserId" />
           <ScalarProperty Name="Id" ColumnName="Id" />
         </MappingFragment>
       </EntityTypeMapping>

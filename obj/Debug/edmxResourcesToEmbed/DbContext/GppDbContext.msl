@@ -33,6 +33,7 @@
     <EntitySetMapping Name="UserDetails">
       <EntityTypeMapping TypeName="GppAppModel.UserDetails">
         <MappingFragment StoreEntitySet="UserDetails">
+          <ScalarProperty Name="AssignedMenu" ColumnName="AssignedMenu" />
           <ScalarProperty Name="CreatedOn" ColumnName="CreatedOn" />
           <ScalarProperty Name="Status" ColumnName="Status" />
           <ScalarProperty Name="DateOfBirth" ColumnName="DateOfBirth" />
@@ -100,6 +101,52 @@
       <EntityTypeMapping TypeName="GppAppModel.UserTypes">
         <MappingFragment StoreEntitySet="UserTypes">
           <ScalarProperty Name="Types" ColumnName="Types" />
+          <ScalarProperty Name="Id" ColumnName="Id" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="AssignedMenus">
+      <EntityTypeMapping TypeName="GppAppModel.AssignedMenus">
+        <MappingFragment StoreEntitySet="AssignedMenus">
+          <ScalarProperty Name="Status" ColumnName="Status" />
+          <ScalarProperty Name="UserType" ColumnName="UserType" />
+          <ScalarProperty Name="MenuId" ColumnName="MenuId" />
+          <ScalarProperty Name="AssignedMenu" ColumnName="AssignedMenu" />
+          <ScalarProperty Name="Id" ColumnName="Id" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="Menus">
+      <EntityTypeMapping TypeName="GppAppModel.Menus">
+        <MappingFragment StoreEntitySet="Menus">
+          <ScalarProperty Name="MenuIcon" ColumnName="MenuIcon" />
+          <ScalarProperty Name="Status" ColumnName="Status" />
+          <ScalarProperty Name="MenuDetails" ColumnName="MenuDetails" />
+          <ScalarProperty Name="MenuName" ColumnName="MenuName" />
+          <ScalarProperty Name="MenuId" ColumnName="MenuId" />
+          <ScalarProperty Name="Id" ColumnName="Id" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="TrackUsers">
+      <EntityTypeMapping TypeName="GppAppModel.TrackUsers">
+        <MappingFragment StoreEntitySet="TrackUsers">
+          <ScalarProperty Name="LoginTime" ColumnName="LoginTime" />
+          <ScalarProperty Name="UserId" ColumnName="UserId" />
+          <ScalarProperty Name="Id" ColumnName="Id" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="ItemsConfirmed">
+      <EntityTypeMapping TypeName="GppAppModel.ItemsConfirmed">
+        <MappingFragment StoreEntitySet="ItemsConfirmed">
+          <ScalarProperty Name="SystemDate" ColumnName="SystemDate" />
+          <ScalarProperty Name="Status" ColumnName="Status" />
+          <ScalarProperty Name="Details" ColumnName="Details" />
+          <ScalarProperty Name="ConfirmDate" ColumnName="ConfirmDate" />
+          <ScalarProperty Name="UserId" ColumnName="UserId" />
+          <ScalarProperty Name="ProjectItemId" ColumnName="ProjectItemId" />
+          <ScalarProperty Name="ProjectId" ColumnName="ProjectId" />
           <ScalarProperty Name="Id" ColumnName="Id" />
         </MappingFragment>
       </EntityTypeMapping>

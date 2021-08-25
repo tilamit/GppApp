@@ -79,7 +79,7 @@ namespace GppApp.Repository
             var result = (from c in _context.Projects
                           join d in _context.ProjectItems on c.ProjectId equals d.ProjectId into g
                           from d in g.DefaultIfEmpty()
-                          where c.ProjectId == projectId
+                          where c.ProjectId == projectId && d.Status == 1
                           select new ProjectsViewModel
                           {
                               Id = d.Id,
@@ -89,7 +89,8 @@ namespace GppApp.Repository
                               ProjectNotes = d.ProjectNotes,
                               Checked = d.Checked,
                               Image = d.Image,
-                              CreatedOn = d.CreatedOn.ToString()
+                              CreatedOn = d.CreatedOn.ToString(),
+                              Status = _context.ItemsConfirmed.Where(c => c.ProjectItemId == d.Id).Count() > 0 ? 1 : 0
                           }).ToList();
 
             return result;
@@ -161,6 +162,7 @@ namespace GppApp.Repository
                 result.ProjectName = aProjectHistory.ProjectName;
                 result.ProjectRef = aProjectHistory.ProjectRef;
                 result.ProjectDetails = aProjectHistory.ProjectDetails;
+                result.Status = aProjectHistory.Status;
 
                 ProjectsHistory aProjectsHistory = new ProjectsHistory();
                 aProjectsHistory.ProjectId = aProjectHistory.ProjectId;
@@ -168,7 +170,6 @@ namespace GppApp.Repository
                 aProjectsHistory.PreviousRef = aProjectHistory.PreProjectRef;
                 aProjectsHistory.PreProjectDetails = aProjectHistory.PreProjectDetails;
                 aProjectsHistory.PreCreatedBy = aProjectHistory.PreCreatedBy;
-                aProjectsHistory.PreCreatedOn = aProjectHistory.PreCreatedOn;
                 aProjectsHistory.PreCreatedOn = aProjectHistory.PreCreatedOn;
                 aProjectsHistory.UpdatedOn = DateTime.Now;
 
@@ -185,8 +186,10 @@ namespace GppApp.Repository
             {
                 result.ItemDescription = aProjectItemHistory.ItemDescription;
                 result.ProjectNotes = aProjectItemHistory.ProjectNotes;
+                result.Checked = aProjectItemHistory.PreChecked;
 
                 ProjectItemsHistory aProjectItemsHistory = new ProjectItemsHistory();
+                aProjectItemsHistory.PreId = aProjectItemHistory.Id;
                 aProjectItemsHistory.ProjectId = aProjectItemHistory.ProjectId;
                 aProjectItemsHistory.PreItemDescription = aProjectItemHistory.PreItemDescription;
                 aProjectItemsHistory.PreProjectNotes = aProjectItemHistory.PreProjectNotes;
@@ -195,6 +198,7 @@ namespace GppApp.Repository
                 aProjectItemsHistory.PreCreatedOn = aProjectItemHistory.PreCreatedOn;
                 aProjectItemsHistory.PreCreatedBy = aProjectItemHistory.PreCreatedBy;
                 aProjectItemsHistory.UpdatedOn = DateTime.Now;
+                //aProjectItemsHistory.Status = 1;
 
                 _context.ProjectItemsHistory.Add(aProjectItemsHistory);
                 _context.SaveChanges();
@@ -224,6 +228,22 @@ namespace GppApp.Repository
             }
         }
 
+        public void DeleteProjectItems(string itemId)
+        {
+            string[] id = itemId.Split(',');
+
+            foreach (var item in id)
+            {
+                int itemsId = Convert.ToInt32(item);
+                var result = _context.ProjectItems.Find(itemsId);
+
+                result.Status = 0;
+
+                _context.Entry(result).State = EntityState.Modified;
+                _context.SaveChanges();
+            }
+        }
+
         public bool CheckImages(int id, string imgName)
         {
             bool status = false;
@@ -244,6 +264,26 @@ namespace GppApp.Repository
                           select c).ToList();
 
             return result;
+        }
+
+        public void AddConfirmedItems(string projectId, string itemId)
+        {
+            string[] id = itemId.Split(',');
+
+            foreach (var item in id)
+            {
+                ItemsConfirmed aItemsConfirmed = new ItemsConfirmed();
+                aItemsConfirmed.ProjectId = projectId;
+                aItemsConfirmed.ProjectItemId = Convert.ToInt32(item);
+                aItemsConfirmed.UserId = Convert.ToInt32(HttpContext.Current.Session["userId"]);
+                aItemsConfirmed.ConfirmDate = DateTime.Now;
+                aItemsConfirmed.Details = _context.Projects.Where(c => c.ProjectId == projectId).Select(d => d.ProjectName).FirstOrDefault();
+                aItemsConfirmed.Status = 1;
+                aItemsConfirmed.SystemDate = DateTime.Now;
+
+                _context.ItemsConfirmed.Add(aItemsConfirmed);
+                _context.SaveChanges();
+            }
         }
 
         private bool disposed = false;

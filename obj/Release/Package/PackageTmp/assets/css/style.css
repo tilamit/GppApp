@@ -21142,3 +21142,48 @@ div.tagsinput {
   flex-grow: 1; }
 
 /*# sourceMappingURL=maps/style.css.map */
+
+.sidebar {
+    background: #002b73 !important;
+}
+
+.navbar {
+    background: #002b73 !important;
+}
+
+.sidebar .sidebar-brand-wrapper {
+    background: #002b73 !important;
+}
+
+.content-wrapper {
+    background: white !important;
+}
+
+.table-bordered th, .table-bordered td {
+    border: 0 !important;
+}
+
+.overrideCard {
+    background: white !important;
+}
+
+.table.table-contextual, .jsgrid .table-contextual.jsgrid-table {
+    color:black !important;
+}
+
+.sidebar .nav .nav-item.nav-category .nav-link {
+    color: white !important;
+}
+
+.sidebar .nav .nav-item .nav-link .menu-title {
+    color: white !important;
+}
+
+.navbar .navbar-menu-wrapper .navbar-toggler {
+    color: white !important;
+}
+
+.hideGender {
+    display:none;
+}
+

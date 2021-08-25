@@ -36,6 +36,10 @@
     <EntitySet Name="ProjectItemsHistory" EntityType="GppAppModel.ProjectItemsHistory" />
     <EntitySet Name="Gender" EntityType="GppAppModel.Gender" />
     <EntitySet Name="UserTypes" EntityType="GppAppModel.UserTypes" />
+    <EntitySet Name="AssignedMenus" EntityType="GppAppModel.AssignedMenus" />
+    <EntitySet Name="Menus" EntityType="GppAppModel.Menus" />
+    <EntitySet Name="TrackUsers" EntityType="GppAppModel.TrackUsers" />
+    <EntitySet Name="ItemsConfirmed" EntityType="GppAppModel.ItemsConfirmed" />
   </EntityContainer>
   <EntityType Name="UserDetails">
     <Key>
@@ -51,6 +55,7 @@
     <Property Name="DateOfBirth" Type="DateTime" Precision="3" />
     <Property Name="Status" Type="Int32" />
     <Property Name="CreatedOn" Type="DateTime" Precision="3" />
+    <Property Name="AssignedMenu" Type="String" MaxLength="10" FixedLength="false" Unicode="true" />
   </EntityType>
   <EntityType Name="ItemImages">
     <Key>
@@ -104,5 +109,47 @@
     </Key>
     <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
     <Property Name="Types" Type="String" MaxLength="20" FixedLength="false" Unicode="true" />
+  </EntityType>
+  <EntityType Name="AssignedMenus">
+    <Key>
+      <PropertyRef Name="Id" />
+    </Key>
+    <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="AssignedMenu" Type="String" MaxLength="10" FixedLength="false" Unicode="true" />
+    <Property Name="MenuId" Type="Int32" />
+    <Property Name="UserType" Type="Int32" />
+    <Property Name="Status" Type="Int32" />
+  </EntityType>
+  <EntityType Name="Menus">
+    <Key>
+      <PropertyRef Name="Id" />
+    </Key>
+    <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="MenuId" Type="String" MaxLength="20" FixedLength="false" Unicode="true" />
+    <Property Name="MenuName" Type="String" MaxLength="20" FixedLength="false" Unicode="true" />
+    <Property Name="MenuDetails" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+    <Property Name="Status" Type="Int32" />
+    <Property Name="MenuIcon" Type="String" MaxLength="20" FixedLength="false" Unicode="true" />
+  </EntityType>
+  <EntityType Name="TrackUsers">
+    <Key>
+      <PropertyRef Name="Id" />
+    </Key>
+    <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="UserId" Type="Int32" />
+    <Property Name="LoginTime" Type="DateTime" Precision="3" />
+  </EntityType>
+  <EntityType Name="ItemsConfirmed">
+    <Key>
+      <PropertyRef Name="Id" />
+    </Key>
+    <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="ProjectId" Type="String" MaxLength="100" FixedLength="false" Unicode="true" />
+    <Property Name="ProjectItemId" Type="Int32" />
+    <Property Name="UserId" Type="Int32" />
+    <Property Name="ConfirmDate" Type="DateTime" Precision="0" />
+    <Property Name="Details" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+    <Property Name="Status" Type="Int32" />
+    <Property Name="SystemDate" Type="DateTime" Precision="3" />
   </EntityType>
 </Schema>

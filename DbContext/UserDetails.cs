@@ -24,5 +24,6 @@ namespace GppApp.DbContext
         public Nullable<System.DateTime> DateOfBirth { get; set; }
         public Nullable<int> Status { get; set; }
         public Nullable<System.DateTime> CreatedOn { get; set; }
+        public string AssignedMenu { get; set; }
     }
 }

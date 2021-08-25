@@ -8,6 +8,7 @@ using System.Data.Entity;
 using System.Data.Entity.Core.Objects;
 using GppApp.Interface;
 using OnlineRevision.Repository;
+using GppApp.DbContext;
 
 namespace GppApp.Controllers
 {
@@ -44,6 +45,18 @@ namespace GppApp.Controllers
                 string[] val = _authRepository.Login(email, pass).Split('~');
                 Session["userName"] = val[0];
                 Session["userId"] = val[1];
+
+                //Bangladesh Time
+                DateTime utcTime = DateTime.UtcNow;
+                TimeZoneInfo BdZone = TimeZoneInfo.FindSystemTimeZoneById("Bangladesh Standard Time");
+                DateTime localDateTime = TimeZoneInfo.ConvertTimeFromUtc(utcTime, BdZone);
+
+                //Track user login
+                TrackUsers aTrackUsers = new TrackUsers();
+                aTrackUsers.UserId = Convert.ToInt32(val[1]);
+                aTrackUsers.LoginTime = localDateTime;
+
+                _authRepository.TrackAllUsers(aTrackUsers);
 
                 return RedirectToAction("Index", "Dashboard");
             }

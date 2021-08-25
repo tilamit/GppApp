@@ -1,0 +1,6 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<parameters>
+  <parameter name="GppAppEntities-Web.config Connection String" description="GppAppEntities Connection String used in web.config by the application to access the database." defaultValue="metadata=res://*/DbContext.GppDbContext.csdl|res://*/DbContext.GppDbContext.ssdl|res://*/DbContext.GppDbContext.msl;provider=System.Data.SqlClient;provider=System.Data.SqlClient;provider connection string=&quot;data source=A2NWPLSK14SQL-v01.shr.prod.iad2.secureserver.net;user id=AT-2021_SQLLogin_1;pwd=j5vud4brwo;initial catalog=GppApp2021;integrated security=false;App=EntityFramework&quot;" tags="SqlConnectionString">
+    <parameterEntry kind="XmlFile" scope="D:\\14-04-2021\\GPP\\GppApp\\obj\\Release\\Package\\PackageTmp\\Web\.config$" match="/configuration/connectionStrings/add[@name='GppAppEntities']/@connectionString" />
+  </parameter>
+</parameters>

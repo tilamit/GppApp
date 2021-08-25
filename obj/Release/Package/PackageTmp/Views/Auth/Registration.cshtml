@@ -1,0 +1,445 @@
+﻿@model OnlineRevision.DbContext.UserDetails
+@{
+    Layout = null;
+}
+
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Registration Page</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+    @*jQuery file*@
+    <script src="//cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+
+    @*BootStrap file*@
+    <link href="//maxcdn.bootstrapcdn.com/bootstrap/4.1.1/css/bootstrap.min.css" rel="stylesheet" id="bootstrap-css">
+    <script src="//maxcdn.bootstrapcdn.com/bootstrap/4.1.1/js/bootstrap.min.js"></script>
+
+    @*Custom style sheet*@
+    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.3.1/css/all.css" integrity="sha384-mzrmE5qonljUremFsqc01SB46JvROS7bZs3IO2EmfFsd15uHvIt+Y8vEf7N7fWAU" crossorigin="anonymous">
+    <link rel="stylesheet" type="text/css" href="~/Content/registration.css">
+    <link href="~/dist/css/registration.css" rel="stylesheet" />
+</head>
+<body>
+    <div class="row">
+        <div class="col-lg-12 col-md-12 col-xs-12">
+            <div class="formTop">
+                <div class="d-flex justify-content-center h-100">
+                    <div class="cardRegistration">
+                        <div class="card-header">
+                            <a href="~/"><h3 class="logo">PASSDEN+</h3></a>
+                            <div class="d-flex justify-content-end social_icon">
+                            </div>
+                        </div>
+
+                        <ul class="nav nav-tabs nav-justified" id="myTab" role="tablist">
+                            <li class="nav-item">
+                                <a class="nav-link active" id="new-tab" data-toggle="tab" href="#New" role="tab" aria-controls="new" aria-selected="false">New User</a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link" id="old-tab" data-toggle="tab" href="#Old" role="tab" aria-controls="old" aria-selected="false">Existing Users</a>
+                            </li>
+                        </ul>
+
+                        <div class="tab-content" id="myTabContent">
+                            <div class="tab-pane fade show active" id="New" role="tabpanel" aria-labelledby="new-tab">
+                                <div class="card-body">
+                                    <div class="inputLabel">
+                                        Name
+                                    </div>
+                                    <div class="input-group form-group">
+                                        <input type="text" id="studentName" class="form-control" placeholder="Name">
+                                        @*@Html.ValidationMessageFor(model => model.UserName)*@
+                                    </div>
+
+                                    <div class="inputLabel">
+                                        Email
+                                    </div>
+                                    <div class="input-group form-group">
+                                        <input type="text" id="studentEmail" class="form-control" placeholder="Email">
+                                    </div>
+
+                                    <div class="inputLabel">
+                                        Password
+                                    </div>
+                                    <div class="input-group form-group">
+                                        <input type="password" id="studentPass" class="form-control" placeholder="Password">
+                                    </div>
+
+                                    <div class="inputLabel">
+                                        Confirm Password
+                                    </div>
+                                    <div class="input-group form-group">
+                                        <input type="password" id="studentPassCon" class="form-control" placeholder="Confirm Password">
+                                    </div>
+
+                                    <div class="inputLabel">
+                                        School/University
+                                    </div>
+                                    <div class="input-group form-group">
+                                        <select name="universities" class="form-control">
+                                            <option value="0">--Select School/University--</option>
+                                            <option value="King's College London">King's College London </option>
+                                            <option value="Newcastle University">Newcastle University</option>
+                                            <option value="Queen Mary University of London">Queen Mary University of London</option>
+                                            <option value="Queen’s University Belfast">Queen’s University Belfast</option>
+                                            <option value="University of Cardiff">University of Cardiff</option>
+                                            <option value="University of Aberdeen">University of Aberdeen</option>
+                                            <option value="University of Birmingham ">University of Birmingham </option>
+                                            <option value="University of Bristol">University of Bristol</option>
+                                            <option value="University of Central Lancashire">University of Central Lancashire</option>
+                                            <option value="University of Dundee">University of Dundee</option>
+                                            <option value="University of Glasgow">University of Glasgow</option>
+                                            <option value="University of Leeds">University of Leeds</option>
+                                            <option value="University of Liverpool">University of Liverpool</option>
+                                            <option value="University of Manchester">University of Manchester</option>
+                                            <option value="University of Plymouth">University of Plymouth</option>
+                                            <option value="University of Sheffield">University of Sheffield</option>
+                                            <option value="Other">Other</option>
+                                        </select>
+                                    </div>
+
+                                    <div id="hideUniversity">
+                                        <div class="inputLabel">
+                                            University Name Here
+                                        </div>
+                                        <div class="input-group form-group">
+                                            <input type="text" id="universityName" class="form-control" placeholder="University Name">
+                                        </div>
+                                    </div>
+
+                                    <div class="inputLabel">
+                                        Promo Code <span id="promoMsg"></span>
+                                    </div>
+                                    <div class="input-group form-group">
+                                        <input type="text" id="promoCodeNew" class="form-control" placeholder="Promo Code">
+                                    </div>
+
+                                    <div class="inputLabel">
+                                        Package
+                                    </div>
+                                    <div class="input-group form-group">
+                                        <select id="packages" name="packages" class="form-control">
+                                            <option value="0">----Select Package----</option>
+                                            <option value="1 week access">1 Week - £20.00</option>
+                                            <option value="2 weeks access">2 Weeks - £25.00</option>
+                                            <option value="1 month access">1 Month - £30.00</option>
+                                        </select>
+                                    </div>
+
+                                    <div class="form-group">
+                                        <div class="d-flex justify-content-center links">
+                                            Have an account?<a href="~/Auth/Login">Login</a>
+                                        </div>
+                                        <input type="button" id="btnAdd" value="Register" class="btn float-right login_btn">
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="tab-pane fade show" id="Old" role="tabpanel" aria-labelledby="old-tab">
+                                <div class="card-body">
+                                    <div class="inputLabel">
+                                        Email During Registration
+                                    </div>
+                                    <div class="input-group form-group">
+                                        <input type="text" id="previousEmail" class="form-control" placeholder="Email">
+                                    </div>
+
+                                    <div class="inputLabel">
+                                        Promo Code <span id="promoMsgOld"></span>
+                                    </div>
+                                    <div class="input-group form-group">
+                                        <input type="text" id="promoCodeOld" class="form-control" placeholder="Promo Code">
+                                    </div>
+
+
+                                    <div class="inputLabel">
+                                        Package
+                                    </div>
+                                    <div class="input-group form-group">
+                                        <select name="packagesPrevious" id="packSelected" class="form-control">
+                                            <option value="0">----Select Package----</option>
+                                            <option value="1 week access">1 Week - £20.00</option>
+                                            <option value="2 weeks access">2 Weeks - £25.00</option>
+                                            <option value="1 month access">1 Month - £30.00</option>
+                                        </select>
+                                    </div>
+
+                                    <div class="form-group">
+                                        <div class="d-flex justify-content-center links">
+                                            Have an account?<a href="~/Auth/Login">Login</a>
+                                        </div>
+                                        <input type="button" id="btnAddPrevious" value="Purchase" class="btn float-right login_btn">
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div>
+                            <div id="hide" class="alert alert-success alert-dismissible fade show"></div>
+                        </div>
+
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script type="text/javascript">
+        $(document).ready(function () {
+            //Initially hide a text box
+            $('#hideUniversity').hide();
+            var university = "";
+
+            var result = "";
+
+            //Enable a text box on value selection
+            $('[name="universities"]').change(function () {
+                if ($(this).val() === "Other") {
+                    $('#hideUniversity').show();
+                } else {
+                    $('#hideUniversity').hide();
+                }
+            }).change();
+
+            var urlRegister = '@Url.Action("AddStudents", "Dashboard")';
+            $('#hide').hide();
+
+            var promoCode = "0";
+            var promoCodeOld = "0";
+
+            $('#btnAdd').click(function () {
+                var name = $("#studentName").val();
+                var email = $("#studentEmail").val();
+                var pass = $("#studentPass").val();
+                var passCon = $("#studentPassCon").val();
+
+                var universities = "";
+
+                if ($('select[name="universities"]').val() == "Other") {
+                    universities = $('#universityName').val();
+                } else {
+                    universities = $('select[name="universities"]').val();
+                }
+
+                if (name == "" || pass == "" || email == "") {
+                    alert("Please! Fill up all the fields.");
+                }
+                else if ($('select[name="universities"]').val() == "0") {
+                    alert("Please! Select a university.");
+                }
+                else if ($('select[name="packages"]').val() == "0") {
+                    alert("Please! Select a package.");
+                }
+                else if (pass != passCon) {
+                    alert("Passwords don't match! Make sure both are same.");
+                } else if (!validateEmail(email)) {
+                    alert("Please! Use valid email address.");
+                }
+                else {
+                    var price = $('select[name="packages"] option:selected').text();
+                    var number = price.substring(price.indexOf('£') + 1);
+
+                    //alert(parseFloat(number).toFixed(2));
+
+                    $.ajax({
+                        url: "/Dashboard/CheckEmail",
+                        type: "POST",
+                        contentType: "application/json; charset=utf-8",
+                        dataType: "json",
+                        data: JSON.stringify({ email: email }),
+                        success: function (response) {
+                            if (response != "") {
+                                alert(response);
+                            } else {
+                                $.post(urlRegister, { name: name, email: email, pass: pass, universities: universities }, function (response) {
+                                    if (response) {
+                                        $('#hide').show();
+
+                                        $('#hide').hide().delay(1500).fadeIn('slow');
+
+                                        $('#hide').html(response.value);
+
+                                        $("#studentName").val('');
+                                        $("#studentPass").val('');
+                                        $("#studentEmail").val('');
+
+                                        $("#dateOfBirth").val('');
+                                        $("#yearContinuing").val('');
+
+                                        //window.location.href = '/Payment/Packages';
+                                        //Redirect to PayPal
+                                        $.ajax({
+                                            url: "/PayWithPaypal/GetPaymentWithPaypal",
+                                            type: "POST",
+                                            data: JSON.stringify({ packageName: $('select[name="packages"]').val(), price: parseFloat(number).toFixed(2), email: email }),
+                                            contentType: "application/json; charset=utf-8",
+                                            success: function () {
+                                                window.open('/PayWithPaypal', '_blank');
+                                            },
+                                            error: function (er) {
+                                                alert(er);
+                                            }
+                                        });
+                                    } else {
+                                    }
+                                }).fail(function () {
+                                    alert("Oops! Didn't add.");
+                                });
+                            }
+                        },
+                        error: function (er) {
+                            //alert(er);
+                        }
+                    });
+                }
+            });
+
+            var urlPurchase = '@Url.Action("AddStudents", "Dashboard")';
+            $('#btnAddPrevious').click(function () {
+                var email = $("#previousEmail").val();
+                var packagesPre = $('select[name="packagesPrevious"]').val();
+
+                if (email == "") {
+                    alert("Please! Provide email.");
+                }
+                else if (packagesPre == "0") {
+                    alert("Please! Select a package.");
+                } else if (!validateEmail(email)) {
+                    alert("Please! Use valid email address.");
+                }
+                else {
+                    var price = $('select[name="packagesPrevious"] option:selected').text();
+                    var number = price.substring(price.indexOf('£') + 1);
+
+                    //alert(parseFloat(number).toFixed(2));
+
+                    //var num = "";
+                    //if (promoCodeOld != "0") {
+                    //    num = parseInt(number[1]) - ((parseInt(promoCodeOld) / 100) * parseInt(number[1]));
+                    //    alert(parseInt(num));
+                    //} else {
+                    //    num = number[1];
+                    //    alert(parseInt(num));
+                    //}
+
+                    //alert(number[1]);
+                    $.ajax({
+                        url: "/Dashboard/CheckEmail",
+                        type: "POST",
+                        contentType: "application/json; charset=utf-8",
+                        dataType: "json",
+                        data: JSON.stringify({ email: email }),
+                        success: function (response) {
+                            if (response != "") {
+                                //window.location.href = '/Payment/Packages';
+                                //Redirect to PayPal
+                                $.ajax({
+                                    url: "/PayWithPaypal/GetPaymentWithPaypal",
+                                    type: "POST",
+                                    data: JSON.stringify({ packageName: $('select[name="packagesPrevious"]').val(), price: parseFloat(number).toFixed(2), email: email }),
+                                    contentType: "application/json; charset=utf-8",
+                                    success: function () {
+                                        window.open('/PayWithPaypal', '_blank');
+                                    },
+                                    error: function (er) {
+                                        alert(er);
+                                    }
+                                });
+                            } else {
+                                alert("Email doesn't exist. Please register first!");
+                            }
+                        },
+                        error: function (er) {
+                            //alert(er);
+                        }
+                    });
+                }
+            });
+
+            function validateEmail($email) {
+                var emailReg = /^([\w-\.]+@@([\w-]+\.)+[\w-]{2,4})?$/;
+                return emailReg.test($email);
+            }
+
+            //Add new promo code here
+            var lastReq = 0; //0 means no requests sent
+            $('#promoCodeNew').keyup(function() {
+                var d = new Date();
+                var currentTime = d.getTime(); //Get the time of this change event
+                var interval = currentTime - lastReq; //How many milliseconds since the last request
+                if (interval >= 2000) { //More than 2 seconds
+                    //alert("Event fired with value: " + $(this).val() + "!");
+
+                    $.ajax({
+                        type: "POST",
+                        url: "/Dashboard/CheckPromoCode",
+                        data: JSON.stringify({ promoCode: $(this).val() }),
+                        contentType: "application/json; charset=utf-8",
+                        dataType: "json",
+                        success: function (data) {
+                            //alert(data);
+                            if (data == "<span style='color:darkred;'>Invalid promo code!</span>") {
+                                $("#promoMsg").html(data);
+
+                                promoCode = 0;
+
+                                $('select[id="packages"]').find('option[value="1 week access"]').text("1 week " + " - £20.00");
+                                $('select[id="packages"]').find('option[value="2 weeks access"]').text("2 weeks " + " - £25.00");
+                                $('select[id="packages"]').find('option[value="1 month access"]').text("1 month " + " - £30.00");
+                            } else {
+                                $("#promoMsg").html(data.replace(/[0-9]/g, ''));
+                                promoCode = data.match(/\d/g).join("");
+
+                                $('select[id="packages"]').find('option[value="1 week access"]').text("1 week " + " - £" + (20 - (20 * promoCode / 100)).toFixed(2));
+                                $('select[id="packages"]').find('option[value="2 weeks access"]').text("2 weeks " + " - £" + (25 - (25 * promoCode / 100)).toFixed(2));
+                                $('select[id="packages"]').find('option[value="1 month access"]').text("1 month " + " - £" + (30 - (30 * promoCode / 100)).toFixed(2));
+                            }
+                        }
+                    });
+                }
+            });
+
+            //Add old promo code here
+            var lastReqOld = 0; //0 means no requests sent
+            $('#promoCodeOld').keyup(function() {
+                var d = new Date();
+                var currentTime = d.getTime(); //Get the time of this change event
+                var interval = currentTime - lastReqOld; //How many milliseconds since the last request
+                if (interval >= 2000) { //More than 2 seconds
+                    //alert("Event fired with value: " + $(this).val() + "!");
+
+                    $.ajax({
+                        type: "POST",
+                        url: "/Dashboard/CheckPromoCode",
+                        data: JSON.stringify({ promoCode: $(this).val() }),
+                        contentType: "application/json; charset=utf-8",
+                        dataType: "json",
+                        success: function (data) {
+                            //alert(data);
+                            if (data == "<span style='color:darkred;'>Invalid promo code!</span>") {
+                                $("#promoMsgOld").html(data);
+
+                                promoCodeOld = 0;
+
+                                $('select[id="packSelected"]').find('option[value="1 week access"]').text("1 week " + " - £20.00");
+                                $('select[id="packSelected"]').find('option[value="2 weeks access"]').text("2 weeks " + " - £25.00");
+                                $('select[id="packSelected"]').find('option[value="1 month access"]').text("1 month " + " - £30.00");
+                            } else {
+                                $("#promoMsgOld").html(data.replace(/[0-9]/g, ''));
+                                promoCodeOld = data.match(/\d/g).join("");
+
+                                $('select[id="packSelected"]').find('option[value="1 week access"]').text("1 week " + " - £" + (20 - (20 * promoCodeOld / 100)).toFixed(2));
+                                $('select[id="packSelected"]').find('option[value="2 weeks access"]').text("2 weeks " + " - £" + (25 - (25 * promoCodeOld / 100)).toFixed(2));
+                                $('select[id="packSelected"]').find('option[value="1 month access"]').text("1 month " + " - £" + (30 - (30 * promoCodeOld / 100)).toFixed(2));
+                            }
+                        }
+                    });
+                }
+            });
+        });
+    </script>
+</body>
+</html>
