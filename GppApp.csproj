@@ -205,6 +205,7 @@
     <Compile Include="Interface\MenusInterface.cs" />
     <Compile Include="Interface\ProjectsInterface.cs" />
     <Compile Include="Interface\UsersInterface.cs" />
+    <Compile Include="Models\ImgHistoryViewModel.cs" />
     <Compile Include="Models\MenusViewModel.cs" />
     <Compile Include="Models\ProjectHistory.cs" />
     <Compile Include="Models\ProjectImages.cs" />

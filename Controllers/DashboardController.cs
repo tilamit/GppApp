@@ -146,7 +146,7 @@ namespace GppApp.Controllers
         [HttpPost]
         public JsonResult GetImages(int id)
         {
-            List<ItemImages> aLst = null;
+            List<ImgHistoryViewModel> aLst = null;
             try
             {
                 aLst = _projectsRepository.GetImages(id);
@@ -277,9 +277,10 @@ namespace GppApp.Controllers
         //Add project items here
         public async Task<JsonResult> AddProjectItems(ProjectItems aProjectItems)
         {
+            string val = "";
             try
             {
-                _projectsRepository.AddProjectItems(aProjectItems);
+                val = _projectsRepository.AddProjectItems(aProjectItems);
             }
 
             catch (Exception ex)
@@ -287,7 +288,7 @@ namespace GppApp.Controllers
                 ex.ToString();
             }
 
-            return await Task.Run(() => Json(aProjectItems.Id, JsonRequestBehavior.AllowGet));
+            return await Task.Run(() => Json(val, JsonRequestBehavior.AllowGet));
         }
 
         //Add project items here

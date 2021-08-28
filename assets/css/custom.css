@@ -29,7 +29,7 @@ span.spanId {
 }
 
 #floatRight {
-    margin-left:-27.1%;
+    margin-left:-28.3%;
 }
 
 .sign-up {
@@ -71,4 +71,8 @@ span.spanId {
 
 .dashboard {
     color:black;
+}
+
+.sidebar .nav .nav-item {
+    cursor: pointer;
 }

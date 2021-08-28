@@ -12,7 +12,7 @@ namespace GppApp.Interface
         List<ProjectItems> GetAllProjectItems();
         List<ProjectsViewModel> GetProjectItems(string projectId);
         List<ProjectItems> GetItems(int id);
-        List<ItemImages> GetImages(int projectId);
+        List<ImgHistoryViewModel> GetImages(int projectId);
         List<ProjectHistory> ShowProjectsHistory(string projectId);
         List<ProjectItemHistory> ShowProjectItemsHistory(int id);
         void AddProjects(Projects aProject);
@@ -20,7 +20,7 @@ namespace GppApp.Interface
         void UpdateItems(ProjectItemHistory aProjectItemHistory);
         void AddImages(int id, string imgName);
         bool CheckImages(int id, string imgName);
-        void AddProjectItems(ProjectItems aProjectItems);
+        string AddProjectItems(ProjectItems aProjectItems);
         void DeleteProjectItems(string itemId);
         void AddConfirmedItems(string projectId, string itemId);
     }

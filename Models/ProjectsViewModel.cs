@@ -14,8 +14,11 @@ namespace GppApp.Models
         public string Image { get; set; }
         public Nullable<bool> Checked { get; set; }
         public Nullable<int> Status { get; set; }
+        public Nullable<int> ProStatus { get; set; }
         public DateTime? ProCreatedOn { get; set; }
         public string CreatedOn { get; set; }
         public Nullable<int> CreatedBy { get; set; }
+        public string SubmittedBy { get; set; }
+        public DateTime? SubmittedDt { get; set; }
     }
 }
