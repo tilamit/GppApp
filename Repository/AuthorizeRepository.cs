@@ -38,6 +38,7 @@ namespace OnlineRevision.Repository
         public void TrackAllUsers(TrackUsers aTrackUsers)
         {
             _context.TrackUsers.Add(aTrackUsers);
+            _context.SaveChanges();
         }
 
         private bool disposed = false;

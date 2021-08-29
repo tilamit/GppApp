@@ -2,7 +2,6 @@
 @{
     ViewBag.Title = "Project Items";
 }
-
 <style type="text/css">
     .elem, .elem * {
         box-sizing: border-box;
@@ -21,16 +20,16 @@
         background-clip: padding-box;
     }
 
-    .elem > span {
-        display: block;
-        cursor: pointer;
-        height: 0;
-        padding-bottom: 70%;
-        background-size: cover;
-        background-position: center center;
-    }
+        .elem > span {
+            display: block;
+            cursor: pointer;
+            height: 0;
+            padding-bottom: 70%;
+            background-size: cover;
+            background-position: center center;
+        }
 
-    .hide, .hideArea, .hideDate, .hideChecked, .showBlueBar, .hideSection, .hideFooter {
+    .hide, .hideArea, .hideDate, .hideChecked, .showBlueBar, .hideSection, .hideFooter, .showFooter {
         display: none;
     }
 
@@ -39,33 +38,10 @@
         text-align: center;
     }
 
-    .bs-example{
-    	margin: 20px;
+    .bs-example {
+        margin: 20px;
     }
-
-    .page-footer, .page-footer-space {
-  height: 50px;
-
-}
-
-.page-footer {
-  position: fixed;
-  bottom: 0;
-  width: 100%;
-}
-
- tfoot {display: table-footer-group;}
-
-@@media print {
-   thead {display: table-header-group;} 
-   tfoot {display: table-footer-group;}
-   
-   button {display: none;}
-   
-   body {margin: 0;}
-}
 </style>
-
 <div>
     <div class="d-flex justify-content-between">
         <div><input type="button" class="btn btn-success" id="floatLeft" value="Generate PDF" /></div>
@@ -73,9 +49,7 @@
         <div class="col-lg-12" id="floatRight"><a id="confirm" class="btn btn-primary">Confirm</a> &nbsp; <a id="delete" class="btn btn-danger">Delete</a></div>
     </div>
 </div>
-
 <br />
-
 @*Add Project Items*@
 <div id="myProjectItems" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
     <div class="modal-dialog">
@@ -89,25 +63,21 @@
                     <div class="form-group hide">
                         <label for="Id">Id</label>
                         <input type="text" class="form-control" id="id" />
-
                         <span class="hideSection" id="preId"></span>
                     </div>
                     <div class="form-group">
                         <label for="ItemDescription">Item Description</label>
                         <input type="text" class="form-control" id="editor1" placeholder="Description" />
-
                         <span class="hideSection" id="preEditor1"></span>
                     </div>
                     <div class="form-group">
                         <label for="projectNotes">Notes</label>
                         <input type="text" class="form-control" id="projectNotes" placeholder="Notes" />
-
                         <span class="hideSection" id="preProjectNotes"></span>
                     </div>
                     <div class="form-group">
                         <label for="CreatedOn">Created On</label>
                         <input type="text" class="form-control" id="projectCreatedOn" />
-
                         <span class="hideSection" id="preProjectCreatedOn"></span>
                     </div>
                     <div class="form-group hideThisStatus">
@@ -118,7 +88,7 @@
                         <label for="itemImage">Image</label>
                         <input type="file" name="Image" value="" onchange="return ShowImagePreview(this)" class="form-control" id="uploadImg" /><div></div>
                         <img src="~/img/default.jpg" alt="preview" id="imagePreview" style="border: 1px solid red; height: 200px; width: 200px; margin: auto; display: block;" />
-                    
+
                         <span class="hideSection" id="preProjectId"></span>
                         <span class="hideSection" id="preUploadImg"></span>
                         <span id="createdBy" class="hideSection"></span>
@@ -133,7 +103,6 @@
         </div>
     </div>
 </div>
-
 @*Show Project Items History*@
 <div id="myProjectItemsHistory" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
     <div class="modal-dialog">
@@ -146,12 +115,10 @@
                 <div id="projectItemsHistory"></div>
             </div>
             <div class="modal-footer">
-
             </div>
         </div>
     </div>
 </div>
-
 @*Show images here*@
 <div id="myProjectImages" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabe2" aria-hidden="true">
     <div class="modal-dialog">
@@ -166,23 +133,18 @@
         </div>
     </div>
 </div>
-
 <div class="row">
     <div class="col-lg-12 grid-margin stretch-card">
         <div class="card overrideCard">
             <div class='page-footer'>I'm The Footer</div>
             <div class="card-body" id="card">
-
             </div>
         </div>
     </div>
     <div class="hide">
-
     </div>
 </div>
-
 <script src="~/ckeditor/ckeditor.js"></script>
-
 <script>
     //Hide modal initially
     $('#myProjectItems').modal('hide');
@@ -426,7 +388,7 @@
                         }
 
                         var num = parseInt(i) + 1;
-                        
+
                         if (project.Status == 0) {
                             status = "<td class='hideSelect'><input type='checkbox' class='cbCheck' name='cbCheck' value='" + project.Id + "' id='" + project.Id + "' /></td>";
                             locked = "<a class='editItems' data-projectId='" + project.ProjectId + "'>Edit</a>";
@@ -440,6 +402,10 @@
                             blueSection = "<div style='color: red;'><i style='margin-left: -20%;font-size:10px;'><b>SUBMITTED FOR ACTION " + getDateFormatted(project.SubmittedDt).toLocaleTimeString('en-US') + " " + getDateFormatted(project.SubmittedDt).toString().slice(0, 15) + "</b></i> <b style='margin-left: 18%;font-size:10px;'>Approved by " + project.SubmittedBy + "</b></div>";
                         }
 
+                        if (project.SubmittedBy == "") {
+                            blueSection = "";
+                        }
+
                         html += "<tr> " + status +
                                 "<td class='action hideSelect'>" + locked + "</td><td>" + num + "</td>" +
                                 "<td class='hide hideId projectWithId'>" + project.Id + "</td>" +
@@ -451,7 +417,7 @@
 
                     })
 
-                    html += "</tbody> <tfoot class='hideFooter' style='border:0px;bottom: 0; height: 30px; top: 94%; padding: 4px; border: 1px solid #1f497d; font-size: 10px; margin-left: -2%; text-align: center; width: 94%; background-color: lightblue; font-family: Arial; -webkit-print-color-adjust: exact;'><tr><td>Job ref. " + projects[0].ProjectId + " | Gold Property Partners l 07 5438 9775 l admin@goldpp.com.au l www.goldpp.com.au l 1/9 Aqua Circuit, Caloundra West Q 4551 Property of Gold Property Partners Pty Ltd. ABN 94 611 852 307. © Copyright protected.</td></tr></tfoot> </table></div>";
+                    html += "</tbody></table><div id='footer'>Job ref. " + projects[0].ProjectId + " | Gold Property Partners l 07 5438 9775 l admin@goldpp.com.au l www.goldpp.com.au l 1/9 Aqua Circuit, Caloundra West Q 4551 Property of Gold Property Partners Pty Ltd. ABN 94 611 852 307. © Copyright protected.</div>";
                 }
 
                 $("#card").append(html);
@@ -527,6 +493,8 @@
 
                 //Delete project items
                 $("#delete").click(function () {
+                    $("#card").empty();
+
                     var $container = $('.projectItems');
                     var $checked = $container.find('.cbCheck:checked');
                     var values = $checked.map(function () {
@@ -558,6 +526,8 @@
 
                 //Confirm project items
                 $("#confirm").click(function () {
+                    $("#card").empty();
+
                     var $container = $('.projectItems');
                     var $checked = $container.find('.cbCheck:checked');
                     var values = $checked.map(function () {
@@ -570,7 +540,7 @@
 
                     var cnfrm = confirm('Are you sure to confirm the project items?');
                     if (cnfrm == true) {
-                        alert(values.join(','));
+                        //alert(values.join(','));
 
                         $.ajax({
                             url: "/Dashboard/AddConfirmedItems",
@@ -678,15 +648,14 @@
                 //Create pdf here
                 //Generate pdf
                 $("body").on("click", "#floatLeft", function () {
-                    //var divContents = $("#projects").html();
                     var sTable = document.getElementById('card').innerHTML;
                     var style = "<style>";
-                    style = style + "@@page { size: A4 portrait; } body { border: 2px solid #1f497d; padding: 4%; margin: 0; }";
+                    style = style + "@@page { size: A4 portrait; } body { -webkit-print-color-adjust: exact; border: 2px solid #1f497d; padding: 4%; margin: 0; }";
                     style = style + "table { width: 100%; font: 17px Calibri; } #showImages { height: 100px; width: 180px; } #BoxLeft { font-size:10px; width: 120%; margin: 0 auto; margin-top: 6%; height: 36px; } .Box1, .Box2 { float: left; width: 15%; } .box { height: 25px; border: 1px solid #bdbdbd; -webkit-border-radius: 5px; border-radius: 5px; -moz-box-shadow: 0 0 10px #bdbdbd; -webkit-box-shadow: 0 0 10px #bdbdbd; box-shadow: 0 0 10px #bdbdbd; } .Box1 { background-color: #002b73; color:white; -webkit-print-color-adjust: exact; } .Box2 { background-color: white; -webkit-print-color-adjust: exact; }  #BoxRight { font-size:10px; width: 120%; margin: 0 auto; margin-top: -12%; height: 36px; margin-left: -20%; } .Box3, .Box4 { float: right; width: 15%; } .Box3 { -webkit-print-color-adjust: exact; } .Box4 { background-color: #002b73; color:white; -webkit-print-color-adjust: exact; }";
                     style = style + "table, td { border: solid 2px #002b73; border-collapse: collapse; font-size:10px;";
                     style = style + "padding: 2px 3px;text-align: center; } #projects th { height:10px; font-style:bold; font-size:10px; text-transform: uppercase; background-color: #002b73; -webkit-print-color-adjust: exact; color: white; }";
                     style = style + ".headingItemNo { width: 6%; } .detailsWidth { width:40%; } #projects { margin-top: 0%; -webkit-print-color-adjust: exact; } .action, .hideId, .hide, .hideDate, .hideArea, .hideSelect { display:none; } .top { margin-top: -5%; margin-left: 4%; } .topAside { margin-top: -5%; margin-left: 4%; } .heading { margin-top:5%; text-align:center; } .logoGpp { height: 140px; width: 250px; display: block; margin-left: auto; margin-right: auto; -webkit-print-color-adjust: exact; }";
-                    style = style + "#footer { position: absolute; display: table-footer-group; bottom: 0; height: 30px; top: 94%; padding: 4px; border: 1px solid #1f497d; font-size: 10px; margin-left: -2%; text-align: center; width: 94%; background-color: lightblue; font-family: Arial; -webkit-print-color-adjust: exact; } </style>";
+                    style = style + ".showFooter { border:0px; display: block; } #footer { position: fixed; bottom: 0; height: 30px; top: 96.6%; padding: 4px; border: 1px solid #1f497d; font-size: 10px; margin-left: -2%; text-align: center; width: 94%; background-color: lightblue; font-family: Arial; -webkit-print-color-adjust: exact; } </style>";
 
                     var win = window.open('', '', 'height=2000,width=2000');
 
@@ -696,8 +665,6 @@
                     win.document.write("<body><img class='logoGpp' src='/img/logo.jpg' /><div class='top topAside'><div id='BoxLeft'><div class='Box1'><div class='box'><h4 class='heading'>Job Reference: </h4></div></div><div class='Box2'><div class='box'><h4 class='heading'>" + $(".card-title").html() + "</h4></div></div></div></div>");
                     win.document.write("<div class='top'><div id='BoxRight'><div class='Box3'><div class='box'><h4 class='heading'>" + $(".proCreatedOn").html() + "</h4></div></div><div class='Box4'><div class='box'><h4 class='heading'>Initiation Date: </h4></div></div></div></div><br /><br /><br />");
                     win.document.write(sTable);
-
-                    //win.document.write("<div id='footer'>Job ref. " + projects[0].ProjectId + " | Gold Property Partners l 07 5438 9775 l admin@goldpp.com.au l www.goldpp.com.au l 1/9 Aqua Circuit, Caloundra West Q 4551 Property of Gold Property Partners Pty Ltd. ABN 94 611 852 307. © Copyright protected.</div>");
 
                     win.document.close();
 
