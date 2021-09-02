@@ -151,5 +151,19 @@
         </MappingFragment>
       </EntityTypeMapping>
     </EntitySetMapping>
+    <EntitySetMapping Name="ApprovalForSubmission">
+      <EntityTypeMapping TypeName="GppAppModel.ApprovalForSubmission">
+        <MappingFragment StoreEntitySet="ApprovalForSubmission">
+          <ScalarProperty Name="SystemDate" ColumnName="SystemDate" />
+          <ScalarProperty Name="Status" ColumnName="Status" />
+          <ScalarProperty Name="Details" ColumnName="Details" />
+          <ScalarProperty Name="SubmissionDate" ColumnName="SubmissionDate" />
+          <ScalarProperty Name="UserId" ColumnName="UserId" />
+          <ScalarProperty Name="ProjectItemId" ColumnName="ProjectItemId" />
+          <ScalarProperty Name="ProjectId" ColumnName="ProjectId" />
+          <ScalarProperty Name="Id" ColumnName="Id" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
   </EntityContainerMapping>
 </Mapping>

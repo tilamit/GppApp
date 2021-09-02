@@ -100,7 +100,23 @@ namespace GppApp.Controllers
             List<ProjectsViewModel> aLst = null;
             try
             {
-                aLst = _projectsRepository.GetProjectItems(id).OrderByDescending(c => c.Id).ToList();
+                aLst = _projectsRepository.GetProjectItems(id).OrderBy(c => c.Id).ToList();
+            }
+            catch (Exception ex)
+            {
+                ex.ToString();
+            }
+
+            return Json(aLst, JsonRequestBehavior.AllowGet);
+        }
+
+        [HttpPost]
+        public JsonResult GetProjectItemsInPdf(string id)
+        {
+            List<ProjectsViewModel> aLst = null;
+            try
+            {
+                aLst = _projectsRepository.GetProjectItemsInPdf(id).OrderByDescending(c => c.DateConfirmed).ThenByDescending(d => d.SubmittedDt).ToList();
             }
             catch (Exception ex)
             {
@@ -291,7 +307,23 @@ namespace GppApp.Controllers
             return await Task.Run(() => Json(val, JsonRequestBehavior.AllowGet));
         }
 
-        //Add project items here
+        //Add project items here for submission
+        public async Task<JsonResult> SubmitForApproval(string projectId, string itemId)
+        {
+            try
+            {
+                _projectsRepository.SubmitForApproval(projectId, itemId);
+            }
+
+            catch (Exception ex)
+            {
+                ex.ToString();
+            }
+
+            return await Task.Run(() => Json("Project items submitted for approval!", JsonRequestBehavior.AllowGet));
+        }
+
+        //Add project items here to confirm
         public async Task<JsonResult> AddConfirmedItems(string projectId, string itemId)
         {
             try

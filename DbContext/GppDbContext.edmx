@@ -5,6 +5,19 @@
     <!-- SSDL content -->
     <edmx:StorageModels>
     <Schema Namespace="GppAppModel.Store" Provider="System.Data.SqlClient" ProviderManifestToken="2012" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
+        <EntityType Name="ApprovalForSubmission">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="ProjectId" Type="nvarchar" MaxLength="100" />
+          <Property Name="ProjectItemId" Type="int" />
+          <Property Name="UserId" Type="int" />
+          <Property Name="SubmissionDate" Type="date" />
+          <Property Name="Details" Type="nvarchar(max)" />
+          <Property Name="Status" Type="int" />
+          <Property Name="SystemDate" Type="datetime" />
+        </EntityType>
         <EntityType Name="AssignedMenus">
           <Key>
             <PropertyRef Name="Id" />
@@ -144,6 +157,7 @@
           <Property Name="Types" Type="nvarchar" MaxLength="20" />
         </EntityType>
         <EntityContainer Name="GppAppModelStoreContainer">
+          <EntitySet Name="ApprovalForSubmission" EntityType="Self.ApprovalForSubmission" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="AssignedMenus" EntityType="Self.AssignedMenus" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="Gender" EntityType="Self.Gender" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="ItemImages" EntityType="Self.ItemImages" Schema="dbo" store:Type="Tables" />
@@ -201,6 +215,7 @@
           <EntitySet Name="Menus" EntityType="GppAppModel.Menus" />
           <EntitySet Name="TrackUsers" EntityType="GppAppModel.TrackUsers" />
           <EntitySet Name="ItemsConfirmed" EntityType="GppAppModel.ItemsConfirmed" />
+          <EntitySet Name="ApprovalForSubmission" EntityType="GppAppModel.ApprovalForSubmission" />
         </EntityContainer>
         <EntityType Name="UserDetails">
           <Key>
@@ -309,6 +324,19 @@
           <Property Name="ProjectItemId" Type="Int32" />
           <Property Name="UserId" Type="Int32" />
           <Property Name="ConfirmDate" Type="DateTime" Precision="0" />
+          <Property Name="Details" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+          <Property Name="Status" Type="Int32" />
+          <Property Name="SystemDate" Type="DateTime" Precision="3" />
+        </EntityType>
+        <EntityType Name="ApprovalForSubmission">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="ProjectId" Type="String" MaxLength="100" FixedLength="false" Unicode="true" />
+          <Property Name="ProjectItemId" Type="Int32" />
+          <Property Name="UserId" Type="Int32" />
+          <Property Name="SubmissionDate" Type="DateTime" Precision="0" />
           <Property Name="Details" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
           <Property Name="Status" Type="Int32" />
           <Property Name="SystemDate" Type="DateTime" Precision="3" />
@@ -462,6 +490,20 @@
                 <ScalarProperty Name="Status" ColumnName="Status" />
                 <ScalarProperty Name="Details" ColumnName="Details" />
                 <ScalarProperty Name="ConfirmDate" ColumnName="ConfirmDate" />
+                <ScalarProperty Name="UserId" ColumnName="UserId" />
+                <ScalarProperty Name="ProjectItemId" ColumnName="ProjectItemId" />
+                <ScalarProperty Name="ProjectId" ColumnName="ProjectId" />
+                <ScalarProperty Name="Id" ColumnName="Id" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="ApprovalForSubmission">
+            <EntityTypeMapping TypeName="GppAppModel.ApprovalForSubmission">
+              <MappingFragment StoreEntitySet="ApprovalForSubmission">
+                <ScalarProperty Name="SystemDate" ColumnName="SystemDate" />
+                <ScalarProperty Name="Status" ColumnName="Status" />
+                <ScalarProperty Name="Details" ColumnName="Details" />
+                <ScalarProperty Name="SubmissionDate" ColumnName="SubmissionDate" />
                 <ScalarProperty Name="UserId" ColumnName="UserId" />
                 <ScalarProperty Name="ProjectItemId" ColumnName="ProjectItemId" />
                 <ScalarProperty Name="ProjectId" ColumnName="ProjectId" />

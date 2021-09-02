@@ -147,6 +147,9 @@
     <Compile Include="Controllers\HomeController.cs" />
     <Compile Include="Controllers\MenusController.cs" />
     <Compile Include="Controllers\UserController.cs" />
+    <Compile Include="DbContext\ApprovalForSubmission.cs">
+      <DependentUpon>GppDbContext.tt</DependentUpon>
+    </Compile>
     <Compile Include="DbContext\AssignedMenus.cs">
       <DependentUpon>GppDbContext.tt</DependentUpon>
     </Compile>

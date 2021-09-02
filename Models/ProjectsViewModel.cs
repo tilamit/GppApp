@@ -9,6 +9,7 @@ namespace GppApp.Models
     {
         public int Id { get; set; }
         public string ProjectId { get; set; }
+        public string ProjectName { get; set; }
         public string ItemDescription { get; set; }
         public string ProjectNotes { get; set; }
         public string Image { get; set; }
@@ -20,5 +21,7 @@ namespace GppApp.Models
         public Nullable<int> CreatedBy { get; set; }
         public string SubmittedBy { get; set; }
         public DateTime? SubmittedDt { get; set; }
+        public DateTime? DateConfirmed { get; set; }
+        public int TotalItems { get; set; }
     }
 }

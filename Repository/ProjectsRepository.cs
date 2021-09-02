@@ -73,7 +73,6 @@ namespace GppApp.Repository
             return _context.ProjectItems.ToList();
         }
 
-
         public List<ProjectsViewModel> GetProjectItems(string projectId)
         {
             var result = (from c in _context.Projects
@@ -84,26 +83,69 @@ namespace GppApp.Repository
                           {
                               Id = d.Id,
                               ProjectId = c.ProjectId,
+                              ProjectName = c.ProjectName,
                               ProCreatedOn = c.CreatedOn,
                               ItemDescription = d.ItemDescription,
                               ProjectNotes = d.ProjectNotes,
                               Checked = d.Checked,
                               Image = _context.ItemImages.Where(c => c.ProjectItemId == d.Id).Select(d => d.Image).FirstOrDefault(),
                               CreatedOn = d.CreatedOn.ToString(),
-                              Status = _context.ItemsConfirmed.Where(c => c.ProjectItemId == d.Id).Count() > 0 ? 1 : 0,
+                              Status = _context.ItemsConfirmed.Where(c => c.ProjectItemId == d.Id).Count() > 0 ? 1 : 0, //Confirmed by client
                               ProStatus = c.Status,
-                              SubmittedBy = _context.ItemsConfirmed.
+                              SubmittedBy = _context.ApprovalForSubmission.
                                             Join(_context.UserDetails, c => c.UserId, d => d.UserId,
                                             (c, d) => new { c, d }).
                                             Join(_context.UserTypes, g => g.d.UserType, h => h.Id, (g, h) => new { g, h }).
                                             Where(m => m.g.c.ProjectItemId == d.Id)
                                             .Select(m => m.h.Types).FirstOrDefault() ?? "",
-                              SubmittedDt = _context.ItemsConfirmed.
+                              SubmittedDt = _context.ApprovalForSubmission.
                                             Join(_context.UserDetails, c => c.UserId, d => d.UserId,
                                             (c, d) => new { c, d }).
                                             Join(_context.UserTypes, g => g.d.UserType, h => h.Id, (g, h) => new { g, h }).
                                             Where(m => m.g.c.ProjectItemId == d.Id)
-                                            .Select(m => m.g.c.ConfirmDate).FirstOrDefault(),
+                                            .Select(m => m.g.c.SubmissionDate).FirstOrDefault(),
+
+                              TotalItems = _context.ProjectItems.Where(c => c.ProjectId == d.ProjectId && d.Status == 1).Count()
+                          }).ToList();
+
+            return result;
+        }
+
+        public List<ProjectsViewModel> GetProjectItemsInPdf(string projectId)
+        {
+            var result = (from c in _context.Projects
+                          join d in _context.ProjectItems on c.ProjectId equals d.ProjectId into g
+                          from d in g.DefaultIfEmpty()
+                          where c.ProjectId == projectId && d.Status == 1
+                          select new ProjectsViewModel
+                          {
+                              Id = d.Id,
+                              ProjectId = c.ProjectId,
+                              ProjectName = c.ProjectName,
+                              ProCreatedOn = c.CreatedOn,
+                              ItemDescription = d.ItemDescription,
+                              ProjectNotes = d.ProjectNotes,
+                              Checked = d.Checked,
+                              Image = _context.ItemImages.Where(c => c.ProjectItemId == d.Id).Select(d => d.Image).FirstOrDefault(),
+                              CreatedOn = d.CreatedOn.ToString(),
+                              Status = _context.ItemsConfirmed.Where(c => c.ProjectItemId == d.Id).Count() > 0 ? 1 : 0, //Confirmed by client
+                              ProStatus = c.Status,
+                              SubmittedBy = _context.ApprovalForSubmission.
+                                            Join(_context.UserDetails, c => c.UserId, d => d.UserId,
+                                            (c, d) => new { c, d }).
+                                            Join(_context.UserTypes, g => g.d.UserType, h => h.Id, (g, h) => new { g, h }).
+                                            Where(m => m.g.c.ProjectItemId == d.Id)
+                                            .Select(m => m.h.Types).FirstOrDefault() ?? "",
+                              SubmittedDt = _context.ApprovalForSubmission.
+                                            Join(_context.UserDetails, c => c.UserId, d => d.UserId,
+                                            (c, d) => new { c, d }).
+                                            Join(_context.UserTypes, g => g.d.UserType, h => h.Id, (g, h) => new { g, h }).
+                                            Where(m => m.g.c.ProjectItemId == d.Id)
+                                            .Select(m => m.g.c.SubmissionDate).FirstOrDefault(),
+
+                              TotalItems = _context.ProjectItems.Where(c => c.ProjectId == d.ProjectId && d.Status == 1).Count(),
+
+                              DateConfirmed = _context.ItemsConfirmed.Where(c => c.ProjectItemId == d.Id).Select(d => d.ConfirmDate).FirstOrDefault()
                           }).ToList();
 
             return result;
@@ -134,9 +176,9 @@ namespace GppApp.Repository
 
         public string GetAutoId()
         {
-            var result = _context.Projects.ToList().OrderByDescending(c => c.ProjectId);
+            var result = _context.Projects.OrderByDescending(c => c.Id);
 
-            string id = result.SingleOrDefault().ProjectId;
+            string id = result.FirstOrDefault().ProjectId;
             string newId = id.Substring(id.LastIndexOf('/') + 1);
 
             string num = (Convert.ToInt32(newId) + 1).ToString("0###");
@@ -236,7 +278,7 @@ namespace GppApp.Repository
                     aProjectItems.CreatedOn = aProjectItem.CreatedOn;
                     aProjectItems.CreatedBy = Convert.ToInt32(HttpContext.Current.Session["userId"]);
                     aProjectItems.Status = 1;
-                    aProjectItems.Checked = true;
+                    aProjectItems.Checked = false;
 
                     _context.ProjectItems.Add(aProjectItems);
                     _context.SaveChanges();
@@ -312,10 +354,8 @@ namespace GppApp.Repository
             foreach (var item in id)
             {
                 int projectItemId = Convert.ToInt32(item);
-                var result = (from c in _context.ItemsConfirmed
-                              where c.ProjectItemId == projectItemId
-                              select c).ToList();
-
+                var result = _context.ItemsConfirmed.Where(c => c.ProjectItemId == projectItemId).ToList();
+               
                 if (result.Count() == 0)
                 {
                     ItemsConfirmed aItemsConfirmed = new ItemsConfirmed();
@@ -327,7 +367,38 @@ namespace GppApp.Repository
                     aItemsConfirmed.Status = 1;
                     aItemsConfirmed.SystemDate = DateTime.Now;
 
+                    var query = _context.ProjectItems.Find(Convert.ToInt32(item));
+
+                    query.Checked = true;
+
                     _context.ItemsConfirmed.Add(aItemsConfirmed);
+                    _context.SaveChanges();
+                }
+            }
+        }
+
+        public void SubmitForApproval(string projectId, string itemId)
+        {
+            string[] id = itemId.Split(',');
+
+            foreach (var item in id)
+            {
+                int projectItemId = Convert.ToInt32(item);
+                var result1 = _context.ApprovalForSubmission.Where(c => c.ProjectItemId == projectItemId).ToList();
+                var result2 = _context.ItemsConfirmed.Where(c => c.ProjectItemId == projectItemId).ToList();
+
+                if (result1.Count() == 0 && result2.Count() == 0)
+                {
+                    ApprovalForSubmission aApprovalForSubmission = new ApprovalForSubmission();
+                    aApprovalForSubmission.ProjectId = projectId;
+                    aApprovalForSubmission.ProjectItemId = Convert.ToInt32(item);
+                    aApprovalForSubmission.UserId = Convert.ToInt32(HttpContext.Current.Session["userId"]);
+                    aApprovalForSubmission.SubmissionDate = DateTime.Now;
+                    aApprovalForSubmission.Details = _context.Projects.Where(c => c.ProjectId == projectId).Select(d => d.ProjectName).FirstOrDefault();
+                    aApprovalForSubmission.Status = 1;
+                    aApprovalForSubmission.SystemDate = DateTime.Now;
+
+                    _context.ApprovalForSubmission.Add(aApprovalForSubmission);
                     _context.SaveChanges();
                 }
             }

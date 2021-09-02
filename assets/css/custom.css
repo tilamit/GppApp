@@ -76,3 +76,7 @@ span.spanId {
 .sidebar .nav .nav-item {
     cursor: pointer;
 }
+
+.sidebar-brand {
+    font-size: 1.4rem !important;
+}

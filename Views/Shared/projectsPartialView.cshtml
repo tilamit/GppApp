@@ -300,7 +300,7 @@
                     var id = $(this).attr("id");
 
                     //Load projects with id for editing
-                    $("#result").html("Loading ......");
+                    $("#result").html('');
                     $("#result").load('@Url.Action("LoadPartialViewWithId", "Dashboard")', { passVal: "editProjects", id: projectId });
                 });
 

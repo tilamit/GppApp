@@ -11,6 +11,7 @@ namespace GppApp.Interface
         List<Projects> GetProjects();
         List<ProjectItems> GetAllProjectItems();
         List<ProjectsViewModel> GetProjectItems(string projectId);
+        List<ProjectsViewModel> GetProjectItemsInPdf(string projectId);
         List<ProjectItems> GetItems(int id);
         List<ImgHistoryViewModel> GetImages(int projectId);
         List<ProjectHistory> ShowProjectsHistory(string projectId);
@@ -23,5 +24,6 @@ namespace GppApp.Interface
         string AddProjectItems(ProjectItems aProjectItems);
         void DeleteProjectItems(string itemId);
         void AddConfirmedItems(string projectId, string itemId);
+        void SubmitForApproval(string projectId, string itemId);
     }
 }

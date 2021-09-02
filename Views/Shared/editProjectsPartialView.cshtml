@@ -29,7 +29,7 @@
             background-position: center center;
         }
 
-    .hide, .hideArea, .hideDate, .hideChecked, .showBlueBar, .hideSection, .hideFooter, .showFooter {
+    .hide, .hideArea, .hideDate, .hideChecked, .showBlueBar, .hideSection, .hideFooter, .showFooter, .getId {
         display: none;
     }
 
@@ -45,7 +45,7 @@
 <div>
     <div class="d-flex justify-content-between">
         <div><input type="button" class="btn btn-success" id="floatLeft" value="Generate PDF" /></div>
-        <div class="col-lg-12"><a id="openModal" class="btn btn-primary" data-toggle="modal" data-target="#myProjectItems">Add Items</a></div>
+        <div class="col-lg-12"><a id="openModal" class="btn btn-primary" data-toggle="modal" data-target="#myProjectItems">Add Items</a>><a id="approval"class="btn btn-inverse-warning">Submit for approval</a></div>
         <div class="col-lg-12" id="floatRight"><a id="confirm" class="btn btn-primary">Confirm</a> &nbsp; <a id="delete" class="btn btn-danger">Delete</a></div>
     </div>
 </div>
@@ -139,6 +139,9 @@
             <div class='page-footer'>I'm The Footer</div>
             <div class="card-body" id="card">
             </div>
+
+            <div class="card-body" id="cardNew">
+            </div>
         </div>
     </div>
     <div class="hide">
@@ -152,6 +155,8 @@
     $('.hideThisStatus').hide();
     $("#delete").hide();
     $("#confirm").hide();
+    $("#approval").hide();
+    $("#cardNew").hide();
 
     //Open modal on click
     $('#openModal').click(function () {
@@ -241,6 +246,7 @@
                             //$(".img-circle").attr('src', '/img/' + response);
 
                             GetProjectItems();
+                            GetProjectItemsInPdf();
                         },
                         error: function (er) {
                             //alert(er);
@@ -321,6 +327,7 @@
                     });
 
                     GetProjectItems();
+                    GetProjectItemsInPdf();
                 },
                 error: function (ex) {
                     alert('Failed to retrieve states.' + ex);
@@ -353,6 +360,103 @@
     }
 
     GetProjectItems();
+    GetProjectItemsInPdf();
+
+    //Delete project items
+    $("#delete").click(function () {
+        var $container = $('.projectItems');
+        var $checked = $container.find('.cbCheck:checked');
+        var values = $checked.map(function () {
+            return this.value
+        }).get();
+
+        var projectId = $(".getId").text();
+     
+        var cnfrm = confirm('Are you sure to delete?');
+        if (cnfrm == true) {
+            $.ajax({
+                url: "/Dashboard/DeleteProjectItems",
+                type: "POST",
+                contentType: "application/json; charset=utf-8",
+                dataType: "json",
+                data: JSON.stringify({ itemId: values.join(',') }),
+                success: function (response) {
+                    if (response != null || response != "") {
+                        alert(response);
+
+                        GetProjectItems();
+                        GetProjectItemsInPdf();
+                    }
+                }
+            });
+        } else {
+            return false;
+        }
+    });
+
+    //Confirm project items
+    $("#confirm").click(function () {
+        var $container = $('.projectItems');
+        var $checked = $container.find('.cbCheck:checked');
+        var values = $checked.map(function () {
+            return this.value
+        }).get();
+
+        var projectId = $(".getId").text();
+
+        var cnfrm = confirm('Are you sure to confirm the project items?');
+        if (cnfrm == true) {
+            $.ajax({
+                url: "/Dashboard/AddConfirmedItems",
+                type: "POST",
+                contentType: "application/json; charset=utf-8",
+                dataType: "json",
+                data: JSON.stringify({ projectId: projectId, itemId: values.join(',') }),
+                success: function (response) {
+                    if (response != null || response != "") {
+                        alert(response);
+
+                        GetProjectItems();
+                        GetProjectItemsInPdf();
+                    }
+                }
+            });
+        } else {
+            return false;
+        }
+    });
+
+    //Approval for submission
+    $("#approval").click(function () {
+        var $container = $('.projectItems');
+        var $checked = $container.find('.cbCheck:checked');
+        var values = $checked.map(function () {
+            return this.value
+        }).get();
+
+        var projectId = $(".getId").text();
+
+        var cnfrm = confirm('Are you sure to confirm the project items for approval?');
+        if (cnfrm == true) {
+            $.ajax({
+                url: "/Dashboard/SubmitForApproval",
+                type: "POST",
+                contentType: "application/json; charset=utf-8",
+                dataType: "json",
+                data: JSON.stringify({ projectId: projectId, itemId: values.join(',') }),
+                success: function (response) {
+                    if (response != null || response != "") {
+                        alert(response);
+
+                        GetProjectItems();
+                        GetProjectItemsInPdf();
+                    }
+                }
+            });
+        } else {
+            return false;
+        }
+    });
 
     //Get project items
     function GetProjectItems() {
@@ -376,18 +480,26 @@
             success: function (projects) {
                 if (projects != null || projects != "") {
 
-                    html += "<h4 class='card-title card-title-override hideId getProjectId'>" + projects[0].ProjectId + "</h4><div class='table-responsive'>" +
+                    html += "<h4 class='card-title card-title-override hideId getProjectId'>" + projects[0].ProjectName + "</h4><h4 class='getId'>" + projects[0].ProjectId + "</h4><div class='table-responsive'>" +
                             "<table id='projects' class='table table-bordered table-contextual projectItems'><thead>" +
-                            "<tr><th class='hideArea'>Date</th><th class='hideSelect'>Select</th><th class='action'>Action</th><th class='headingItemNo'> Item # </th><th class='hide'>Id</th><th>Item Description</th><th>Notes</th><th class='hideDate'>Created On</th><th class='hideSelect'>History</th><th>Image</th><th class='hideChecked'>Checked?</th></tr></thead><tbody>";
+                            "<tr><th class='hideArea'>Date</th><th class='hideSelect'>Select</th><th class='action'>Action</th><th class='headingItemNo'> Item # </th><th class='hide'>Id</th><th>Item Description</th><th class='hide'>Notes</th><th class='hideDate'>Created On</th><th class='hideSelect'>History</th><th>Image</th><th class='hideChecked'>Checked?</th></tr></thead><tbody>";
 
                     $.each(projects, function (i, project) {
                         if (project.Checked == true) {
                             backColor = "<td class='checked hideChecked' style='background-color:#98FB98;-webkit-print-color-adjust: exact;'>CHECKED</td>";
                         } else {
-                            backColor = "<td class='checked hideChecked' style='background-color:lightpink;-webkit-print-color-adjust: exact;'></td>;"
+                            backColor = "<td class='checked hideChecked' style='background-color:lightpink;-webkit-print-color-adjust: exact;'></td>"
                         }
 
-                        var num = parseInt(i) + 1;
+                        var val = (parseInt(i) + 1);
+                        var num = (parseInt(i) + 1);
+                        //var num = (parseInt(project.TotalItems) + 1) - val;
+
+                        if (project.ProStatus == 0) {
+                            $('#openModal').hide();
+                        } else {
+                            $('#openModal').show();
+                        }
 
                         if (project.Status == 0) {
                             status = "<td class='hideSelect'><input type='checkbox' class='cbCheck' name='cbCheck' value='" + project.Id + "' id='" + project.Id + "' /></td>";
@@ -398,7 +510,7 @@
                             locked = "<a href='javascript:void(0);'>Edit</a>";
                         }
 
-                        if (project.SubmittedBy != "") {
+                        if (project.SubmittedBy != "" && project.Checked == false) {
                             blueSection = "<div style='color: red;'><i style='margin-left: -20%;font-size:10px;'><b>SUBMITTED FOR ACTION " + getDateFormatted(project.SubmittedDt).toLocaleTimeString('en-US') + " " + getDateFormatted(project.SubmittedDt).toString().slice(0, 15) + "</b></i> <b style='margin-left: 18%;font-size:10px;'>Approved by " + project.SubmittedBy + "</b></div>";
                         }
 
@@ -411,13 +523,13 @@
                                 "<td class='hide hideId projectWithId'>" + project.Id + "</td>" +
                                 "<td class='hideDate proCreatedOn'>" + getDateFormatted(project.ProCreatedOn).toString().slice(0, 15) + "</td>" +
                                 "<td class='detailsWidth'>" + project.ItemDescription + "</td>" +
-                                "<td>" + project.ProjectNotes + "</td>" +
+                                "<td class='hide'>" + project.ProjectNotes + "</td>" +
                                 "<td class='hideDate'>" + (project.CreatedOn) + "</td><td class='alignText hideSelect'><i class='mdi mdi-history projectItemHistory'></i></td>" +
                                 "<td><img id='showImages' height='270' width='240' src='/img/" + project.Image + "' /></td>" + backColor + "</tr><tr><td class='showBlueBar' height='20' colspan='10' style='background-color: lightblue; -webkit-print-color-adjust: exact;'>" + blueSection + "</td></tr>";
 
                     })
 
-                    html += "</tbody></table><div id='footer'>Job ref. " + projects[0].ProjectId + " | Gold Property Partners l 07 5438 9775 l admin@goldpp.com.au l www.goldpp.com.au l 1/9 Aqua Circuit, Caloundra West Q 4551 Property of Gold Property Partners Pty Ltd. ABN 94 611 852 307. © Copyright protected.</div>";
+                    html += "</tbody></table><div id='footer'>Job ref. " + projects[0].ProjectName + " | Gold Property Partners l 07 5438 9775 l admin@goldpp.com.au l www.goldpp.com.au l Level 1, Suite 7, 9 Capital Place, Birtinya, Qld, 4575 Property of Gold Property Partners Pty Ltd. ABN 94 611 852 307. © Copyright protected.</div>";
                 }
 
                 $("#card").append(html);
@@ -485,79 +597,11 @@
                     if ($('input[name="cbCheck"]:checked').length >= 1) {
                         $("#delete").show();
                         $("#confirm").show();
+                        $("#approval").show();
                     } else {
                         $("#delete").hide();
                         $("#confirm").hide();
-                    }
-                });
-
-                //Delete project items
-                $("#delete").click(function () {
-                    $("#card").empty();
-
-                    var $container = $('.projectItems');
-                    var $checked = $container.find('.cbCheck:checked');
-                    var values = $checked.map(function () {
-                        return this.value
-                    }).get();
-
-                    var projectId = $(".getProjectId").text();
-
-                    var cnfrm = confirm('Are you sure to delete?');
-                    if (cnfrm == true) {
-                        $.ajax({
-                            url: "/Dashboard/DeleteProjectItems",
-                            type: "POST",
-                            contentType: "application/json; charset=utf-8",
-                            dataType: "json",
-                            data: JSON.stringify({ itemId: values.join(',') }),
-                            success: function (response) {
-                                if (response != null || response != "") {
-                                    alert(response);
-
-                                    $("#result").load('@Url.Action("LoadPartialViewWithId", "Dashboard")', { passVal: "editProjects", id: projectId });
-                                }
-                            }
-                        });
-                    } else {
-                        return false;
-                    }
-                });
-
-                //Confirm project items
-                $("#confirm").click(function () {
-                    $("#card").empty();
-
-                    var $container = $('.projectItems');
-                    var $checked = $container.find('.cbCheck:checked');
-                    var values = $checked.map(function () {
-                        return this.value
-                    }).get();
-
-                    //alert(values);
-
-                    var projectId = $(".getProjectId").text();
-
-                    var cnfrm = confirm('Are you sure to confirm the project items?');
-                    if (cnfrm == true) {
-                        //alert(values.join(','));
-
-                        $.ajax({
-                            url: "/Dashboard/AddConfirmedItems",
-                            type: "POST",
-                            contentType: "application/json; charset=utf-8",
-                            dataType: "json",
-                            data: JSON.stringify({ projectId: projectId, itemId: values.join(',') }),
-                            success: function (response) {
-                                if (response != null || response != "") {
-                                    alert(response);
-
-                                    $("#result").load('@Url.Action("LoadPartialViewWithId", "Dashboard")', { passVal: "editProjects", id: projectId });
-                                }
-                            }
-                        });
-                    } else {
-                        return false;
+                        $("#approval").hide();
                     }
                 });
 
@@ -645,32 +689,6 @@
                     });
                 });
 
-                //Create pdf here
-                //Generate pdf
-                $("body").on("click", "#floatLeft", function () {
-                    var sTable = document.getElementById('card').innerHTML;
-                    var style = "<style>";
-                    style = style + "@@page { size: A4 portrait; } body { -webkit-print-color-adjust: exact; border: 2px solid #1f497d; padding: 4%; margin: 0; }";
-                    style = style + "table { width: 100%; font: 17px Calibri; } #showImages { height: 100px; width: 180px; } #BoxLeft { font-size:10px; width: 120%; margin: 0 auto; margin-top: 6%; height: 36px; } .Box1, .Box2 { float: left; width: 15%; } .box { height: 25px; border: 1px solid #bdbdbd; -webkit-border-radius: 5px; border-radius: 5px; -moz-box-shadow: 0 0 10px #bdbdbd; -webkit-box-shadow: 0 0 10px #bdbdbd; box-shadow: 0 0 10px #bdbdbd; } .Box1 { background-color: #002b73; color:white; -webkit-print-color-adjust: exact; } .Box2 { background-color: white; -webkit-print-color-adjust: exact; }  #BoxRight { font-size:10px; width: 120%; margin: 0 auto; margin-top: -12%; height: 36px; margin-left: -20%; } .Box3, .Box4 { float: right; width: 15%; } .Box3 { -webkit-print-color-adjust: exact; } .Box4 { background-color: #002b73; color:white; -webkit-print-color-adjust: exact; }";
-                    style = style + "table, td { border: solid 2px #002b73; border-collapse: collapse; font-size:10px;";
-                    style = style + "padding: 2px 3px;text-align: center; } #projects th { height:10px; font-style:bold; font-size:10px; text-transform: uppercase; background-color: #002b73; -webkit-print-color-adjust: exact; color: white; }";
-                    style = style + ".headingItemNo { width: 6%; } .detailsWidth { width:40%; } #projects { margin-top: 0%; -webkit-print-color-adjust: exact; } .action, .hideId, .hide, .hideDate, .hideArea, .hideSelect { display:none; } .top { margin-top: -5%; margin-left: 4%; } .topAside { margin-top: -5%; margin-left: 4%; } .heading { margin-top:5%; text-align:center; } .logoGpp { height: 140px; width: 250px; display: block; margin-left: auto; margin-right: auto; -webkit-print-color-adjust: exact; }";
-                    style = style + ".showFooter { border:0px; display: block; } #footer { position: fixed; bottom: 0; height: 30px; top: 96.6%; padding: 4px; border: 1px solid #1f497d; font-size: 10px; margin-left: -2%; text-align: center; width: 94%; background-color: lightblue; font-family: Arial; -webkit-print-color-adjust: exact; } </style>";
-
-                    var win = window.open('', '', 'height=2000,width=2000');
-
-                    win.document.write("<html><head>");
-                    win.document.write(style);
-                    win.document.write("</head>");
-                    win.document.write("<body><img class='logoGpp' src='/img/logo.jpg' /><div class='top topAside'><div id='BoxLeft'><div class='Box1'><div class='box'><h4 class='heading'>Job Reference: </h4></div></div><div class='Box2'><div class='box'><h4 class='heading'>" + $(".card-title").html() + "</h4></div></div></div></div>");
-                    win.document.write("<div class='top'><div id='BoxRight'><div class='Box3'><div class='box'><h4 class='heading'>" + $(".proCreatedOn").html() + "</h4></div></div><div class='Box4'><div class='box'><h4 class='heading'>Initiation Date: </h4></div></div></div></div><br /><br /><br />");
-                    win.document.write(sTable);
-
-                    win.document.close();
-
-                    win.print();
-                });
-
                 //Live handler for images
                 lc_lightbox('.elem', {
                     wrap_class: 'lcl_fade_oc',
@@ -720,13 +738,6 @@
 
         var isValid = true;
 
-        if ($('#projectNotes').val().trim() == "") {
-            $('#projectNotes').css('border-color', 'Red');
-            isValid = false;
-        }
-        else {
-            $('#projectNotes').css('border-color', 'lightgrey');
-        }
         if (CKEDITOR.instances['editor1'].getData().trim() == "") {
             $('#editor1').css('border-color', 'Red');
             isValid = false;
@@ -743,5 +754,113 @@
         }
 
         return isValid;
+    }
+
+    //Get project items for PDF 
+    function GetProjectItemsInPdf() {
+        var html = "";
+        var html2 = "";
+        var id = '@ViewBag.projectId';
+
+        var backColor = "";
+        var status = "";
+        var locked = "";
+        var blueSection = "";
+
+        $("#cardNew").empty();
+
+        $.ajax({
+            url: "/Dashboard/GetProjectItemsInPdf",
+            type: "POST",
+            contentType: "application/json; charset=utf-8",
+            dataType: "json",
+            data: JSON.stringify({ id: id }),
+            success: function (projects) {
+                if (projects != null || projects != "") {
+
+                    html += "<h4 class='card-title card-title-override hideId getProjectId'>" + projects[0].ProjectName + "</h4><div class='table-responsive'>" +
+                            "<table id='projectsInPdf' class='table table-bordered table-contextual projectItems'><thead>" +
+                            "<tr><th class='hideArea'>Date</th><th class='hideSelect'>Select</th><th class='action'>Action</th><th class='headingItemNo'> Item # </th><th class='hide'>Id</th><th>Item Description</th><th class='hide'>Notes</th><th class='hideDate'>Created On</th><th class='hideSelect'>History</th><th>Image</th><th class='hideChecked'>Checked?</th></tr></thead><tbody>";
+
+                    $.each(projects, function (i, project) {
+                        if (project.Checked == true) {
+                            backColor = "<td class='checked hideChecked' style='background-color:#98FB98;-webkit-print-color-adjust: exact;'>CHECKED</td>";
+                        } else {
+                            backColor = "<td class='checked hideChecked' style='background-color:lightpink;-webkit-print-color-adjust: exact;'></td>"
+                        }
+
+                        var val = (parseInt(i) + 1);
+                        var num = (parseInt(i) + 1);
+                        //var num = (parseInt(project.TotalItems) + 1) - val;
+
+                        if (project.ProStatus == 0) {
+                            $('#openModal').hide();
+                        } else {
+                            $('#openModal').show();
+                        }
+
+                        if (project.Status == 0) {
+                            status = "<td class='hideSelect'><input type='checkbox' class='cbCheck' name='cbCheck' value='" + project.Id + "' id='" + project.Id + "' /></td>";
+                            locked = "<a class='editItems' data-projectId='" + project.ProjectId + "'>Edit</a>";
+                        }
+                        if (project.Status == 1 || project.ProStatus == 0) {
+                            status = "<td class='hideSelect'><input type='checkbox' class='cbCheck hideSelect' checked='true' disabled name='cbCheck' value='" + project.Id + "' id='" + project.Id + "' /></td>";
+                            locked = "<a href='javascript:void(0);'>Edit</a>";
+                        }
+
+                        if (project.SubmittedBy != "" && project.Checked == false) {
+                            blueSection = "<div style='color: red;'><i style='margin-left: -20%;font-size:10px;'><b>SUBMITTED FOR ACTION " + getDateFormatted(project.SubmittedDt).toLocaleTimeString('en-US') + " " + getDateFormatted(project.SubmittedDt).toString().slice(0, 15) + "</b></i> <b style='margin-left: 18%;font-size:10px;'>Approved by " + project.SubmittedBy + "</b></div>";
+                        }
+
+                        if (project.SubmittedBy == "") {
+                            blueSection = "";
+                        }
+
+                        html += "<tr> " + status +
+                                "<td class='action hideSelect'>" + locked + "</td><td>" + num + "</td>" +
+                                "<td class='hide hideId projectWithId'>" + project.Id + "</td>" +
+                                "<td class='hideDate proCreatedOn'>" + getDateFormatted(project.ProCreatedOn).toString().slice(0, 15) + "</td>" +
+                                "<td class='detailsWidth'>" + project.ItemDescription + "</td>" +
+                                "<td class='hide'>" + project.ProjectNotes + "</td>" +
+                                "<td class='hideDate'>" + (project.CreatedOn) + "</td><td class='alignText hideSelect'><i class='mdi mdi-history projectItemHistory'></i></td>" +
+                                "<td><img id='showImages' height='270' width='240' src='/img/" + project.Image + "' /></td>" + backColor + "</tr><tr><td class='showBlueBar' height='20' colspan='10' style='background-color: lightblue; -webkit-print-color-adjust: exact;'>" + blueSection + "</td></tr>";
+
+                    })
+
+                    html += "</tbody></table><div id='footer'>Job ref. " + projects[0].ProjectName + " | Gold Property Partners l 07 5438 9775 l admin@goldpp.com.au l www.goldpp.com.au l Level 1, Suite 7, 9 Capital Place, Birtinya, Qld, 4575 Property of Gold Property Partners Pty Ltd. ABN 94 611 852 307. © Copyright protected.</div>";
+                }
+
+                $("#cardNew").append(html);
+
+                //Create pdf here
+                //Generate pdf
+                $("body").on("click", "#floatLeft", function () {
+                    var sTable = document.getElementById('cardNew').innerHTML;
+                    var style = "<style>";
+                    style = style + "@@page { size: A4 portrait; } body { -webkit-print-color-adjust: exact; border: 2px solid #1f497d; padding: 4%; margin: 0; }";
+                    style = style + "table { width: 100%; font: 17px Calibri; } #showImages { height: 100px; width: 180px; } #BoxLeft { font-size:10px; width: 120%; margin: 0 auto; margin-top: 6%; height: 36px; } .Box1, .Box2 { float: left; width: 15%; } .box { height: 25px; border: 1px solid #bdbdbd; -webkit-border-radius: 5px; border-radius: 5px; -moz-box-shadow: 0 0 10px #bdbdbd; -webkit-box-shadow: 0 0 10px #bdbdbd; box-shadow: 0 0 10px #bdbdbd; } .Box1 { background-color: #002b73; color:white; -webkit-print-color-adjust: exact; } .Box2 { background-color: white; -webkit-print-color-adjust: exact; }  #BoxRight { font-size:10px; width: 120%; margin: 0 auto; margin-top: -12%; height: 36px; margin-left: -20%; } .Box3, .Box4 { float: right; width: 15%; } .Box3 { -webkit-print-color-adjust: exact; } .Box4 { background-color: #002b73; color:white; -webkit-print-color-adjust: exact; }";
+                    style = style + "table, td { border: solid 2px #002b73; border-collapse: collapse; font-size:10px;";
+                    style = style + "padding: 2px 3px;text-align: center; } #projectsInPdf th { height:10px; font-style:bold; font-size:10px; text-transform: uppercase; background-color: #002b73; -webkit-print-color-adjust: exact; color: white; }";
+                    style = style + ".headingItemNo { width: 6%; } .detailsWidth { width:40%; } #projectsInPdf { margin-top: 0%; -webkit-print-color-adjust: exact; } .action, .hideId, .hide, .hideDate, .hideArea, .hideSelect { display:none; } .top { margin-top: -5%; margin-left: 4%; } .topAside { margin-top: -5%; margin-left: 4%; } .heading { margin-top:5%; text-align:center; } .logoGpp { height: 140px; width: 250px; display: block; margin-left: auto; margin-right: auto; -webkit-print-color-adjust: exact; }";
+                    style = style + ".showFooter { border:0px; display: block; } #footer { position: fixed; bottom: 0; height: 30px; top: 96.6%; padding: 4px; border: 1px solid #1f497d; font-size: 10px; margin-left: -2%; text-align: center; width: 94%; background-color: lightblue; font-family: Arial; -webkit-print-color-adjust: exact; } </style>";
+
+                    var win = window.open('', '', 'height=2000,width=2000');
+
+                    win.document.write("<html><head>");
+                    win.document.write(style);
+                    win.document.write("</head>");
+                    win.document.write("<body><img class='logoGpp' src='/img/logo.jpg' /><div class='top topAside'><div id='BoxLeft'><div class='Box1'><div class='box'><h4 class='heading'>Job Reference: </h4></div></div><div class='Box2'><div class='box'><h4 class='heading'>" + $(".card-title").html() + "</h4></div></div></div></div>");
+                    win.document.write("<div class='top'><div id='BoxRight'><div class='Box3'><div class='box'><h4 class='heading'>" + $(".proCreatedOn").html() + "</h4></div></div><div class='Box4'><div class='box'><h4 class='heading'>Initiation Date: </h4></div></div></div></div><br /><br /><br />");
+                    win.document.write(sTable);
+
+                    win.document.close();
+
+                    win.print();
+                });
+            },
+            error: function (er) {
+                //alert(er);
+            }
+        });
     }
 </script>

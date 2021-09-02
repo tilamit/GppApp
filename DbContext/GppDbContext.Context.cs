@@ -37,5 +37,6 @@ namespace GppApp.DbContext
         public virtual DbSet<Menus> Menus { get; set; }
         public virtual DbSet<TrackUsers> TrackUsers { get; set; }
         public virtual DbSet<ItemsConfirmed> ItemsConfirmed { get; set; }
+        public virtual DbSet<ApprovalForSubmission> ApprovalForSubmission { get; set; }
     }
 }
