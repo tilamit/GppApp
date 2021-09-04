@@ -45,7 +45,7 @@
 <div>
     <div class="d-flex justify-content-between">
         <div><input type="button" class="btn btn-success" id="floatLeft" value="Generate PDF" /></div>
-        <div class="col-lg-12"><a id="openModal" class="btn btn-primary" data-toggle="modal" data-target="#myProjectItems">Add Items</a>><a id="approval"class="btn btn-inverse-warning">Submit for approval</a></div>
+        <div class="col-lg-12"><a id="openModal" class="btn btn-primary" data-toggle="modal" data-target="#myProjectItems">Add Items</a>><a id="approval"class="btn btn-inverse-warning">Save for Submission</a></div>
         <div class="col-lg-12" id="floatRight"><a id="confirm" class="btn btn-primary">Confirm</a> &nbsp; <a id="delete" class="btn btn-danger">Delete</a></div>
     </div>
 </div>
@@ -84,6 +84,13 @@
                         <label for="Status">Checked ?</label>
                         <input type="checkbox" class="form-control" id="addCheckedStatus" />
                     </div>
+
+                    <div class="form-group hideThisStatus">
+                        <label for="itemImage">Signature</label>
+                        <input type="file" name="Image" value="" onchange="return ShowSignaturePreview(this)" class="form-control" id="uploadSignature" /><div></div>
+                        <img src="~/img/default.jpg" alt="preview" id="sigPreview" style="border: 1px solid red; height: 200px; width: 200px; margin: auto; display: block;" />
+                    </div>
+
                     <div class="form-group">
                         <label for="itemImage">Image</label>
                         <input type="file" name="Image" value="" onchange="return ShowImagePreview(this)" class="form-control" id="uploadImg" /><div></div>
@@ -780,7 +787,7 @@
 
                     html += "<h4 class='card-title card-title-override hideId getProjectId'>" + projects[0].ProjectName + "</h4><div class='table-responsive'>" +
                             "<table id='projectsInPdf' class='table table-bordered table-contextual projectItems'><thead>" +
-                            "<tr><th class='hideArea'>Date</th><th class='hideSelect'>Select</th><th class='action'>Action</th><th class='headingItemNo'> Item # </th><th class='hide'>Id</th><th>Item Description</th><th class='hide'>Notes</th><th class='hideDate'>Created On</th><th class='hideSelect'>History</th><th>Image</th><th class='hideChecked'>Checked?</th></tr></thead><tbody>";
+                            "<tr><th class='headingItemNo'> Item # </th><th width='40%'>Item Description</th><th width='10%'>Image</th><th width='10%' class='hideChecked'>Checked?</th></tr></thead><tbody>";
 
                     $.each(projects, function (i, project) {
                         if (project.Checked == true) {
@@ -819,10 +826,7 @@
                         html += "<tr> " + status +
                                 "<td class='action hideSelect'>" + locked + "</td><td>" + num + "</td>" +
                                 "<td class='hide hideId projectWithId'>" + project.Id + "</td>" +
-                                "<td class='hideDate proCreatedOn'>" + getDateFormatted(project.ProCreatedOn).toString().slice(0, 15) + "</td>" +
                                 "<td class='detailsWidth'>" + project.ItemDescription + "</td>" +
-                                "<td class='hide'>" + project.ProjectNotes + "</td>" +
-                                "<td class='hideDate'>" + (project.CreatedOn) + "</td><td class='alignText hideSelect'><i class='mdi mdi-history projectItemHistory'></i></td>" +
                                 "<td><img id='showImages' height='270' width='240' src='/img/" + project.Image + "' /></td>" + backColor + "</tr><tr><td class='showBlueBar' height='20' colspan='10' style='background-color: lightblue; -webkit-print-color-adjust: exact;'>" + blueSection + "</td></tr>";
 
                     })

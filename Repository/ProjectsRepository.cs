@@ -1,6 +1,7 @@
 ﻿using GppApp.DbContext;
 using GppApp.Interface;
 using GppApp.Models;
+using GppApp.Utility;
 using OnlineRevision.Models;
 using System;
 using System.Collections.Generic;
@@ -183,7 +184,7 @@ namespace GppApp.Repository
 
             string num = (Convert.ToInt32(newId) + 1).ToString("0###");
 
-            return ("#Project-" + DateTime.Now.Year.ToString() + "/" + DateTime.Now.Month.ToString("0#") + "/" + num).ToString();
+            return ("#Project-" + DateTimeAustralia.GetDateTime().Year.ToString() + "/" + DateTimeAustralia.GetDateTime().Month.ToString("0#") + "/" + num).ToString();
         }
 
         public void AddImages(int id, string imgName)
@@ -199,7 +200,7 @@ namespace GppApp.Repository
                 ItemImages ItemImages = new ItemImages();
                 ItemImages.ProjectItemId = id;
                 ItemImages.Image = imgName;
-                ItemImages.CreatedOn = DateTime.Now;
+                ItemImages.CreatedOn = DateTimeAustralia.GetDateTime();
                 ItemImages.CreatedBy = Convert.ToInt32(HttpContext.Current.Session["userId"]);
                 ItemImages.Status = 1;
 
@@ -226,7 +227,7 @@ namespace GppApp.Repository
                 aProjectsHistory.PreProjectDetails = aProjectHistory.PreProjectDetails;
                 aProjectsHistory.PreCreatedBy = aProjectHistory.PreCreatedBy;
                 aProjectsHistory.PreCreatedOn = aProjectHistory.PreCreatedOn;
-                aProjectsHistory.UpdatedOn = DateTime.Now;
+                aProjectsHistory.UpdatedOn = DateTimeAustralia.GetDateTime();
 
                 _context.ProjectsHistory.Add(aProjectsHistory);
                 _context.SaveChanges();
@@ -252,7 +253,7 @@ namespace GppApp.Repository
                 aProjectItemsHistory.PreChecked = aProjectItemHistory.PreChecked;
                 aProjectItemsHistory.PreCreatedOn = aProjectItemHistory.PreCreatedOn;
                 aProjectItemsHistory.PreCreatedBy = aProjectItemHistory.PreCreatedBy;
-                aProjectItemsHistory.UpdatedOn = DateTime.Now;
+                aProjectItemsHistory.UpdatedOn = DateTimeAustralia.GetDateTime();
                 //aProjectItemsHistory.Status = 1;
 
                 _context.ProjectItemsHistory.Add(aProjectItemsHistory);
@@ -362,10 +363,10 @@ namespace GppApp.Repository
                     aItemsConfirmed.ProjectId = projectId;
                     aItemsConfirmed.ProjectItemId = Convert.ToInt32(item);
                     aItemsConfirmed.UserId = Convert.ToInt32(HttpContext.Current.Session["userId"]);
-                    aItemsConfirmed.ConfirmDate = DateTime.Now;
+                    aItemsConfirmed.ConfirmDate = DateTimeAustralia.GetDateTime();
                     aItemsConfirmed.Details = _context.Projects.Where(c => c.ProjectId == projectId).Select(d => d.ProjectName).FirstOrDefault();
                     aItemsConfirmed.Status = 1;
-                    aItemsConfirmed.SystemDate = DateTime.Now;
+                    aItemsConfirmed.SystemDate = DateTimeAustralia.GetDateTime();
 
                     var query = _context.ProjectItems.Find(Convert.ToInt32(item));
 
@@ -393,10 +394,10 @@ namespace GppApp.Repository
                     aApprovalForSubmission.ProjectId = projectId;
                     aApprovalForSubmission.ProjectItemId = Convert.ToInt32(item);
                     aApprovalForSubmission.UserId = Convert.ToInt32(HttpContext.Current.Session["userId"]);
-                    aApprovalForSubmission.SubmissionDate = DateTime.Now;
+                    aApprovalForSubmission.SubmissionDate = DateTimeAustralia.GetDateTime();
                     aApprovalForSubmission.Details = _context.Projects.Where(c => c.ProjectId == projectId).Select(d => d.ProjectName).FirstOrDefault();
                     aApprovalForSubmission.Status = 1;
-                    aApprovalForSubmission.SystemDate = DateTime.Now;
+                    aApprovalForSubmission.SystemDate = DateTimeAustralia.GetDateTime();
 
                     _context.ApprovalForSubmission.Add(aApprovalForSubmission);
                     _context.SaveChanges();

@@ -298,7 +298,7 @@
             return isValid;
         }
 
-
+        CheckSession();
         GetAllMenus();
 
         //Get all menus
@@ -337,6 +337,19 @@
                 error: function (er) {
                     //alert(er);
                 }
+            });
+        }
+
+        function CheckSession() {
+            $.ajax({
+                type: "GET",
+                url: "@Url.Action("SessionInfo", "Dashboard")"
+            }).done(function (data) {
+                if (data === true) {
+                    window.location.href = "@Url.Action("Index", "Home")";
+                }
+            }).fail(function (e) {
+                alert('Error');
             });
         }
     </script>

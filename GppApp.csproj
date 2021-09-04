@@ -221,6 +221,7 @@
     <Compile Include="Repository\ProjectsRepository.cs" />
     <Compile Include="Repository\UsersRepository.cs" />
     <Compile Include="Startup.cs" />
+    <Compile Include="Utility\DateTimeAustralia.cs" />
     <Compile Include="Utility\GppAuthorizeAttribute.cs" />
   </ItemGroup>
   <ItemGroup>

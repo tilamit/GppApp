@@ -375,5 +375,14 @@ namespace GppApp.Controllers
 
             return Json(Convert.ToString(_imgname), JsonRequestBehavior.AllowGet);
         }
+
+        public JsonResult SessionInfo()
+        {
+            if (Session["userId"] == null)
+            {
+                return Json(true, JsonRequestBehavior.AllowGet);
+            }
+            return Json(false, JsonRequestBehavior.AllowGet);
+        }
     }
 }
