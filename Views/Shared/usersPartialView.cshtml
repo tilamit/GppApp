@@ -91,6 +91,8 @@
 
     //Open modal on click
     $('#openModalUsers').click(function () {
+        CheckSession();
+
         $('#updateUserData').hide();
         $('#addUserStatus').hide();
         $('.hideThisStatus').hide();
@@ -140,6 +142,8 @@
                 //Update user details
                 var id = "";
                 $('.editUser').click(function () {
+                    CheckSession();
+
                     id = $(this).closest("tr").find(".userId").text();
 
                     $.ajax({
@@ -186,6 +190,8 @@
 
     //Add user details here
     $('#addUserData').click(function () {
+        CheckSession();
+
         var aUserDetails = {};
 
         var res = validate();
@@ -220,6 +226,8 @@
 
     //Update user details here
     $('#updateUserData').click(function () {
+        CheckSession();
+
         var aUserDetails = {};
 
         var res = validate();
@@ -289,5 +297,19 @@
     function validateEmail($email) {
         var emailReg = /^([\w-\.]+@@([\w-]+\.)+[\w-]{2,4})?$/;
         return emailReg.test($email);
+    }
+
+    function CheckSession() {
+        $.ajax({
+            type: "GET",
+            url: "@Url.Action("SessionInfo", "Dashboard")"
+        }).done(function (data) {
+            if (data === true) {
+                alert("Your session expired! Please login again.");
+                window.location.href = "@Url.Action("Login", "Auth")";
+            }
+        }).fail(function (e) {
+            alert('Error');
+        });
     }
 </script>

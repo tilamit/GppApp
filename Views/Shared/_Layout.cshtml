@@ -5,24 +5,11 @@
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
     <title>Gold Property</title>
-    <!-- plugins:css -->
-    <link rel="stylesheet" href="assets/vendors/mdi/css/materialdesignicons.min.css">
-    <link rel="stylesheet" href="assets/vendors/css/vendor.bundle.base.css">
-    <!-- endinject -->
-    <!-- Plugin css for this page -->
-    <link rel="stylesheet" href="assets/vendors/jvectormap/jquery-jvectormap.css">
-    <link rel="stylesheet" href="assets/vendors/flag-icon-css/css/flag-icon.min.css">
-    <link rel="stylesheet" href="assets/vendors/owl-carousel-2/owl.carousel.min.css">
-    <link rel="stylesheet" href="assets/vendors/owl-carousel-2/owl.theme.default.min.css">
-    <!-- End plugin css for this page -->
-    <!-- inject:css -->
-    <!-- endinject -->
-    <!-- Layout styles -->
-    <link rel="stylesheet" href="assets/css/style.css">
-    <!-- End layout styles -->
+    
     <link rel="shortcut icon" href="assets/images/favicon.png" />
-    <!-- Custom styles -->
-    <link href="~/assets/css/custom.css" rel="stylesheet" />
+
+    @Styles.Render("~/bundles/bootstrap")
+    @Styles.Render("~/Content/css")
 </head>
 <body>
     @*Account settings*@
@@ -113,13 +100,13 @@
                 <span class="addMenus">
                 </span>
                 @*<li class="nav-item menu-items">
-                        <a id="dashboard" class="nav-link" href="">
-                            <span class="menu-icon">
-                                <i class="mdi mdi-speedometer"></i>
-                            </span>
-                            <span class="menu-title">Dashboard</span>
-                        </a>
-                  </li>*@
+                          <a id="dashboard" class="nav-link" href="">
+                              <span class="menu-icon">
+                                  <i class="mdi mdi-speedometer"></i>
+                              </span>
+                              <span class="menu-title">Dashboard</span>
+                          </a>
+                    </li>*@
             </ul>
         </nav>
         <div class="container-fluid page-body-wrapper">
@@ -141,7 +128,7 @@
                                     <i class="mdi mdi-menu-down d-none d-sm-block"></i>
                                 </div>
                             </a>
-                            <div class="dropdown-menu dropdown-menu-right navbar-dropdown preview-list" aria-labelledby="profileDropdown">
+                            <div class="dropdown-menu dropdown-menu-right navbar-dropdown" aria-labelledby="profileDropdown">
                                 <h6 class="p-3 mb-0">Profile</h6>
                                 <div class="dropdown-divider"></div>
                                 <a class="dropdown-item preview-item">
@@ -173,32 +160,12 @@
             </div>
         </div>
     </div>
-    <!-- container-scroller -->
-    <!-- plugins:js -->
-    <script src="assets/vendors/js/vendor.bundle.base.js"></script>
-    <!-- endinject -->
-    <!-- Plugin js for this page -->
-    <script src="assets/vendors/chart.js/Chart.min.js"></script>
-    <script src="assets/vendors/progressbar.js/progressbar.min.js"></script>
-    <script src="assets/vendors/jvectormap/jquery-jvectormap.min.js"></script>
-    <script src="assets/vendors/jvectormap/jquery-jvectormap-world-mill-en.js"></script>
-    <script src="assets/vendors/owl-carousel-2/owl.carousel.min.js"></script>
-    <!-- End plugin js for this page -->
-    <!-- inject:js -->
-    <script src="assets/js/off-canvas.js"></script>
-    <script src="assets/js/hoverable-collapse.js"></script>
-    <script src="assets/js/misc.js"></script>
-    <script src="assets/js/settings.js"></script>
-    <script src="assets/js/todolist.js"></script>
-    <!-- endinject -->
-    <!-- Custom js for this page -->
-    <script src="assets/js/dashboard.js"></script>
-    <!-- End custom js for this page -->
+
+    @Scripts.Render("~/bundles/jquery")
     @*SyncFusion datepicker*@
     <script src="https://cdn.syncfusion.com/ej2/dist/ej2.min.js"></script>
     <link href="~/assets/SyncFusion/material.css" rel="stylesheet" />
-    @*<script src="https://cdn.syncfusion.com/ej2/dist/ej2.min.js"></script>
-        <link href="https://cdn.syncfusion.com/ej2/material.css" rel="stylesheet">*@
+
     <script type="text/javascript">
         //SyncFusion date picker
         var datepicker = new ej.calendars.DatePicker({ width: "255px", color: "red", format: "MM/dd/yyyy" });
@@ -298,7 +265,6 @@
             return isValid;
         }
 
-        CheckSession();
         GetAllMenus();
 
         //Get all menus
@@ -328,8 +294,10 @@
                     $(".addMenus").append(html);
 
                     $('.nav-link').click(function () {
+                        CheckSession();
+
                         var id = $(this).attr("id");
-                        //$("#result").html("Loading ......");
+
                         $("#result").load('@Url.Action("LoadPartialView", "Dashboard")', { passVal: id });
                         $(".nav-link").removeAttr('href');
                     });
@@ -341,12 +309,14 @@
         }
 
         function CheckSession() {
+            var val = false;
             $.ajax({
                 type: "GET",
                 url: "@Url.Action("SessionInfo", "Dashboard")"
             }).done(function (data) {
                 if (data === true) {
-                    window.location.href = "@Url.Action("Index", "Home")";
+                    alert("Your session expired! Please login again.");
+                    window.location.href = "@Url.Action("Login", "Auth")";
                 }
             }).fail(function (e) {
                 alert('Error');

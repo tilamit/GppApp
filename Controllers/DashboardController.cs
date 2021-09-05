@@ -71,6 +71,7 @@ namespace GppApp.Controllers
             }
         }
 
+        [GppAuthorize]
         [HttpPost]
         public JsonResult GetProjects(string id)
         {
@@ -94,6 +95,7 @@ namespace GppApp.Controllers
             return Json(aLst, JsonRequestBehavior.AllowGet);
         }
 
+        [GppAuthorize]
         [HttpPost]
         public JsonResult GetProjectItems(string id)
         {
@@ -110,6 +112,7 @@ namespace GppApp.Controllers
             return Json(aLst, JsonRequestBehavior.AllowGet);
         }
 
+        [GppAuthorize]
         [HttpPost]
         public JsonResult GetProjectItemsInPdf(string id)
         {
@@ -126,6 +129,7 @@ namespace GppApp.Controllers
             return Json(aLst, JsonRequestBehavior.AllowGet);
         }
 
+        [GppAuthorize]
         [HttpPost]
         public JsonResult GetAllProjects()
         {
@@ -143,6 +147,7 @@ namespace GppApp.Controllers
             return Json(projectsTotal = aLst.Count(), JsonRequestBehavior.AllowGet);
         }
 
+        [GppAuthorize]
         [HttpPost]
         public JsonResult GetAllProjectItems()
         {
@@ -159,6 +164,7 @@ namespace GppApp.Controllers
             return Json(aLst.Count(), JsonRequestBehavior.AllowGet);
         }
 
+        [GppAuthorize]
         [HttpPost]
         public JsonResult GetImages(int id)
         {
@@ -175,6 +181,7 @@ namespace GppApp.Controllers
             return Json(aLst, JsonRequestBehavior.AllowGet);
         }
 
+        [GppAuthorize]
         //Get project items
         [HttpPost]
         public JsonResult GetItems(int id)
@@ -192,6 +199,7 @@ namespace GppApp.Controllers
             return Json(aLst, JsonRequestBehavior.AllowGet);
         }
 
+        [GppAuthorize]
         //Add project details here
         public async Task<JsonResult> AddProjects(Projects aProject)
         {
@@ -208,6 +216,7 @@ namespace GppApp.Controllers
             return await Task.Run(() => Json("Project added successfully!", JsonRequestBehavior.AllowGet));
         }
 
+        [GppAuthorize]
         //Update project details here
         public async Task<JsonResult> UpdateProjects(ProjectHistory aProjectsHistory)
         {
@@ -224,6 +233,7 @@ namespace GppApp.Controllers
             return await Task.Run(() => Json("Project updated successfully!", JsonRequestBehavior.AllowGet));
         }
 
+        [GppAuthorize]
         //Show project update history
         public async Task<JsonResult> ShowProjectsHistory(string projectId)
         {
@@ -241,6 +251,7 @@ namespace GppApp.Controllers
             return await Task.Run(() => Json(aLst, JsonRequestBehavior.AllowGet));
         }
 
+        [GppAuthorize]
         //Show project items update history
         public async Task<JsonResult> ShowProjectItemsHistory(int id)
         {
@@ -258,6 +269,7 @@ namespace GppApp.Controllers
             return await Task.Run(() => Json(aLst, JsonRequestBehavior.AllowGet));
         }
 
+        [GppAuthorize]
         //Update project items here
         public async Task<JsonResult> UpdateItems(ProjectItemHistory aProjectItemHistory)
         {
@@ -274,6 +286,7 @@ namespace GppApp.Controllers
             return await Task.Run(() => Json("Project items updated successfully!", JsonRequestBehavior.AllowGet));
         }
 
+        [GppAuthorize]
         //Update project items here
         public async Task<JsonResult> DeleteProjectItems(string itemId)
         {
@@ -290,6 +303,7 @@ namespace GppApp.Controllers
             return await Task.Run(() => Json("Project items deleted successfully!", JsonRequestBehavior.AllowGet));
         }
 
+        [GppAuthorize]
         //Add project items here
         public async Task<JsonResult> AddProjectItems(ProjectItems aProjectItems)
         {
@@ -307,6 +321,7 @@ namespace GppApp.Controllers
             return await Task.Run(() => Json(val, JsonRequestBehavior.AllowGet));
         }
 
+        [GppAuthorize]
         //Add project items here for submission
         public async Task<JsonResult> SubmitForApproval(string projectId, string itemId)
         {
@@ -323,6 +338,7 @@ namespace GppApp.Controllers
             return await Task.Run(() => Json("Project items submitted for approval!", JsonRequestBehavior.AllowGet));
         }
 
+        [GppAuthorize]
         //Add project items here to confirm
         public async Task<JsonResult> AddConfirmedItems(string projectId, string itemId)
         {
@@ -339,6 +355,7 @@ namespace GppApp.Controllers
             return await Task.Run(() => Json("Project items confirmed successfully!", JsonRequestBehavior.AllowGet));
         }
 
+        [GppAuthorize]
         //Image upload
         [AcceptVerbs(HttpVerbs.Post)]
         public JsonResult UploadImg(string id, int uniqueId, string imgName)

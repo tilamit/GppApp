@@ -167,6 +167,7 @@
 
     //Open modal on click
     $('#openModal').click(function () {
+        CheckSession();
 
         //Initialize CKEditor by giving id of text area
         CKEDITOR.replace('editor1');
@@ -190,6 +191,8 @@
 
     //Hide modal on click
     $("#closbtn").click(function () {
+        CheckSession();
+
         $('#myProjectItems').modal('hide');
     });
 
@@ -209,6 +212,8 @@
 
     //Add project items here
     $('#addData').click(function () {
+        CheckSession();
+
         var id = '@ViewBag.projectId';
 
         $('.card-body').empty();
@@ -271,6 +276,8 @@
 
     //Update project items here
     $('#updateData').click(function () {
+        CheckSession();
+
         var aProjectItemHistory = {};
 
         var res = validate();
@@ -371,6 +378,8 @@
 
     //Delete project items
     $("#delete").click(function () {
+        CheckSession();
+
         var $container = $('.projectItems');
         var $checked = $container.find('.cbCheck:checked');
         var values = $checked.map(function () {
@@ -403,6 +412,8 @@
 
     //Confirm project items
     $("#confirm").click(function () {
+        CheckSession();
+
         var $container = $('.projectItems');
         var $checked = $container.find('.cbCheck:checked');
         var values = $checked.map(function () {
@@ -435,6 +446,8 @@
 
     //Approval for submission
     $("#approval").click(function () {
+        CheckSession();
+
         var $container = $('.projectItems');
         var $checked = $container.find('.cbCheck:checked');
         var values = $checked.map(function () {
@@ -544,6 +557,8 @@
                 //Update project items
                 var id = "";
                 $('.editItems').click(function () {
+                    CheckSession();
+
                     id = $(this).closest("tr").find(".hideId").text();
 
                     $.ajax({
@@ -601,6 +616,8 @@
 
                 //Check if any check boxes checked
                 $('.cbCheck').change(function () {
+                    CheckSession();
+
                     if ($('input[name="cbCheck"]:checked').length >= 1) {
                         $("#delete").show();
                         $("#confirm").show();
@@ -614,6 +631,8 @@
 
                 //Show update history
                 $('.projectItemHistory').click(function () {
+                    CheckSession();
+
                     $('#myProjectItemsHistory').modal('show');
 
                     $('#projectItemsHistory').empty();
@@ -666,6 +685,8 @@
 
                 //Add image src here
                 $("body").on("click", "#showImages", function () {
+                    CheckSession();
+
                     $('.images').empty();
 
                     var id = $(this).closest("tr").find(".hideId").text();
@@ -839,6 +860,8 @@
                 //Create pdf here
                 //Generate pdf
                 $("body").on("click", "#floatLeft", function () {
+                    CheckSession();
+
                     var sTable = document.getElementById('cardNew').innerHTML;
                     var style = "<style>";
                     style = style + "@@page { size: A4 portrait; } body { -webkit-print-color-adjust: exact; border: 2px solid #1f497d; padding: 4%; margin: 0; }";
@@ -865,6 +888,20 @@
             error: function (er) {
                 //alert(er);
             }
+        });
+    }
+
+    function CheckSession() {
+        $.ajax({
+            type: "GET",
+            url: "@Url.Action("SessionInfo", "Dashboard")"
+        }).done(function (data) {
+            if (data === true) {
+                alert("Your session expired! Please login again.");
+                window.location.href = "@Url.Action("Login", "Auth")";
+            }
+        }).fail(function (e) {
+            alert('Error');
         });
     }
 </script>

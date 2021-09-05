@@ -116,6 +116,8 @@
 
     //Open modal on click
     $('#openModal').click(function () {
+        CheckSession();
+
         $("#projectId").prop("disabled", false);
         $('#projectId').val('');
 
@@ -143,6 +145,8 @@
 
     //Hide modal on click
     $("#closbtn").click(function () {
+        CheckSession();
+
         $('#myProjects').modal('hide');
     });
 
@@ -164,6 +168,8 @@
 
     //Add project details here
     $('#addData').click(function () {
+        CheckSession();
+
         var aProject = {};
 
         var res = validate();
@@ -197,6 +203,8 @@
 
     //Update project details here
     $('#updateData').click(function () {
+        CheckSession();
+
         var aProjectsHistory = {};
 
         var res = validate();
@@ -295,6 +303,8 @@
                 $("#projects").append(html);
 
                 $('.editProjects').click(function () {
+                    CheckSession();
+
                     //Get project id
                     var projectId = $(this).attr("data-projectId");
                     var id = $(this).attr("id");
@@ -307,6 +317,8 @@
                 //Update project details
                 var id = "";
                 $('.editProject').click(function () {
+                    CheckSession();
+
                     $('.frmProjectId').show();
 
                     id = $(this).closest("tr").find(".projectWithId").text();
@@ -371,6 +383,8 @@
 
                 //Show update history
                 $('.projectHistory').click(function () {
+                    CheckSession();
+
                     $('#myProjectsHistory').modal('show');
 
                     $('#projectsHistory').empty();
@@ -463,5 +477,19 @@
         }
 
         return isValid;
+    }
+
+    function CheckSession() {
+        $.ajax({
+            type: "GET",
+            url: "@Url.Action("SessionInfo", "Dashboard")"
+        }).done(function (data) {
+            if (data === true) {
+                alert("Your session expired! Please login again.");
+                window.location.href = "@Url.Action("Login", "Auth")";
+            }
+        }).fail(function (e) {
+            alert('Error');
+        });
     }
 </script>

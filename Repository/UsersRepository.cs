@@ -63,7 +63,7 @@ namespace GppApp.Repository
                     aUserDetail.AssignedMenu = "#user";
                 }
 
-                aUserDetail.Gender = aUserDetails.Gender;
+                aUserDetail.Gender = 2;
                 aUserDetail.DateOfBirth = Convert.ToDateTime("1990-09-10");
                 aUserDetail.CreatedOn = DateTime.Now;
                 aUserDetail.Status = 1;
@@ -86,7 +86,6 @@ namespace GppApp.Repository
             if (result != null)
             {
                 result.UserName = aUserDetails.UserName;
-                result.Gender = aUserDetails.Gender;
                 result.DateOfBirth = aUserDetails.DateOfBirth;
             
                 _context.SaveChanges();
@@ -100,7 +99,6 @@ namespace GppApp.Repository
             if (result != null)
             {
                 result.UserName = aUserDetails.UserName;
-                result.Gender = aUserDetails.Gender;
                 result.UserType = aUserDetails.UserType;
                 result.Status = aUserDetails.Status;
 
