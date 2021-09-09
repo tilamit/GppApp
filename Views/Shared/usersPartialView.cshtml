@@ -5,7 +5,7 @@
 
 <style>
     .userId {
-        display:none;
+        display: none;
     }
 </style>
 
@@ -99,7 +99,7 @@
 
         $('#addUserData').show();
     });
-    
+
     //Get user details
     function GetUserDetails() {
         var html = "";
@@ -142,44 +142,49 @@
                 //Update user details
                 var id = "";
                 $('.editUser').click(function () {
-                    CheckSession();
+                    var chkStatus = CheckSession();
 
-                    id = $(this).closest("tr").find(".userId").text();
+                    if (chkStatus == true) {
+                        alert("Your session expired! Please login again.");
+                        window.location.href = "@Url.Action("Login", "Auth")";
+                    } else {
+                        id = $(this).closest("tr").find(".userId").text();
 
-                    $.ajax({
-                        url: "/User/GetAllUsers",
-                        type: "POST",
-                        contentType: "application/json; charset=utf-8",
-                        dataType: "json",
-                        data: JSON.stringify({ id: id }),
-                        success: function (users) {
-                            if (users != null || users != "") {
+                        $.ajax({
+                            url: "/User/GetAllUsers",
+                            type: "POST",
+                            contentType: "application/json; charset=utf-8",
+                            dataType: "json",
+                            data: JSON.stringify({ id: id }),
+                            success: function (users) {
+                                if (users != null || users != "") {
 
-                                $.each(users, function (i, user) {
-                                    $('#addUserId').val(user.UserId);
-                                    $('#addUserName').val(user.UserName);
-                                    $('#addUserEmail').val(user.Email);
-                                    $('.userGender select').val(0);
-                                    $('.userType select').val(user.UserType);
+                                    $.each(users, function (i, user) {
+                                        $('#addUserId').val(user.UserId);
+                                        $('#addUserName').val(user.UserName);
+                                        $('#addUserEmail').val(user.Email);
+                                        $('.userGender select').val(0);
+                                        $('.userType select').val(user.UserType);
 
-                                    if (user.Status == 1) {
-                                        $('#addUserStatus').prop('checked', true);
-                                    } else {
-                                        $('#addUserStatus').prop('checked', false);
-                                    }
-                                })
+                                        if (user.Status == 1) {
+                                            $('#addUserStatus').prop('checked', true);
+                                        } else {
+                                            $('#addUserStatus').prop('checked', false);
+                                        }
+                                    })
 
-                                $('#updateUserData').show();
-                                $('#addUserData').hide();
-                                $('#myUsers').modal('show');
-                                $('.hideThisStatus').show();
-                                $('#addUserStatus').show();
+                                    $('#updateUserData').show();
+                                    $('#addUserData').hide();
+                                    $('#myUsers').modal('show');
+                                    $('.hideThisStatus').show();
+                                    $('#addUserStatus').show();
+                                }
+                            },
+                            error: function (er) {
+                                alert(er);
                             }
-                        },
-                        error: function (er) {
-                            alert(er);
-                        }
-                    });
+                        });
+                    }
                 });
             },
             error: function (er) {
@@ -190,80 +195,101 @@
 
     //Add user details here
     $('#addUserData').click(function () {
-        CheckSession();
+        $.ajax({
+            type: "GET",
+            url: "@Url.Action("SessionInfo", "Dashboard")"
+        }).done(function (data) {
+            if (data === true) {
+                alert("Your session expired! Please login again.");
+                window.location.href = "@Url.Action("Login", "Auth")";
+            } else {
+                var aUserDetails = {};
 
-        var aUserDetails = {};
+                var res = validate();
+                if (res == true) {
+                    $('#users').empty();
 
-        var res = validate();
-        if (res == true) {
-            $('#users').empty();
+                    aUserDetails.UserName = $("#addUserName").val();
+                    aUserDetails.Email = $("#addUserEmail").val();
+                    aUserDetails.Password = $("#addUserPass").val();
+                    aUserDetails.UserType = $("#addUserType").val();
+                    aUserDetails.Gender = $("#addUserGender").val();
 
-            aUserDetails.UserName = $("#addUserName").val();
-            aUserDetails.Email = $("#addUserEmail").val();
-            aUserDetails.Password = $("#addUserPass").val();
-            aUserDetails.UserType = $("#addUserType").val();
-            aUserDetails.Gender = $("#addUserGender").val();
+                    $.ajax({
+                        type: "POST",
+                        url: "/User/AddUsers",
+                        data: JSON.stringify({ aUserDetails }),
+                        contentType: "application/json; charset=utf-8",
+                        dataType: "json",
+                        success: function (value) {
+                            alert(value);
 
-            $.ajax({
-                type: "POST",
-                url: "/User/AddUsers",
-                data: JSON.stringify({ aUserDetails }),
-                contentType: "application/json; charset=utf-8",
-                dataType: "json",
-                success: function (value) {
-                    alert(value);
-
-                    GetUserDetails();
-                },
-                error: function (ex) {
-                    alert('Failed to retrieve states.' + ex);
+                            GetUserDetails();
+                        },
+                        error: function (ex) {
+                            alert('Failed to retrieve states.' + ex);
+                        }
+                    });
+                } else {
+                    alert("Please! Fill up all fields.");
                 }
-            });
-        } else {
-            alert("Please! Fill up all fields.");
-        }
+            }
+        }).fail(function (e) {
+            alert('Error');
+        });
     });
 
     //Update user details here
     $('#updateUserData').click(function () {
-        CheckSession();
-
-        var aUserDetails = {};
-
-        var res = validate();
-        if (res == true) {
-            $('#users').empty();
-
-            //New update
-            aUserDetails.UserId = $("#addUserId").val();
-            aUserDetails.UserName = $("#addUserName").val();
-            aUserDetails.Gender = $("#addUserGender").val();
-            aUserDetails.UserType = $("#addUserType").val();
-            
-            if ($("#addUserStatus").prop('checked') == true) {
-                aUserDetails.Status = 1;
+        $.ajax({
+            type: "GET",
+            url: "@Url.Action("SessionInfo", "Dashboard")"
+        }).done(function (data) {
+            if (data === true) {
+                alert("Your session expired! Please login again.");
+                window.location.href = "@Url.Action("Login", "Auth")";
             } else {
-                aUserDetails.Status = 0;
-            }
 
-            $.ajax({
-                type: "POST",
-                url: "/User/UpdateAllUsers",
-                data: JSON.stringify({ aUserDetails }),
-                contentType: "application/json; charset=utf-8",
-                dataType: "json",
-                success: function (value) {
-                    alert(value);
+                var aUserDetails = {};
 
-                    GetUserDetails();
-                },
-                error: function (ex) {
-                    alert('Failed to retrieve states.' + ex);
+                var res = validate();
+                if (res == true) {
+                    $('#users').empty();
+
+                    //New update
+                    aUserDetails.UserId = $("#addUserId").val();
+                    aUserDetails.UserName = $("#addUserName").val();
+                    aUserDetails.Gender = $("#addUserGender").val();
+                    aUserDetails.UserType = $("#addUserType").val();
+
+                    if ($("#addUserStatus").prop('checked') == true) {
+                        aUserDetails.Status = 1;
+                    } else {
+                        aUserDetails.Status = 0;
+                    }
+
+                    $.ajax({
+                        type: "POST",
+                        url: "/User/UpdateAllUsers",
+                        data: JSON.stringify({ aUserDetails }),
+                        contentType: "application/json; charset=utf-8",
+                        dataType: "json",
+                        success: function (value) {
+                            alert(value);
+
+                            GetUserDetails();
+                        },
+                        error: function (ex) {
+                            alert('Failed to retrieve states.' + ex);
+                        }
+                    });
+                } else {
+                    alert("Please! Fill up all fields.");
                 }
-            });
-        } else {
-            alert("Please! Fill up all fields.");
-        }
+            }
+        }).fail(function (e) {
+            alert('Error');
+        });
     });
 
     //Validation

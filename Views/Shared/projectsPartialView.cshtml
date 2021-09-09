@@ -168,89 +168,109 @@
 
     //Add project details here
     $('#addData').click(function () {
-        CheckSession();
+        $.ajax({
+            type: "GET",
+            url: "@Url.Action("SessionInfo", "Dashboard")"
+        }).done(function (data) {
+            if (data === true) {
+                alert("Your session expired! Please login again.");
+                window.location.href = "@Url.Action("Login", "Auth")";
+            } else {
+                var aProject = {};
 
-        var aProject = {};
+                var res = validate();
+                if (res == true) {
+                    $('#projects').empty();
 
-        var res = validate();
-        if (res == true) {
-            $('#projects').empty();
+                    aProject.ProjectName = $("#projectName").val();
+                    aProject.ProjectRef = $("#projectRef").val();
+                    aProject.ProjectDetails = CKEDITOR.instances['editor1'].getData();  //Set CKEditor value using jQuery
+                    aProject.CreatedOn = $("#projectCreatedOn").val();
 
-            aProject.ProjectName = $("#projectName").val();
-            aProject.ProjectRef = $("#projectRef").val();
-            aProject.ProjectDetails = CKEDITOR.instances['editor1'].getData();  //Set CKEditor value using jQuery
-            aProject.CreatedOn = $("#projectCreatedOn").val();
+                    $.ajax({
+                        type: "POST",
+                        url: "/Dashboard/AddProjects",
+                        data: JSON.stringify({ aProject }),
+                        contentType: "application/json; charset=utf-8",
+                        dataType: "json",
+                        success: function (value) {
+                            alert(value);
 
-            $.ajax({
-                type: "POST",
-                url: "/Dashboard/AddProjects",
-                data: JSON.stringify({ aProject }),
-                contentType: "application/json; charset=utf-8",
-                dataType: "json",
-                success: function (value) {
-                    alert(value);
-
-                    GetProjectDetails();
-                },
-                error: function (ex) {
-                    alert('Failed to retrieve states.' + ex);
+                            GetProjectDetails();
+                        },
+                        error: function (ex) {
+                            alert('Failed to retrieve states.' + ex);
+                        }
+                    });
+                } else {
+                    alert("Please! Fill up all fields.");
                 }
-            });
-        } else {
-            alert("Please! Fill up all fields.");
-        }
+            }
+        }).fail(function (e) {
+            alert('Error');
+        });
     });
 
     //Update project details here
     $('#updateData').click(function () {
-        CheckSession();
-
-        var aProjectsHistory = {};
-
-        var res = validate();
-        if (res == true) {
-            $('#projects').empty();
-
-            //New update
-            aProjectsHistory.ProjectId = $("#projectId").val();
-            aProjectsHistory.ProjectName = $("#projectName").val();
-            aProjectsHistory.ProjectRef = $("#projectRef").val();
-            aProjectsHistory.ProjectDetails = CKEDITOR.instances['editor1'].getData();  //Set CKEditor value using jQuery
-            aProjectsHistory.PreCreatedOn = $("#projectCreatedOn").val();
-
-            //Previous data history
-            aProjectsHistory.PreProjectName = $("#preProjectName").text();
-            aProjectsHistory.PreProjectRef = $("#preProjectRef").text();
-            aProjectsHistory.PreProjectDetails = $("#preEditor1").text();  //Set CKEditor value using jQuery
-            aProjectsHistory.PreCreatedOn = $("#preProjectCreatedOn").text();
-            aProjectsHistory.PreCreatedBy = $('#createdBy').text();
-
-            if ($("#addStatus").prop('checked') == true) {
-                aProjectsHistory.Status = 1;
-                //aProjectItemHistory.PreStatus = 1;
+        $.ajax({
+            type: "GET",
+            url: "@Url.Action("SessionInfo", "Dashboard")"
+        }).done(function (data) {
+            if (data === true) {
+                alert("Your session expired! Please login again.");
+                window.location.href = "@Url.Action("Login", "Auth")";
             } else {
-                aProjectsHistory.Status = 0;
-                //aProjectItemHistory.PreStatus = 0;
-            }
+                var aProjectsHistory = {};
 
-            $.ajax({
-                type: "POST",
-                url: "/Dashboard/UpdateProjects",
-                data: JSON.stringify({ aProjectsHistory }),
-                contentType: "application/json; charset=utf-8",
-                dataType: "json",
-                success: function (value) {
-                    alert(value);
+                var res = validate();
+                if (res == true) {
+                    $('#projects').empty();
 
-                    GetProjectDetails();
-                },
-                error: function (ex) {
-                    alert('Failed to retrieve states.' + ex);
+                    //New update
+                    aProjectsHistory.ProjectId = $("#projectId").val();
+                    aProjectsHistory.ProjectName = $("#projectName").val();
+                    aProjectsHistory.ProjectRef = $("#projectRef").val();
+                    aProjectsHistory.ProjectDetails = CKEDITOR.instances['editor1'].getData();  //Set CKEditor value using jQuery
+                    aProjectsHistory.PreCreatedOn = $("#projectCreatedOn").val();
+
+                    //Previous data history
+                    aProjectsHistory.PreProjectName = $("#preProjectName").text();
+                    aProjectsHistory.PreProjectRef = $("#preProjectRef").text();
+                    aProjectsHistory.PreProjectDetails = $("#preEditor1").text();  //Set CKEditor value using jQuery
+                    aProjectsHistory.PreCreatedOn = $("#preProjectCreatedOn").text();
+                    aProjectsHistory.PreCreatedBy = $('#createdBy').text();
+
+                    if ($("#addStatus").prop('checked') == true) {
+                        aProjectsHistory.Status = 1;
+                        //aProjectItemHistory.PreStatus = 1;
+                    } else {
+                        aProjectsHistory.Status = 0;
+                        //aProjectItemHistory.PreStatus = 0;
+                    }
+
+                    $.ajax({
+                        type: "POST",
+                        url: "/Dashboard/UpdateProjects",
+                        data: JSON.stringify({ aProjectsHistory }),
+                        contentType: "application/json; charset=utf-8",
+                        dataType: "json",
+                        success: function (value) {
+                            alert(value);
+
+                            GetProjectDetails();
+                        },
+                        error: function (ex) {
+                            alert('Failed to retrieve states.' + ex);
+                        }
+                    });
+                } else {
+                    alert("Please! Fill up all fields.");
                 }
-            });
-        } else {
-            alert("Please! Fill up all fields.");
-        }
+            }
+        }).fail(function (e) {
+            alert('Error');
+        });
     });
 
     //Get project details
@@ -303,129 +323,154 @@
                 $("#projects").append(html);
 
                 $('.editProjects').click(function () {
-                    CheckSession();
+                    $.ajax({
+                        type: "GET",
+                        url: "@Url.Action("SessionInfo", "Dashboard")"
+                    }).done(function (data) {
+                        if (data === true) {
+                            alert("Your session expired! Please login again.");
+                            window.location.href = "@Url.Action("Login", "Auth")";
+                        } else {
+                            //Get project id
+                            var projectId = $(this).attr("data-projectId");
+                            var id = $(this).attr("id");
 
-                    //Get project id
-                    var projectId = $(this).attr("data-projectId");
-                    var id = $(this).attr("id");
-
-                    //Load projects with id for editing
-                    $("#result").html('');
-                    $("#result").load('@Url.Action("LoadPartialViewWithId", "Dashboard")', { passVal: "editProjects", id: projectId });
+                            //Load projects with id for editing
+                            $("#result").html('');
+                            $("#result").load('@Url.Action("LoadPartialViewWithId", "Dashboard")', { passVal: "editProjects", id: projectId });
+                        }
+                    }).fail(function (e) {
+                        alert('Error');
+                    });
                 });
 
                 //Update project details
                 var id = "";
                 $('.editProject').click(function () {
-                    CheckSession();
-
-                    $('.frmProjectId').show();
-
-                    id = $(this).closest("tr").find(".projectWithId").text();
-
                     $.ajax({
-                        url: "/Dashboard/GetProjects",
-                        type: "POST",
-                        contentType: "application/json; charset=utf-8",
-                        dataType: "json",
-                        data: JSON.stringify({ id: id }),
-                        success: function (projects) {
-                            if (projects != null || projects != "") {
+                        type: "GET",
+                        url: "@Url.Action("SessionInfo", "Dashboard")"
+                    }).done(function (data) {
+                        if (data === true) {
+                            alert("Your session expired! Please login again.");
+                            window.location.href = "@Url.Action("Login", "Auth")";
+                        } else {
+                            $('.frmProjectId').show();
+                            id = $(this).closest("tr").find(".projectWithId").text();
 
-                                //alert(id);
-                                $("#projectId").prop("disabled", true);
-                                $('#projectId').val(id);
+                            $.ajax({
+                                url: "/Dashboard/GetProjects",
+                                type: "POST",
+                                contentType: "application/json; charset=utf-8",
+                                dataType: "json",
+                                data: JSON.stringify({ id: id }),
+                                success: function (projects) {
+                                    if (projects != null || projects != "") {
 
-                                //Initialize CKEditor by giving id of text area
-                                CKEDITOR.replace('editor1');
+                                        //alert(id);
+                                        $("#projectId").prop("disabled", true);
+                                        $('#projectId').val(id);
 
-                                //Get each instance of CKEditor
-                                for (instance in CKEDITOR.instances) {
-                                    //update element
-                                    CKEDITOR.instances[instance].updateElement();
-                                }
+                                        //Initialize CKEditor by giving id of text area
+                                        CKEDITOR.replace('editor1');
 
-                                //Set CKEditor value using jQuery
-                                $.each(projects, function (i, project) {
-                                    $('#projectName').val(project.ProjectName);
-                                    $('#projectRef').val(project.ProjectRef);
-                                    CKEDITOR.instances['editor1'].setData(project.ProjectDetails);
-                                    $('#projectCreatedOn').val(getFormattedDate(project.CreatedOn));
-                                    $('#createdBy').text(project.CreatedBy);
-                                    //$('#status').val(project.Status);
+                                        //Get each instance of CKEditor
+                                        for (instance in CKEDITOR.instances) {
+                                            //update element
+                                            CKEDITOR.instances[instance].updateElement();
+                                        }
 
-                                    $("#preProjectName").text(project.ProjectName);
-                                    $("#preProjectRef").text(project.ProjectRef);
-                                    $("#preEditor1").text(CKEDITOR.instances['editor1'].getData());  //Set CKEditor value using jQuery
-                                    $("#preProjectCreatedOn").text(getFormattedDate(project.CreatedOn));
+                                        //Set CKEditor value using jQuery
+                                        $.each(projects, function (i, project) {
+                                            $('#projectName').val(project.ProjectName);
+                                            $('#projectRef').val(project.ProjectRef);
+                                            CKEDITOR.instances['editor1'].setData(project.ProjectDetails);
+                                            $('#projectCreatedOn').val(getFormattedDate(project.CreatedOn));
+                                            $('#createdBy').text(project.CreatedBy);
+                                            //$('#status').val(project.Status);
 
-                                    if (project.Status == 1) {
-                                        $('#addStatus').prop('checked', true);
-                                    } else {
-                                        $('#addStatus').prop('checked', false);
+                                            $("#preProjectName").text(project.ProjectName);
+                                            $("#preProjectRef").text(project.ProjectRef);
+                                            $("#preEditor1").text(CKEDITOR.instances['editor1'].getData());  //Set CKEditor value using jQuery
+                                            $("#preProjectCreatedOn").text(getFormattedDate(project.CreatedOn));
+
+                                            if (project.Status == 1) {
+                                                $('#addStatus').prop('checked', true);
+                                            } else {
+                                                $('#addStatus').prop('checked', false);
+                                            }
+                                        })
+
+                                        $('#updateData').show();
+                                        $('#addData').hide();
+                                        $('#myProjects').modal('show');
+                                        $('.hideThisStatus').show();
                                     }
-                                })
-
-                                $('#updateData').show();
-                                $('#addData').hide();
-                                $('#myProjects').modal('show');
-                                $('.hideThisStatus').show();
-                            }
-                        },
-                        error: function (er) {
-                            alert(er);
+                                },
+                                error: function (er) {
+                                    alert(er);
+                                }
+                            });
                         }
+                    }).fail(function (e) {
+                        alert('Error');
                     });
-
-
-                    //$('#myProjects').modal('show');
                 });
 
                 //Show update history
                 $('.projectHistory').click(function () {
-                    CheckSession();
-
-                    $('#myProjectsHistory').modal('show');
-
-                    $('#projectsHistory').empty();
-
-                    var html = "";
-                    id = $(this).closest("tr").find(".projectWithId").text();
-
                     $.ajax({
-                        url: "/Dashboard/ShowProjectsHistory",
-                        type: "POST",
-                        contentType: "application/json; charset=utf-8",
-                        dataType: "json",
-                        data: JSON.stringify({ projectId: id }),
-                        success: function (projects) {
-                            if (projects != null || projects != "") {
+                        type: "GET",
+                        url: "@Url.Action("SessionInfo", "Dashboard")"
+                    }).done(function (data) {
+                        if (data === true) {
+                            alert("Your session expired! Please login again.");
+                            window.location.href = "@Url.Action("Login", "Auth")";
+                        } else {
+                            $('#myProjectsHistory').modal('show');
+                            $('#projectsHistory').empty();
 
-                                html += "<div class='table-responsive'>" +
-                                        "<table id='projectHisDetails' class='table table-bordered'><thead>" +
-                                        "<tr><th> # </th><th>Id</th><th>Name</th><th>Details</th><th>Created On</th><th>Updated On</th><th>Updated By</th></tr></thead><tbody>";
+                            var html = "";
+                            id = $(this).closest("tr").find(".projectWithId").text();
 
-                                $.each(projects, function (i, project) {
-                                    var num = parseInt(i) + 1;
+                            $.ajax({
+                                url: "/Dashboard/ShowProjectsHistory",
+                                type: "POST",
+                                contentType: "application/json; charset=utf-8",
+                                dataType: "json",
+                                data: JSON.stringify({ projectId: id }),
+                                success: function (projects) {
+                                    if (projects != null || projects != "") {
 
-                                    html += "<tr><td>" + num + "</td>" +
-                                            "<td>" + project.ProjectId + "</td>" +
-                                            "<td>" + project.PreProjectName + "</td>" +
-                                            "<td>" + project.PreProjectDetails + "</td>" +
-                                            "<td>" + getFormattedDate(project.PreCreatedOn) + "</td>" +
-                                            "<td>" + getFormattedDate(project.UpdatedOn) + "</td>" +
-                                            "<td>" + project.PersonCreated + "</td>" +
-                                            "</tr>";
-                                })
+                                        html += "<div class='table-responsive'>" +
+                                                "<table id='projectHisDetails' class='table table-bordered'><thead>" +
+                                                "<tr><th> # </th><th>Id</th><th>Name</th><th>Details</th><th>Created On</th><th>Updated On</th><th>Updated By</th></tr></thead><tbody>";
 
-                                html += "</tbody></table></div>";
-                            }
+                                        $.each(projects, function (i, project) {
+                                            var num = parseInt(i) + 1;
 
-                            $("#projectsHistory").append(html);
-                        },
-                        error: function (er) {
-                            alert(er);
+                                            html += "<tr><td>" + num + "</td>" +
+                                                    "<td>" + project.ProjectId + "</td>" +
+                                                    "<td>" + project.PreProjectName + "</td>" +
+                                                    "<td>" + project.PreProjectDetails + "</td>" +
+                                                    "<td>" + getFormattedDate(project.PreCreatedOn) + "</td>" +
+                                                    "<td>" + getFormattedDate(project.UpdatedOn) + "</td>" +
+                                                    "<td>" + project.PersonCreated + "</td>" +
+                                                    "</tr>";
+                                        })
+
+                                        html += "</tbody></table></div>";
+                                    }
+
+                                    $("#projectsHistory").append(html);
+                                },
+                                error: function (er) {
+                                    alert(er);
+                                }
+                            });
                         }
+                    }).fail(function (e) {
+                        alert('Error');
                     });
                 });
             },
