@@ -34,7 +34,7 @@ namespace GppApp.Repository
                           select new ProjectHistory
                           {
                               ProjectId = c.ProjectId,
-                              PreProjectName = c.ProjectName,
+                              PreProjectName = d.PreviousName,
                               PreProjectDetails = d.PreProjectDetails,
                               PersonCreated = f.UserName,
                               PreCreatedOn = d.PreCreatedOn,
@@ -177,12 +177,24 @@ namespace GppApp.Repository
 
         public string GetAutoId()
         {
-            var result = _context.Projects.OrderByDescending(c => c.Id);
+            var result = _context.Projects.OrderByDescending(c => c.Id).ToList();
 
-            string id = result.FirstOrDefault().ProjectId;
-            string newId = id.Substring(id.LastIndexOf('/') + 1);
+            string id = "";
+            string newId = "";
+            string num = "";
 
-            string num = (Convert.ToInt32(newId) + 1).ToString("0###");
+            if (result.Count() == 0)
+            {
+                id = "#Project-2021/07/0000";
+                newId = id.Substring(id.LastIndexOf('/') + 1);
+                num = (Convert.ToInt32(newId) + 1).ToString("0###");
+            }
+            else
+            {
+                id = result.FirstOrDefault().ProjectId;
+                newId = id.Substring(id.LastIndexOf('/') + 1);
+                num = (Convert.ToInt32(newId) + 1).ToString("0###");
+            }
 
             return ("#Project-" + DateTimeAustralia.GetDateTime().Year.ToString() + "/" + DateTimeAustralia.GetDateTime().Month.ToString("0#") + "/" + num).ToString();
         }

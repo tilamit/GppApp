@@ -21,6 +21,7 @@ namespace GppApp.Models
         public Nullable<int> CreatedBy { get; set; }
         public string SubmittedBy { get; set; }
         public DateTime? SubmittedDt { get; set; }
+        public string SubmissionDt { get; set; }
         public DateTime? DateConfirmed { get; set; }
         public int TotalItems { get; set; }
     }

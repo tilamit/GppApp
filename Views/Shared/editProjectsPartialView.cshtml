@@ -70,7 +70,7 @@
                         <input type="text" class="form-control" id="editor1" placeholder="Description" />
                         <span class="hideSection" id="preEditor1"></span>
                     </div>
-                    <div class="form-group">
+                    <div class="form-group hideArea">
                         <label for="projectNotes">Notes</label>
                         <input type="text" class="form-control" id="projectNotes" placeholder="Notes" />
                         <span class="hideSection" id="preProjectNotes"></span>
@@ -84,13 +84,6 @@
                         <label for="Status">Checked ?</label>
                         <input type="checkbox" class="form-control" id="addCheckedStatus" />
                     </div>
-
-                    <div class="form-group hideThisStatus">
-                        <label for="itemImage">Signature</label>
-                        <input type="file" name="Image" value="" onchange="return ShowSignaturePreview(this)" class="form-control" id="uploadSignature" /><div></div>
-                        <img src="~/img/default.jpg" alt="preview" id="sigPreview" style="border: 1px solid red; height: 200px; width: 200px; margin: auto; display: block;" />
-                    </div>
-
                     <div class="form-group">
                         <label for="itemImage">Image</label>
                         <input type="file" name="Image" value="" onchange="return ShowImagePreview(this)" class="form-control" id="uploadImg" /><div></div>
@@ -256,6 +249,7 @@
                         data: data,
                         success: function (response) {
                             //$(".img-circle").attr('src', '/img/' + response);
+                            $('#myProjectItems').modal('hide');
 
                             GetProjectItems();
                             GetProjectItemsInPdf();
@@ -339,6 +333,8 @@
                             alert(er);
                         }
                     });
+
+                    $('#myProjectItems').modal('hide');
 
                     GetProjectItems();
                     GetProjectItemsInPdf();
@@ -837,7 +833,7 @@
                         }
 
                         if (project.SubmittedBy != "" && project.Checked == false) {
-                            blueSection = "<div style='color: red;'><i style='margin-left: -20%;font-size:10px;'><b>SUBMITTED FOR ACTION " + getDateFormatted(project.SubmittedDt).toLocaleTimeString('en-US') + " " + getDateFormatted(project.SubmittedDt).toString().slice(0, 15) + "</b></i> <b style='margin-left: 18%;font-size:10px;'>Approved by " + project.SubmittedBy + "</b></div>";
+                            blueSection = "<div style='color: red;'><i style='margin-left: -20%;font-size:10px;'><b>SUBMITTED FOR ACTION " + getDateFormatted(project.SubmittedDt).toString().slice(0, 15) + "</b></i> <b style='margin-left: 18%;font-size:10px;'>Approved by " + project.SubmittedBy + "</b></div>";
                         }
 
                         if (project.SubmittedBy == "") {

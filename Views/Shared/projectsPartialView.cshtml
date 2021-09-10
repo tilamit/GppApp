@@ -196,6 +196,7 @@
                         success: function (value) {
                             alert(value);
 
+                            $('#myProjects').modal('hide');
                             GetProjectDetails();
                         },
                         error: function (ex) {
@@ -258,6 +259,7 @@
                         success: function (value) {
                             alert(value);
 
+                            $('#myProjects').modal('hide');
                             GetProjectDetails();
                         },
                         error: function (ex) {
@@ -295,13 +297,13 @@
                     $.each(projects, function (i, project) {
                         var num = parseInt(i) + 1;
 
-                        if (project.Status == 0) {
-                            status = "<a class='editProjects' data-projectId='" + project.ProjectId + "'>Project Items</a>";
-                            locked = "<a href='javascript:void(0);'>Edit</a>";
-                        } else {
-                            status = "<a class='editProjects' data-projectId='" + project.ProjectId + "'>Project Items</a>";
-                            locked = "<a class='editProject' data-projectId='" + project.ProjectId + "'>Edit</a>";
-                        }
+                        //if (project.Status == 0) {
+                        //    status = "<a class='editProjects' data-projectId='" + project.ProjectId + "'>Project Items</a>";
+                        //    locked = "<a href='javascript:void(0);'>Edit</a>";
+                        //} else {
+                        status = "<a class='editProjects' data-projectId='" + project.ProjectId + "'>Project Items</a>";
+                        locked = "<a class='editProject' data-projectId='" + project.ProjectId + "'>Edit</a>";
+                        //}
 
                         html += "<tr><td>" + num + "</td>" +
                                 "<td class='projectWithId'>" + project.ProjectId + "</td>" +
@@ -323,6 +325,10 @@
                 $("#projects").append(html);
 
                 $('.editProjects').click(function () {
+                    //Get project id
+                    var projectId = $(this).attr("data-projectId");
+                    var id = $(this).attr("id");
+
                     $.ajax({
                         type: "GET",
                         url: "@Url.Action("SessionInfo", "Dashboard")"
@@ -331,10 +337,6 @@
                             alert("Your session expired! Please login again.");
                             window.location.href = "@Url.Action("Login", "Auth")";
                         } else {
-                            //Get project id
-                            var projectId = $(this).attr("data-projectId");
-                            var id = $(this).attr("id");
-
                             //Load projects with id for editing
                             $("#result").html('');
                             $("#result").load('@Url.Action("LoadPartialViewWithId", "Dashboard")', { passVal: "editProjects", id: projectId });
@@ -347,6 +349,8 @@
                 //Update project details
                 var id = "";
                 $('.editProject').click(function () {
+                    id = $(this).closest("tr").find(".projectWithId").text();
+
                     $.ajax({
                         type: "GET",
                         url: "@Url.Action("SessionInfo", "Dashboard")"
@@ -356,7 +360,6 @@
                             window.location.href = "@Url.Action("Login", "Auth")";
                         } else {
                             $('.frmProjectId').show();
-                            id = $(this).closest("tr").find(".projectWithId").text();
 
                             $.ajax({
                                 url: "/Dashboard/GetProjects",
@@ -419,6 +422,8 @@
 
                 //Show update history
                 $('.projectHistory').click(function () {
+                    id = $(this).closest("tr").find(".projectWithId").text();
+
                     $.ajax({
                         type: "GET",
                         url: "@Url.Action("SessionInfo", "Dashboard")"
@@ -431,7 +436,6 @@
                             $('#projectsHistory').empty();
 
                             var html = "";
-                            id = $(this).closest("tr").find(".projectWithId").text();
 
                             $.ajax({
                                 url: "/Dashboard/ShowProjectsHistory",
