@@ -29,7 +29,7 @@ span.spanId {
 }
 
 #floatRight {
-    margin-left:-28.3%;
+    margin-left: -28.3%;
 }
 
 .sign-up {
@@ -54,7 +54,7 @@ span.spanId {
 }
 
 .table.table-contextual, .jsgrid .table-contextual.jsgrid-table {
-    color:black !important;
+    color: black !important;
 }
 
 .card .card-title-override {
@@ -62,15 +62,15 @@ span.spanId {
 }
 
 #projectHisDetails td {
-    color:white;
+    color: white;
 }
 
 .body-color {
-    background:#002b73 !important;
+    background: #002b73 !important;
 }
 
 .dashboard {
-    color:black;
+    color: black;
 }
 
 .sidebar .nav .nav-item {
@@ -79,4 +79,35 @@ span.spanId {
 
 .sidebar-brand {
     font-size: 1.4rem !important;
+}
+
+.preview-list-projects .preview-item .preview-thumbnail .preview-icon {
+    width: 40px;
+    height: 40px;
+    text-align: center;
+    display: -webkit-flex;
+    display: flex;
+    -webkit-align-items: center;
+    align-items: center;
+    -webkit-justify-content: center;
+    justify-content: center;
+}
+
+.preview-list-projects .preview-item {
+    display: -webkit-flex;
+    display: flex;
+    -webkit-flex-direction: row;
+    flex-direction: row;
+    -webkit-align-items: flex-start;
+    align-items: flex-start;
+    padding: 1rem 0rem;
+    font-size: .875rem;
+}
+
+.preview-subject-projects {
+    margin-left: 2%;
+}
+
+.mdi-file-document {
+    font-size: 1.5em;
 }

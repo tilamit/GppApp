@@ -358,37 +358,48 @@ namespace GppApp.Controllers
         [GppAuthorize]
         //Image upload
         [AcceptVerbs(HttpVerbs.Post)]
-        public JsonResult UploadImg(string id, int uniqueId, string imgName)
+        public JsonResult UploadImg(string id, int uniqueId, string imgName, string defaultImg)
         {
             string _imgname = string.Empty;
-            if (System.Web.HttpContext.Current.Request.Files.AllKeys.Any())
+
+            if (defaultImg == "1")
             {
-                var pic = System.Web.HttpContext.Current.Request.Files["MyImages"];
-                if (pic.ContentLength > 0)
+                _imgname = "no_notes.png";
+            }
+            else
+            {
+                if (System.Web.HttpContext.Current.Request.Files.AllKeys.Any())
                 {
-                    if (_projectsRepository.CheckImages(uniqueId, imgName) == false)
+                    var pic = System.Web.HttpContext.Current.Request.Files["MyImages"];
+                    if (pic.ContentLength > 0)
                     {
-                        var fileName = Path.GetFileName(pic.FileName);
-                        var _ext = Path.GetExtension(pic.FileName);
+                        if (_projectsRepository.CheckImages(uniqueId, imgName) == false)
+                        {
+                            var fileName = Path.GetFileName(pic.FileName);
 
-                        _imgname = Guid.NewGuid().ToString();
-                        var _comPath = Server.MapPath("/img/") + _imgname + _ext;
-                        _imgname = "" + _imgname + _ext;
 
-                        ViewBag.Msg = _comPath;
-                        var path = _comPath;
 
-                        pic.SaveAs(path);
+                            var _ext = Path.GetExtension(pic.FileName);
 
-                        MemoryStream ms = new MemoryStream();
-                        System.Web.Helpers.WebImage img = new System.Web.Helpers.WebImage(_comPath);
+                            _imgname = Guid.NewGuid().ToString();
+                            var _comPath = Server.MapPath("/img/") + _imgname + _ext;
+                            _imgname = "" + _imgname + _ext;
 
-                        img.Save(_comPath);
+                            ViewBag.Msg = _comPath;
+                            var path = _comPath;
 
-                        _projectsRepository.AddImages(uniqueId, _imgname);
+                            pic.SaveAs(path);
+
+                            MemoryStream ms = new MemoryStream();
+                            System.Web.Helpers.WebImage img = new System.Web.Helpers.WebImage(_comPath);
+
+                            img.Save(_comPath);
+                        }
                     }
                 }
             }
+
+            _projectsRepository.AddImages(uniqueId, _imgname);
 
             return Json(Convert.ToString(_imgname), JsonRequestBehavior.AllowGet);
         }
