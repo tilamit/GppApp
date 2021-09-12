@@ -89,7 +89,7 @@
                         <input type="file" name="Image" value="" onchange="return ShowImagePreview(this)" class="form-control" id="uploadImg" /><div></div>
                         <img src="~/img/default.jpg" alt="preview" id="imagePreview" style="border: 1px solid red; height: 200px; width: 200px; margin: auto; display: block;" />
 
-                        Select To Use Default Image <input type="checkbox" class="form-control" id="addDefaultImg" name="addDefaultImg" />
+                        <span class="selectImg">Select To Use Default Image <input type="checkbox" class="form-control" id="addDefaultImg" name="addDefaultImg" /></span>
 
                         <span class="hideSection" id="preProjectId"></span>
                         <span class="hideSection" id="preUploadImg"></span>
@@ -160,6 +160,7 @@
     $("#approval").hide();
     $("#cardNew").hide();
 
+    //Show default image or not
     $('#addDefaultImg').click(function () {
         if ($('input[name="addDefaultImg"]:checked').length == 1) {
             $('#imagePreview').attr('src', '/img/no_notes.png');
@@ -172,6 +173,8 @@
     $('#openModal').click(function () {
         CheckSession();
 
+        $('#imagePreview').attr('src', '/img/default.jpg');
+        $('.selectImg').show();
         //Initialize CKEditor by giving id of text area
         CKEDITOR.replace('editor1');
 
@@ -303,12 +306,7 @@
                 data.append("MyImages", files[0]);
             }
 
-            var strImg = "";
-            if ($('input[name="addDefaultImg"]:checked').length == 1) {
-                strImg = "1";
-            } else {
-                strImg = "0";
-            }
+            var strImg = "0";
 
             var txt = $(".spanId").html();
             data.append("id", "");
@@ -502,6 +500,10 @@
 
     //Get project items
     function GetProjectItems() {
+        $("#delete").hide();
+        $("#confirm").hide();
+        $("#approval").hide();
+
         var html = "";
         var html2 = "";
         var id = '@ViewBag.projectId';
@@ -627,6 +629,7 @@
                                 $('.hideThisStatus').show();
                                 $('#updateData').show();
                                 $('#addData').hide();
+                                $('.selectImg').hide();
                                 $('#myProjectItems').modal('show');
                             }
                         },
@@ -859,7 +862,7 @@
                         }
 
                         if (project.SubmittedBy != "" && project.Checked == false) {
-                            blueSection = "<div style='color: red;'><i style='margin-left: -20%;font-size:10px;'><b>SUBMITTED FOR ACTION " + getDateFormatted(project.SubmittedDt).toString().slice(0, 15) + "</b></i> <b style='margin-left: 18%;font-size:10px;'>Approved by " + project.SubmittedBy + "</b></div>";
+                            blueSection = "<div style='color: red;'><i style='margin-left: -20%;font-size:10px;'><b>SUBMITTED FOR ACTION " + getDateFormatted(project.SubmittedDt).toString().slice(0, 15) + "</b></i> <b style='margin-left: 18%;font-size:10px;'>Approved by " + project.SubmittedBy + ": " + project.UserName + "</b></div>";
                         }
 
                         if (project.SubmittedBy == "") {

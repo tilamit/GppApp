@@ -24,5 +24,6 @@ namespace GppApp.Models
         public string SubmissionDt { get; set; }
         public DateTime? DateConfirmed { get; set; }
         public int TotalItems { get; set; }
+        public string UserName { get; set; }
     }
 }

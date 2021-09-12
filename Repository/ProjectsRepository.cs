@@ -147,7 +147,14 @@ namespace GppApp.Repository
 
                               TotalItems = _context.ProjectItems.Where(c => c.ProjectId == d.ProjectId && d.Status == 1).Count(),
 
-                              DateConfirmed = _context.ItemsConfirmed.Where(c => c.ProjectItemId == d.Id).Select(d => d.ConfirmDate).FirstOrDefault()
+                              DateConfirmed = _context.ItemsConfirmed.Where(c => c.ProjectItemId == d.Id).Select(d => d.ConfirmDate).FirstOrDefault(),
+
+                              UserName = _context.ApprovalForSubmission.
+                                         Join(_context.UserDetails, c => c.UserId, d => d.UserId,
+                                         (c, d) => new { c, d }).
+                                         Join(_context.UserTypes, g => g.d.UserType, h => h.Id, (g, h) => new { g, h }).
+                                         Where(m => m.g.c.ProjectItemId == d.Id)
+                                         .Select(m => m.g.d.UserName).FirstOrDefault() ?? "",
                           }).ToList();
 
             return result;
