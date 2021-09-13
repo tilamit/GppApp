@@ -13,7 +13,7 @@
           <Property Name="ProjectId" Type="nvarchar" MaxLength="100" />
           <Property Name="ProjectItemId" Type="int" />
           <Property Name="UserId" Type="int" />
-          <Property Name="SubmissionDate" Type="date" />
+          <Property Name="SubmissionDate" Type="datetime" />
           <Property Name="Details" Type="nvarchar(max)" />
           <Property Name="Status" Type="int" />
           <Property Name="SystemDate" Type="datetime" />
@@ -83,6 +83,7 @@
           <Property Name="Status" Type="int" />
           <Property Name="CreatedOn" Type="datetime" />
           <Property Name="CreatedBy" Type="int" />
+          <Property Name="SysDate" Type="datetime" />
         </EntityType>
         <EntityType Name="ProjectItemsHistory">
           <Key>
@@ -111,6 +112,7 @@
           <Property Name="Status" Type="int" />
           <Property Name="CreatedBy" Type="int" />
           <Property Name="CreatedOn" Type="datetime" />
+          <Property Name="SysDate" Type="datetime" />
         </EntityType>
         <EntityType Name="ProjectsHistory">
           <Key>
@@ -188,6 +190,7 @@
           <Property Name="Status" Type="Int32" />
           <Property Name="CreatedOn" Type="DateTime" Precision="3" />
           <Property Name="CreatedBy" Type="Int32" />
+          <Property Name="SysDate" Type="DateTime" Precision="3" />
         </EntityType>
         <EntityType Name="Projects">
           <Key>
@@ -201,6 +204,7 @@
           <Property Name="CreatedBy" Type="Int32" />
           <Property Name="CreatedOn" Type="DateTime" Precision="3" />
           <Property Name="ProjectRef" Type="String" MaxLength="100" FixedLength="false" Unicode="true" />
+          <Property Name="SysDate" Type="DateTime" Precision="3" />
         </EntityType>
         <EntityContainer Name="GppAppEntities" annotation:LazyLoadingEnabled="true">
           <EntitySet Name="ProjectItems" EntityType="Self.ProjectItems" />
@@ -336,7 +340,7 @@
           <Property Name="ProjectId" Type="String" MaxLength="100" FixedLength="false" Unicode="true" />
           <Property Name="ProjectItemId" Type="Int32" />
           <Property Name="UserId" Type="Int32" />
-          <Property Name="SubmissionDate" Type="DateTime" Precision="0" />
+          <Property Name="SubmissionDate" Type="DateTime" Precision="3" />
           <Property Name="Details" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
           <Property Name="Status" Type="Int32" />
           <Property Name="SystemDate" Type="DateTime" Precision="3" />
@@ -350,6 +354,7 @@
           <EntitySetMapping Name="ProjectItems">
             <EntityTypeMapping TypeName="GppAppModel.ProjectItems">
               <MappingFragment StoreEntitySet="ProjectItems">
+                <ScalarProperty Name="SysDate" ColumnName="SysDate" />
                 <ScalarProperty Name="Id" ColumnName="Id" />
                 <ScalarProperty Name="ProjectId" ColumnName="ProjectId" />
                 <ScalarProperty Name="ItemDescription" ColumnName="ItemDescription" />
@@ -365,6 +370,7 @@
           <EntitySetMapping Name="Projects">
             <EntityTypeMapping TypeName="GppAppModel.Projects">
               <MappingFragment StoreEntitySet="Projects">
+                <ScalarProperty Name="SysDate" ColumnName="SysDate" />
                 <ScalarProperty Name="ProjectRef" ColumnName="ProjectRef" />
                 <ScalarProperty Name="Id" ColumnName="Id" />
                 <ScalarProperty Name="ProjectId" ColumnName="ProjectId" />

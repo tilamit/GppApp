@@ -22,5 +22,6 @@ namespace GppApp.DbContext
         public Nullable<int> CreatedBy { get; set; }
         public Nullable<System.DateTime> CreatedOn { get; set; }
         public string ProjectRef { get; set; }
+        public Nullable<System.DateTime> SysDate { get; set; }
     }
 }

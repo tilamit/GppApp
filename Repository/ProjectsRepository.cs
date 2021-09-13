@@ -155,6 +155,14 @@ namespace GppApp.Repository
                                          Join(_context.UserTypes, g => g.d.UserType, h => h.Id, (g, h) => new { g, h }).
                                          Where(m => m.g.c.ProjectItemId == d.Id)
                                          .Select(m => m.g.d.UserName).FirstOrDefault() ?? "",
+
+
+                              SubmissionDt = _context.ApprovalForSubmission.
+                                            Join(_context.UserDetails, c => c.UserId, d => d.UserId,
+                                            (c, d) => new { c, d }).
+                                            Join(_context.UserTypes, g => g.d.UserType, h => h.Id, (g, h) => new { g, h }).
+                                            Where(m => m.g.c.ProjectItemId == d.Id).ToList()
+                                            .Select(m => m.g.c.SubmissionDate.ToString()).FirstOrDefault()
                           }).ToList();
 
             return result;
@@ -169,7 +177,8 @@ namespace GppApp.Repository
                 aProjects.ProjectName = aProject.ProjectName;
                 aProjects.ProjectRef = aProject.ProjectRef;
                 aProjects.ProjectDetails = aProject.ProjectDetails;
-                aProjects.CreatedOn = aProject.CreatedOn;
+                aProjects.CreatedOn = aProject.CreatedOn.Value.Add(DateTimeAustralia.GetDateTime().TimeOfDay);
+                aProjects.SysDate = DateTimeAustralia.GetDateTime();
                 aProjects.CreatedBy = Convert.ToInt32(HttpContext.Current.Session["userId"]);
                 aProjects.Status = 1;
 
@@ -296,7 +305,8 @@ namespace GppApp.Repository
                     aProjectItems.ProjectId = aProjectItem.ProjectId;
                     aProjectItems.ItemDescription = aProjectItem.ItemDescription;
                     aProjectItems.ProjectNotes = aProjectItem.ProjectNotes;
-                    aProjectItems.CreatedOn = aProjectItem.CreatedOn;
+                    aProjectItems.CreatedOn = aProjectItem.CreatedOn.Value.Add(DateTimeAustralia.GetDateTime().TimeOfDay);
+                    aProjectItems.SysDate = DateTimeAustralia.GetDateTime();
                     aProjectItems.CreatedBy = Convert.ToInt32(HttpContext.Current.Session["userId"]);
                     aProjectItems.Status = 1;
                     aProjectItems.Checked = false;
@@ -368,7 +378,7 @@ namespace GppApp.Repository
             return result;
         }
 
-        public void AddConfirmedItems(string projectId, string itemId)
+        public void AddConfirmedItems(string projectId, DateTime confirmDt, string itemId)
         {
             string[] id = itemId.Split(',');
 
@@ -383,7 +393,7 @@ namespace GppApp.Repository
                     aItemsConfirmed.ProjectId = projectId;
                     aItemsConfirmed.ProjectItemId = Convert.ToInt32(item);
                     aItemsConfirmed.UserId = Convert.ToInt32(HttpContext.Current.Session["userId"]);
-                    aItemsConfirmed.ConfirmDate = DateTimeAustralia.GetDateTime();
+                    aItemsConfirmed.ConfirmDate = confirmDt.Add(DateTimeAustralia.GetDateTime().TimeOfDay);
                     aItemsConfirmed.Details = _context.Projects.Where(c => c.ProjectId == projectId).Select(d => d.ProjectName).FirstOrDefault();
                     aItemsConfirmed.Status = 1;
                     aItemsConfirmed.SystemDate = DateTimeAustralia.GetDateTime();
@@ -398,7 +408,7 @@ namespace GppApp.Repository
             }
         }
 
-        public void SubmitForApproval(string projectId, string itemId)
+        public void SubmitForApproval(string projectId, DateTime submissionDt, string itemId)
         {
             string[] id = itemId.Split(',');
 
@@ -414,7 +424,7 @@ namespace GppApp.Repository
                     aApprovalForSubmission.ProjectId = projectId;
                     aApprovalForSubmission.ProjectItemId = Convert.ToInt32(item);
                     aApprovalForSubmission.UserId = Convert.ToInt32(HttpContext.Current.Session["userId"]);
-                    aApprovalForSubmission.SubmissionDate = DateTimeAustralia.GetDateTime();
+                    aApprovalForSubmission.SubmissionDate = submissionDt.Add(DateTimeAustralia.GetDateTime().TimeOfDay);
                     aApprovalForSubmission.Details = _context.Projects.Where(c => c.ProjectId == projectId).Select(d => d.ProjectName).FirstOrDefault();
                     aApprovalForSubmission.Status = 1;
                     aApprovalForSubmission.SystemDate = DateTimeAustralia.GetDateTime();

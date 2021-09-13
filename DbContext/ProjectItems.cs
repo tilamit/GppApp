@@ -23,5 +23,6 @@ namespace GppApp.DbContext
         public Nullable<int> Status { get; set; }
         public Nullable<System.DateTime> CreatedOn { get; set; }
         public Nullable<int> CreatedBy { get; set; }
+        public Nullable<System.DateTime> SysDate { get; set; }
     }
 }

@@ -45,8 +45,12 @@
 <div>
     <div class="d-flex justify-content-between">
         <div><input type="button" class="btn btn-success" id="floatLeft" value="Generate PDF" /></div>
-        <div class="col-lg-12"><a id="openModal" class="btn btn-primary" data-toggle="modal" data-target="#myProjectItems">Add Items</a>><a id="approval" class="btn btn-inverse-warning">Save for Submission</a></div>
+        <div class="col-lg-12"><a id="openModal" class="btn btn-primary" data-toggle="modal" data-target="#myProjectItems">Add Items</a><a id="approval" class="btn btn-inverse-warning">Save for Submission</a></div>
         <div class="col-lg-12" id="floatRight"><a id="confirm" class="btn btn-primary">Approved by Client</a> &nbsp; <a id="delete" class="btn btn-danger">Delete</a></div>
+    </div>
+    <br />
+    <div class="d-flex justify-content-between hideSynDate">
+        <div><input type="text" class="form-control" id="selectDate" /></div>
     </div>
 </div>
 <br />
@@ -158,6 +162,7 @@
     $("#delete").hide();
     $("#confirm").hide();
     $("#approval").hide();
+    $('#selectDate').hide();
     $("#cardNew").hide();
 
     //Show default image or not
@@ -221,6 +226,7 @@
         CheckSession();
 
         var id = '@ViewBag.projectId';
+        $('.e-input-group input.e-input, .e-input-group.e-control-wrapper input.e-input').css("color", "white");
 
         $('.card-body').empty();
         var aProjectItems = {};
@@ -271,6 +277,8 @@
                         success: function (response) {
                             //$(".img-circle").attr('src', '/img/' + response);
                             $('#myProjectItems').modal('hide');
+
+                            $('.e-input-group .e-control-wrapper .e-date-wrapper').hide();
 
                             GetProjectItems();
                             GetProjectItemsInPdf();
@@ -360,6 +368,8 @@
 
                     $('#myProjectItems').modal('hide');
 
+                    $('.e-input-group .e-control-wrapper .e-date-wrapper').hide();
+
                     GetProjectItems();
                     GetProjectItemsInPdf();
                 },
@@ -441,24 +451,30 @@
         }).get();
 
         var projectId = $(".getId").text();
+        var confirmDt = $("#selectDate").val();
 
         var cnfrm = confirm('Are you sure to confirm the project items?');
         if (cnfrm == true) {
-            $.ajax({
-                url: "/Dashboard/AddConfirmedItems",
-                type: "POST",
-                contentType: "application/json; charset=utf-8",
-                dataType: "json",
-                data: JSON.stringify({ projectId: projectId, itemId: values.join(',') }),
-                success: function (response) {
-                    if (response != null || response != "") {
-                        alert(response);
+            if (confirmDt != "") {
+                $.ajax({
+                    url: "/Dashboard/AddConfirmedItems",
+                    type: "POST",
+                    contentType: "application/json; charset=utf-8",
+                    dataType: "json",
+                    data: JSON.stringify({ projectId: projectId, confirmDt: confirmDt, itemId: values.join(',') }),
+                    success: function (response) {
+                        if (response != null || response != "") {
+                            alert(response);
 
-                        GetProjectItems();
-                        GetProjectItemsInPdf();
+                            GetProjectItems();
+                            GetProjectItemsInPdf();
+                        }
                     }
-                }
-            });
+                });
+            } else {
+                alert("Please! Select date to confirm.");
+            }
+
         } else {
             return false;
         }
@@ -475,24 +491,29 @@
         }).get();
 
         var projectId = $(".getId").text();
+        var submissionDt = $("#selectDate").val();
 
         var cnfrm = confirm('Are you sure to confirm the project items for approval?');
         if (cnfrm == true) {
-            $.ajax({
-                url: "/Dashboard/SubmitForApproval",
-                type: "POST",
-                contentType: "application/json; charset=utf-8",
-                dataType: "json",
-                data: JSON.stringify({ projectId: projectId, itemId: values.join(',') }),
-                success: function (response) {
-                    if (response != null || response != "") {
-                        alert(response);
+            if (submissionDt != "") {
+                $.ajax({
+                    url: "/Dashboard/SubmitForApproval",
+                    type: "POST",
+                    contentType: "application/json; charset=utf-8",
+                    dataType: "json",
+                    data: JSON.stringify({ projectId: projectId, submissionDt: submissionDt, itemId: values.join(',') }),
+                    success: function (response) {
+                        if (response != null || response != "") {
+                            alert(response);
 
-                        GetProjectItems();
-                        GetProjectItemsInPdf();
+                            GetProjectItems();
+                            GetProjectItemsInPdf();
+                        }
                     }
-                }
-            });
+                });
+            } else {
+                alert("Please! Select date to approve.");
+            }
         } else {
             return false;
         }
@@ -507,6 +528,8 @@
         var html = "";
         var html2 = "";
         var id = '@ViewBag.projectId';
+
+        $('.e-input-group .e-control-wrapper .e-date-wrapper').hide();
 
         var backColor = "";
         var status = "";
@@ -584,6 +607,7 @@
                     CheckSession();
 
                     id = $(this).closest("tr").find(".hideId").text();
+                    $('.e-input-group input.e-input, .e-input-group.e-control-wrapper input.e-input').css("color", "white");
 
                     $.ajax({
                         url: "/Dashboard/GetItems",
@@ -643,14 +667,29 @@
                 $('.cbCheck').change(function () {
                     CheckSession();
 
+                    var datepicker2 = new ej.calendars.DatePicker({ width: "255px", color: "red", format: "MM/dd/yyyy" });
+
                     if ($('input[name="cbCheck"]:checked').length >= 1) {
                         $("#delete").show();
                         $("#confirm").show();
                         $("#approval").show();
+                        $('#selectDate').show();
+
+                        $(".hideSynDate").show();
+
+                        datepicker2.appendTo('#selectDate');
+                        $('.e-input-group input.e-input, .e-input-group.e-control-wrapper input.e-input').css("color", "black");
+                        //$('.e-input-group .e-control-wrapper .e-date-wrapper').show();
                     } else {
                         $("#delete").hide();
                         $("#confirm").hide();
                         $("#approval").hide();
+                        $('#selectDate').hide();
+
+                        datepicker2 = null;
+                        datepicker2.appendTo('#selectDate').empty();
+                        $('.e-input-group input.e-input, .e-input-group.e-control-wrapper input.e-input').css("color", "white");
+                        $('.e-input-group .e-control-wrapper .e-date-wrapper').empty();
                     }
                 });
 
@@ -862,7 +901,7 @@
                         }
 
                         if (project.SubmittedBy != "" && project.Checked == false) {
-                            blueSection = "<div style='color: red;'><i style='margin-left: -20%;font-size:10px;'><b>SUBMITTED FOR ACTION " + getDateFormatted(project.SubmittedDt).toString().slice(0, 15) + "</b></i> <b style='margin-left: 18%;font-size:10px;'>Approved by " + project.SubmittedBy + ": " + project.UserName + "</b></div>";
+                            blueSection = "<div style='color: red;'><i style='margin-left: -20%;font-size:10px;'><b>SUBMITTED FOR ACTION " + getDateFormatted(project.SubmittedDt).toString().slice(0, 21) + "</b></i> <b style='margin-left: 18%;font-size:10px;'>Approved by " + project.SubmittedBy + ": " + project.UserName + "</b></div>";
                         }
 
                         if (project.SubmittedBy == "") {

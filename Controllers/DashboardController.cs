@@ -323,11 +323,11 @@ namespace GppApp.Controllers
 
         [GppAuthorize]
         //Add project items here for submission
-        public async Task<JsonResult> SubmitForApproval(string projectId, string itemId)
+        public async Task<JsonResult> SubmitForApproval(string projectId, DateTime submissionDt, string itemId)
         {
             try
             {
-                _projectsRepository.SubmitForApproval(projectId, itemId);
+                _projectsRepository.SubmitForApproval(projectId, submissionDt, itemId);
             }
 
             catch (Exception ex)
@@ -340,11 +340,11 @@ namespace GppApp.Controllers
 
         [GppAuthorize]
         //Add project items here to confirm
-        public async Task<JsonResult> AddConfirmedItems(string projectId, string itemId)
+        public async Task<JsonResult> AddConfirmedItems(string projectId, DateTime confirmDt, string itemId)
         {
             try
             {
-                _projectsRepository.AddConfirmedItems(projectId, itemId);
+                _projectsRepository.AddConfirmedItems(projectId, confirmDt, itemId);
             }
 
             catch (Exception ex)

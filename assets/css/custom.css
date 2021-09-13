@@ -32,6 +32,10 @@ span.spanId {
     margin-left: -35.6%;
 }
 
+.btn-inverse-warning:not(.btn-inverse-light) {
+    margin-left: 1.2% !important;
+}
+
 .sign-up {
     text-align: center;
 }

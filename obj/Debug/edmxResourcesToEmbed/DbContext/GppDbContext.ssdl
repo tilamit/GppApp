@@ -8,7 +8,7 @@
     <Property Name="ProjectId" Type="nvarchar" MaxLength="100" />
     <Property Name="ProjectItemId" Type="int" />
     <Property Name="UserId" Type="int" />
-    <Property Name="SubmissionDate" Type="date" />
+    <Property Name="SubmissionDate" Type="datetime" />
     <Property Name="Details" Type="nvarchar(max)" />
     <Property Name="Status" Type="int" />
     <Property Name="SystemDate" Type="datetime" />
@@ -78,6 +78,7 @@
     <Property Name="Status" Type="int" />
     <Property Name="CreatedOn" Type="datetime" />
     <Property Name="CreatedBy" Type="int" />
+    <Property Name="SysDate" Type="datetime" />
   </EntityType>
   <EntityType Name="ProjectItemsHistory">
     <Key>
@@ -106,6 +107,7 @@
     <Property Name="Status" Type="int" />
     <Property Name="CreatedBy" Type="int" />
     <Property Name="CreatedOn" Type="datetime" />
+    <Property Name="SysDate" Type="datetime" />
   </EntityType>
   <EntityType Name="ProjectsHistory">
     <Key>

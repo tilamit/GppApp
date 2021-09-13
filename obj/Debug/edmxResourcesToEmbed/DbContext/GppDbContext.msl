@@ -4,6 +4,7 @@
     <EntitySetMapping Name="ProjectItems">
       <EntityTypeMapping TypeName="GppAppModel.ProjectItems">
         <MappingFragment StoreEntitySet="ProjectItems">
+          <ScalarProperty Name="SysDate" ColumnName="SysDate" />
           <ScalarProperty Name="Id" ColumnName="Id" />
           <ScalarProperty Name="ProjectId" ColumnName="ProjectId" />
           <ScalarProperty Name="ItemDescription" ColumnName="ItemDescription" />
@@ -19,6 +20,7 @@
     <EntitySetMapping Name="Projects">
       <EntityTypeMapping TypeName="GppAppModel.Projects">
         <MappingFragment StoreEntitySet="Projects">
+          <ScalarProperty Name="SysDate" ColumnName="SysDate" />
           <ScalarProperty Name="ProjectRef" ColumnName="ProjectRef" />
           <ScalarProperty Name="Id" ColumnName="Id" />
           <ScalarProperty Name="ProjectId" ColumnName="ProjectId" />
