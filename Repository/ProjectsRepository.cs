@@ -149,12 +149,23 @@ namespace GppApp.Repository
 
                               DateConfirmed = _context.ItemsConfirmed.Where(c => c.ProjectItemId == d.Id).Select(d => d.ConfirmDate).FirstOrDefault(),
 
-                              UserName = _context.ApprovalForSubmission.
-                                         Join(_context.UserDetails, c => c.UserId, d => d.UserId,
-                                         (c, d) => new { c, d }).
-                                         Join(_context.UserTypes, g => g.d.UserType, h => h.Id, (g, h) => new { g, h }).
-                                         Where(m => m.g.c.ProjectItemId == d.Id)
-                                         .Select(m => m.g.d.UserName).FirstOrDefault() ?? "",
+                              //UserName = _context.ApprovalForSubmission.
+                              //           Join(_context.UserDetails, c => c.UserId, d => d.UserId,
+                              //           (c, d) => new { c, d }).
+                              //           Join(_context.UserTypes, g => g.d.UserType, h => h.Id, (g, h) => new { g, h }).
+                              //           Where(m => m.g.c.ProjectItemId == d.Id)
+                              //           .Select(m => m.g.d.UserName).FirstOrDefault() ?? "",
+
+                              dtLst = (from c in _context.ApprovalForSubmission
+                                      join f in _context.UserDetails on c.UserId equals f.UserId
+                                      join g in _context.UserTypes on f.UserType equals g.Id
+                                      where c.ProjectItemId == d.Id
+                                      select new SubmissionDetails
+                                      {
+                                          User = f.UserName,
+                                          UserType = g.Types,
+                                          dt = c.SubmissionDate
+                                      }).ToList(),
 
 
                               SubmissionDt = _context.ApprovalForSubmission.
@@ -378,7 +389,7 @@ namespace GppApp.Repository
             return result;
         }
 
-        public void AddConfirmedItems(string projectId, DateTime confirmDt, string itemId)
+        public void AddConfirmedItems(string projectId, string itemId)
         {
             string[] id = itemId.Split(',');
 
@@ -393,7 +404,7 @@ namespace GppApp.Repository
                     aItemsConfirmed.ProjectId = projectId;
                     aItemsConfirmed.ProjectItemId = Convert.ToInt32(item);
                     aItemsConfirmed.UserId = Convert.ToInt32(HttpContext.Current.Session["userId"]);
-                    aItemsConfirmed.ConfirmDate = confirmDt.Add(DateTimeAustralia.GetDateTime().TimeOfDay);
+                    aItemsConfirmed.ConfirmDate = DateTimeAustralia.GetDateTime();
                     aItemsConfirmed.Details = _context.Projects.Where(c => c.ProjectId == projectId).Select(d => d.ProjectName).FirstOrDefault();
                     aItemsConfirmed.Status = 1;
                     aItemsConfirmed.SystemDate = DateTimeAustralia.GetDateTime();
@@ -408,23 +419,22 @@ namespace GppApp.Repository
             }
         }
 
-        public void SubmitForApproval(string projectId, DateTime submissionDt, string itemId)
+        public void SubmitForApproval(string projectId, string itemId)
         {
             string[] id = itemId.Split(',');
 
             foreach (var item in id)
             {
                 int projectItemId = Convert.ToInt32(item);
-                var result1 = _context.ApprovalForSubmission.Where(c => c.ProjectItemId == projectItemId).ToList();
-                var result2 = _context.ItemsConfirmed.Where(c => c.ProjectItemId == projectItemId).ToList();
+                var result = _context.ItemsConfirmed.Where(c => c.ProjectItemId == projectItemId).ToList();
 
-                if (result1.Count() == 0 && result2.Count() == 0)
+                if (result.Count() == 0)
                 {
                     ApprovalForSubmission aApprovalForSubmission = new ApprovalForSubmission();
                     aApprovalForSubmission.ProjectId = projectId;
                     aApprovalForSubmission.ProjectItemId = Convert.ToInt32(item);
                     aApprovalForSubmission.UserId = Convert.ToInt32(HttpContext.Current.Session["userId"]);
-                    aApprovalForSubmission.SubmissionDate = submissionDt.Add(DateTimeAustralia.GetDateTime().TimeOfDay);
+                    aApprovalForSubmission.SubmissionDate = DateTimeAustralia.GetDateTime();
                     aApprovalForSubmission.Details = _context.Projects.Where(c => c.ProjectId == projectId).Select(d => d.ProjectName).FirstOrDefault();
                     aApprovalForSubmission.Status = 1;
                     aApprovalForSubmission.SystemDate = DateTimeAustralia.GetDateTime();

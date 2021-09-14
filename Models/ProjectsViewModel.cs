@@ -1,4 +1,5 @@
-﻿using System;
+﻿using OnlineRevision.Models;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Web;
@@ -24,6 +25,7 @@ namespace GppApp.Models
         public string SubmissionDt { get; set; }
         public DateTime? DateConfirmed { get; set; }
         public int TotalItems { get; set; }
-        public string UserName { get; set; }
+        public List<string> UserName { get; set; }
+        public List<SubmissionDetails> dtLst { get; set; }
     }
 }

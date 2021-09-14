@@ -323,11 +323,11 @@ namespace GppApp.Controllers
 
         [GppAuthorize]
         //Add project items here for submission
-        public async Task<JsonResult> SubmitForApproval(string projectId, DateTime submissionDt, string itemId)
+        public async Task<JsonResult> SubmitForApproval(string projectId, string itemId)
         {
             try
             {
-                _projectsRepository.SubmitForApproval(projectId, submissionDt, itemId);
+                _projectsRepository.SubmitForApproval(projectId, itemId);
             }
 
             catch (Exception ex)
@@ -340,11 +340,11 @@ namespace GppApp.Controllers
 
         [GppAuthorize]
         //Add project items here to confirm
-        public async Task<JsonResult> AddConfirmedItems(string projectId, DateTime confirmDt, string itemId)
+        public async Task<JsonResult> AddConfirmedItems(string projectId, string itemId)
         {
             try
             {
-                _projectsRepository.AddConfirmedItems(projectId, confirmDt, itemId);
+                _projectsRepository.AddConfirmedItems(projectId, itemId);
             }
 
             catch (Exception ex)
@@ -365,19 +365,19 @@ namespace GppApp.Controllers
             if (defaultImg == "1")
             {
                 _imgname = "no_notes.png";
+
+                _projectsRepository.AddImages(uniqueId, _imgname);
             }
             else
             {
-                if (System.Web.HttpContext.Current.Request.Files.AllKeys.Any())
+                if (_projectsRepository.CheckImages(uniqueId, imgName) == false)
                 {
-                    var pic = System.Web.HttpContext.Current.Request.Files["MyImages"];
-                    if (pic.ContentLength > 0)
+                    if (System.Web.HttpContext.Current.Request.Files.AllKeys.Any())
                     {
-                        if (_projectsRepository.CheckImages(uniqueId, imgName) == false)
+                        var pic = System.Web.HttpContext.Current.Request.Files["MyImages"];
+                        if (pic.ContentLength > 0)
                         {
                             var fileName = Path.GetFileName(pic.FileName);
-
-
 
                             var _ext = Path.GetExtension(pic.FileName);
 
@@ -394,12 +394,12 @@ namespace GppApp.Controllers
                             System.Web.Helpers.WebImage img = new System.Web.Helpers.WebImage(_comPath);
 
                             img.Save(_comPath);
+
+                            _projectsRepository.AddImages(uniqueId, _imgname);
                         }
                     }
                 }
             }
-
-            _projectsRepository.AddImages(uniqueId, _imgname);
 
             return Json(Convert.ToString(_imgname), JsonRequestBehavior.AllowGet);
         }

@@ -214,6 +214,7 @@
     <Compile Include="Models\ProjectImages.cs" />
     <Compile Include="Models\ProjectItemHistory.cs" />
     <Compile Include="Models\ProjectsViewModel.cs" />
+    <Compile Include="Models\SubmissionDetails.cs" />
     <Compile Include="Models\UserViewModel.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Repository\AuthorizeRepository.cs" />

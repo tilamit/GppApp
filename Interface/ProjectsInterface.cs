@@ -23,7 +23,7 @@ namespace GppApp.Interface
         bool CheckImages(int id, string imgName);
         string AddProjectItems(ProjectItems aProjectItems);
         void DeleteProjectItems(string itemId);
-        void AddConfirmedItems(string projectId, DateTime confirmDt, string itemId);
-        void SubmitForApproval(string projectId, DateTime submissionDt, string itemId);
+        void AddConfirmedItems(string projectId, string itemId);
+        void SubmitForApproval(string projectId, string itemId);
     }
 }

@@ -315,12 +315,20 @@
             }
 
             var strImg = "0";
+            var src = $('#imagePreview').attr('src')
+            var tarr = src.split('/'); 
+            var file = tarr[tarr.length - 1];
+
 
             var txt = $(".spanId").html();
             data.append("id", "");
             data.append("uniqueId", $("#id").val());
-            data.append("imgName", $('#imagePreview').attr('src').filename());
+            data.append("imgName", file);
             data.append("defaultImg", strImg);
+
+            function getExtension(filename) {
+                return filename.split('.').pop().toLowerCase();
+            }
 
             //Update project item details
             aProjectItemHistory.Id = $("#id").val();
@@ -451,30 +459,24 @@
         }).get();
 
         var projectId = $(".getId").text();
-        var confirmDt = $("#selectDate").val();
 
         var cnfrm = confirm('Are you sure to confirm the project items?');
         if (cnfrm == true) {
-            if (confirmDt != "") {
-                $.ajax({
-                    url: "/Dashboard/AddConfirmedItems",
-                    type: "POST",
-                    contentType: "application/json; charset=utf-8",
-                    dataType: "json",
-                    data: JSON.stringify({ projectId: projectId, confirmDt: confirmDt, itemId: values.join(',') }),
-                    success: function (response) {
-                        if (response != null || response != "") {
-                            alert(response);
+            $.ajax({
+                url: "/Dashboard/AddConfirmedItems",
+                type: "POST",
+                contentType: "application/json; charset=utf-8",
+                dataType: "json",
+                data: JSON.stringify({ projectId: projectId, itemId: values.join(',') }),
+                success: function (response) {
+                    if (response != null || response != "") {
+                        alert(response);
 
-                            GetProjectItems();
-                            GetProjectItemsInPdf();
-                        }
+                        GetProjectItems();
+                        GetProjectItemsInPdf();
                     }
-                });
-            } else {
-                alert("Please! Select date to confirm.");
-            }
-
+                }
+            });
         } else {
             return false;
         }
@@ -491,29 +493,24 @@
         }).get();
 
         var projectId = $(".getId").text();
-        var submissionDt = $("#selectDate").val();
 
         var cnfrm = confirm('Are you sure to confirm the project items for approval?');
         if (cnfrm == true) {
-            if (submissionDt != "") {
-                $.ajax({
-                    url: "/Dashboard/SubmitForApproval",
-                    type: "POST",
-                    contentType: "application/json; charset=utf-8",
-                    dataType: "json",
-                    data: JSON.stringify({ projectId: projectId, submissionDt: submissionDt, itemId: values.join(',') }),
-                    success: function (response) {
-                        if (response != null || response != "") {
-                            alert(response);
+            $.ajax({
+                url: "/Dashboard/SubmitForApproval",
+                type: "POST",
+                contentType: "application/json; charset=utf-8",
+                dataType: "json",
+                data: JSON.stringify({ projectId: projectId, itemId: values.join(',') }),
+                success: function (response) {
+                    if (response != null || response != "") {
+                        alert(response);
 
-                            GetProjectItems();
-                            GetProjectItemsInPdf();
-                        }
+                        GetProjectItems();
+                        GetProjectItemsInPdf();
                     }
-                });
-            } else {
-                alert("Please! Select date to approve.");
-            }
+                }
+            });
         } else {
             return false;
         }
@@ -528,8 +525,6 @@
         var html = "";
         var html2 = "";
         var id = '@ViewBag.projectId';
-
-        $('.e-input-group .e-control-wrapper .e-date-wrapper').hide();
 
         var backColor = "";
         var status = "";
@@ -673,23 +668,23 @@
                         $("#delete").show();
                         $("#confirm").show();
                         $("#approval").show();
-                        $('#selectDate').show();
+                        //$('#selectDate').show();
 
-                        $(".hideSynDate").show();
+                        //$(".hideSynDate").show();
 
-                        datepicker2.appendTo('#selectDate');
-                        $('.e-input-group input.e-input, .e-input-group.e-control-wrapper input.e-input').css("color", "black");
+                        //datepicker2.appendTo('#selectDate');
+                        //$('.e-input-group input.e-input, .e-input-group.e-control-wrapper input.e-input').css("color", "black");
                         //$('.e-input-group .e-control-wrapper .e-date-wrapper').show();
                     } else {
                         $("#delete").hide();
                         $("#confirm").hide();
                         $("#approval").hide();
-                        $('#selectDate').hide();
+                        //$('#selectDate').hide();
 
-                        datepicker2 = null;
-                        datepicker2.appendTo('#selectDate').empty();
-                        $('.e-input-group input.e-input, .e-input-group.e-control-wrapper input.e-input').css("color", "white");
-                        $('.e-input-group .e-control-wrapper .e-date-wrapper').empty();
+                        //datepicker2 = null;
+                        //datepicker2.appendTo('#selectDate').empty();
+                        //$('.e-input-group input.e-input, .e-input-group.e-control-wrapper input.e-input').css("color", "white");
+                        //$('.e-input-group .e-control-wrapper .e-date-wrapper').empty();
                     }
                 });
 
@@ -900,9 +895,13 @@
                             locked = "<a href='javascript:void(0);'>Edit</a>";
                         }
 
-                        if (project.SubmittedBy != "" && project.Checked == false) {
-                            blueSection = "<div style='color: red;'><i style='margin-left: -20%;font-size:10px;'><b>SUBMITTED FOR ACTION " + getDateFormatted(project.SubmittedDt).toString().slice(0, 21) + "</b></i> <b style='margin-left: 18%;font-size:10px;'>Approved by " + project.SubmittedBy + ": " + project.UserName + "</b></div>";
-                        }
+                        $.each(project.dtLst, function (i, projectDetails) {
+                            if (project.dtLst.length > 1) {
+                                blueSection += "<div style='color: red;'><i style='margin-left: -20%;font-size:10px;'><b>SUBMITTED FOR ACTION " + getDateFormatted(projectDetails.dt).toString().slice(0, 21) + "</b></i> <b style='margin-left: 18%;font-size:10px;'>Approved by " + projectDetails.UserType + ": " + projectDetails.User + "</b></div>";
+                            } else {
+                                blueSection = "<div style='color: red;'><i style='margin-left: -20%;font-size:10px;'><b>SUBMITTED FOR ACTION " + getDateFormatted(projectDetails.dt).toString().slice(0, 21) + "</b></i> <b style='margin-left: 18%;font-size:10px;'>Approved by " + projectDetails.UserType + ": " + projectDetails.User + "</b></div>";
+                            }
+                        });
 
                         if (project.SubmittedBy == "") {
                             blueSection = "";
