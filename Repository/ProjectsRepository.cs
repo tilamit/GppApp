@@ -128,7 +128,7 @@ namespace GppApp.Repository
                               ItemDescription = d.ItemDescription,
                               ProjectNotes = d.ProjectNotes,
                               Checked = d.Checked,
-                              Image = _context.ItemImages.Where(c => c.ProjectItemId == d.Id).Select(d => d.Image).FirstOrDefault(),
+                              Image = d.Image,
                               CreatedOn = d.CreatedOn.ToString(),
                               Status = _context.ItemsConfirmed.Where(c => c.ProjectItemId == d.Id).Count() > 0 ? 1 : 0, //Confirmed by client
                               ProStatus = c.Status,

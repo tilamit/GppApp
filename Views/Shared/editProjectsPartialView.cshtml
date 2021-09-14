@@ -316,7 +316,7 @@
 
             var strImg = "0";
             var src = $('#imagePreview').attr('src')
-            var tarr = src.split('/'); 
+            var tarr = src.split('/');
             var file = tarr[tarr.length - 1];
 
 
@@ -897,9 +897,9 @@
 
                         $.each(project.dtLst, function (i, projectDetails) {
                             if (project.dtLst.length > 1) {
-                                blueSection += "<div style='color: red;'><i style='margin-left: -20%;font-size:10px;'><b>SUBMITTED FOR ACTION " + getDateFormatted(projectDetails.dt).toString().slice(0, 21) + "</b></i> <b style='margin-left: 18%;font-size:10px;'>Approved by " + projectDetails.UserType + ": " + projectDetails.User + "</b></div>";
+                                //blueSection += "<div style='color: red;'><i style='margin-left: -20%;font-size:10px;'><b>SUBMITTED FOR ACTION " + getDateFormatted(projectDetails.dt).toString().slice(0, 16) + "</b></i> <b style='margin-left: 18%;font-size:10px;'>Approved by " + projectDetails.UserType + ": " + projectDetails.User + "</b></div>";
                             } else {
-                                blueSection = "<div style='color: red;'><i style='margin-left: -20%;font-size:10px;'><b>SUBMITTED FOR ACTION " + getDateFormatted(projectDetails.dt).toString().slice(0, 21) + "</b></i> <b style='margin-left: 18%;font-size:10px;'>Approved by " + projectDetails.UserType + ": " + projectDetails.User + "</b></div>";
+                                //blueSection = "<div style='color: red;'><i style='margin-left: -20%;font-size:10px;'><b>SUBMITTED FOR ACTION " + getDateFormatted(projectDetails.dt).toString().slice(0, 16) + "</b></i> <b style='margin-left: 18%;font-size:10px;'>Approved by " + projectDetails.UserType + ": " + projectDetails.User + "</b></div>";
                             }
                         });
 
@@ -911,7 +911,13 @@
                                 "<td class='action hideSelect'>" + locked + "</td><td>" + num + "</td>" +
                                 "<td class='hide hideId projectWithId'>" + project.Id + "</td>" +
                                 "<td class='detailsWidth'>" + project.ItemDescription + "</td>" +
-                                "<td><img id='showImages' height='270' width='240' src='/img/" + project.Image + "' /></td>" + backColor + "</tr><tr><td class='showBlueBar' height='20' colspan='10' style='background-color: lightblue; -webkit-print-color-adjust: exact;'>" + blueSection + "</td></tr>";
+                                "<td><img id='showImages' height='270' width='240' src='/img/" + project.Image + "' /></td>" + backColor + "</tr><tr><td class='showBlueBar' height='20' colspan='10' style='background-color: lightblue; -webkit-print-color-adjust: exact;'>";
+                                for(var i = 0; i < project.dtLst.length; i++) {
+                                    html += "<div style='color: red;'><i style='margin-left: -20%;font-size:10px;'><b>SUBMITTED FOR ACTION " + getDateFormatted(project.dtLst[i].dt).toString().slice(0, 16) + "</b></i> <b style='margin-left: 18%;font-size:10px;'>Approved by " + project.dtLst[i].UserType + ": " + project.dtLst[i].User + "</b></div>";
+                                    //console.log(JSON.stringify(SubmissionDetails));
+                                }
+                        //html += blueSection;
+                        html += "</td></tr>";
 
                     })
 
